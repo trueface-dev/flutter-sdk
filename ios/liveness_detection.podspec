@@ -16,11 +16,10 @@ passive anti-spoofing) exposed to Flutter as a platform view.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'GoogleMLKit/FaceDetection', '~> 7.0'
-  s.platform = :ios, '15.5'
-
-  # ML Kit ships static frameworks, so this pod must be static too.
-  s.static_framework = true
+  # iOS face detection uses Apple's built-in Vision framework (no third-party
+  # dependency); Vision exposes face pitch on iOS 15+.
+  s.platform = :ios, '15.0'
+  s.frameworks = 'AVFoundation', 'Vision', 'CoreImage'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }

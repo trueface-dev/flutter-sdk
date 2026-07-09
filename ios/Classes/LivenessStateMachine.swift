@@ -60,16 +60,29 @@ final class LivenessStateMachine {
     static let smile: CGFloat = 0.70
     static let turnPeak: CGFloat = 25
     static let turnReturn: CGFloat = 10
-    static let nodDown: CGFloat = -15
-    static let nodUp: CGFloat = -5
+    /// Nod is detected relative to the user's resting pose (Vision's pitch is
+    /// compressed and carries a per-user/phone-angle offset, so a fixed
+    /// absolute angle is unreliable). It fires when EITHER the pitch drops
+    /// `nodDropDelta`° below the resting baseline, OR the face foreshortens
+    /// (box height/width ratio falls `nodForeshortenDrop` below its resting
+    /// max) — then returns toward the baseline.
+    static let nodDropDelta: CGFloat = 3
+    static let nodReturnDelta: CGFloat = 2
+    static let nodForeshortenDrop: CGFloat = 0.10
+    static let nodForeshortenReturn: CGFloat = 0.05
   }
   private static let hintInterval: TimeInterval = 0.8
   private static let faceLostGrace: TimeInterval = 3.0
   private static let faceLostDebounce: TimeInterval = 0.4
+  /// After all challenges pass, wait up to this long for a frontal, stable face
+  /// before capturing. If it elapses, capture anyway (the user already passed).
+  private static let alignTimeout: TimeInterval = 3.0
 
   private enum Phase {
     case gating
     case challenge
+    /// All challenges done; waiting for a forward-facing frame to capture.
+    case aligning
     case done
   }
 
@@ -81,6 +94,7 @@ final class LivenessStateMachine {
   private(set) var completed: [String] = []
 
   private var challengeStartedAt: TimeInterval = 0
+  private var alignStartedAt: TimeInterval = 0
   private var gateStableSince: TimeInterval?
   private var lastHintAt: TimeInterval = -1
   private var faceVisible = false
@@ -91,6 +105,10 @@ final class LivenessStateMachine {
   private var blinkClosedSeen = false
   private var turnPeakSeen = false
   private var nodDownSeen = false
+  /// Resting pitch captured at the start of a nod (running max = most upright).
+  private var nodBaseline: CGFloat?
+  /// Resting face height/width ratio (running max = tallest = most upright).
+  private var nodAspectBaseline: CGFloat?
 
   init(challenges: [Challenge], timeoutMs: Int) {
     self.challenges = challenges
@@ -152,17 +170,62 @@ final class LivenessStateMachine {
         ]))
         index += 1
         if index >= challenges.count {
-          phase = .done
-          effects.append(.success)
+          // All challenges passed: align to a forward-facing frame, then snap.
+          phase = .aligning
+          alignStartedAt = now
+          gateStableSince = nil
         } else {
           phase = .gating
           gateStableSince = nil
         }
       }
+    case .aligning:
+      effects += align(frame, now: now)
     case .done:
       break
     }
     return effects
+  }
+
+  // MARK: - Alignment (final forward-facing capture)
+
+  /// Waits for a single, centered, horizontally forward-facing, stable face
+  /// before emitting `.success` so the captured image is forward-facing. Falls
+  /// back to success after `alignTimeout` so a user who already passed is never
+  /// blocked.
+  private func align(_ frame: FrameObservation, now: TimeInterval) -> [MachineEffect] {
+    let timedOut = now - alignStartedAt > Self.alignTimeout
+    if frame.faces.count == 1, alignReady(frame.faces[0], frame) {
+      if gateStableSince == nil { gateStableSince = now }
+      if now - gateStableSince! >= Gate.stableInterval || timedOut {
+        phase = .done
+        return [.success]
+      }
+      return hint("holdStill", now: now)
+    }
+    gateStableSince = nil
+    if timedOut {
+      phase = .done
+      return [.success]
+    }
+    return hint("lookStraight", now: now)
+  }
+
+  /// Whether a face is ready for the final forward-facing capture: single,
+  /// well-sized, centered, and not turned left/right. Pitch is intentionally
+  /// NOT checked — Vision's pitch is offset/compressed and would stall a user
+  /// who is genuinely looking straight (e.g. just after a nod).
+  private func alignReady(_ face: FaceObservation, _ frame: FrameObservation) -> Bool {
+    let imgW = frame.imageSize.width, imgH = frame.imageSize.height
+    guard imgW > 0, imgH > 0 else { return false }
+    let widthRatio = face.box.width / imgW
+    if widthRatio < Gate.minFaceWidthRatio || widthRatio > Gate.maxFaceWidthRatio {
+      return false
+    }
+    if abs(face.box.midX - imgW / 2) > Gate.maxCenterOffsetXRatio * imgW { return false }
+    if abs(face.box.midY - imgH / 2) > Gate.maxCenterOffsetYRatio * imgH { return false }
+    if abs(face.eulerY) > Gate.maxRestEuler { return false }  // not turned L/R
+    return true
   }
 
   // MARK: - Gating
@@ -202,7 +265,10 @@ final class LivenessStateMachine {
       return "centerFace"
     }
     if let luma = frame.faceLuminance, luma < Gate.minLuminance { return "faceTooDark" }
-    if abs(face.eulerY) > Gate.maxRestEuler || abs(face.eulerX) > Gate.maxRestEuler {
+    // Only yaw (left/right) is gated. Pitch is intentionally not checked:
+    // Vision's pitch is offset/compressed, so requiring |pitch| small stalls
+    // the gate after a nod even when the user is looking straight.
+    if abs(face.eulerY) > Gate.maxRestEuler {
       return "lookStraight"
     }
     return nil
@@ -212,6 +278,8 @@ final class LivenessStateMachine {
     blinkClosedSeen = false
     turnPeakSeen = false
     nodDownSeen = false
+    nodBaseline = nil
+    nodAspectBaseline = nil
     phase = .challenge
     challengeStartedAt = now
     effects.append(.event([
@@ -247,8 +315,26 @@ final class LivenessStateMachine {
       return turnPeakSeen && abs(face.eulerY) < Thresholds.turnReturn
 
     case .nod:
-      if face.eulerX <= Thresholds.nodDown { nodDownSeen = true; return false }
-      return nodDownSeen && face.eulerX >= Thresholds.nodUp
+      let pitch = face.eulerX
+      let aspect = face.box.height / max(face.box.width, 1)
+      if !nodDownSeen {
+        // Track the most-upright pose (highest pitch, tallest box) as baseline
+        // until the nod begins, then look for a downward drop on either signal.
+        nodBaseline = max(nodBaseline ?? pitch, pitch)
+        nodAspectBaseline = max(nodAspectBaseline ?? aspect, aspect)
+        let pitchDrop = nodBaseline! - pitch
+        let aspectDrop = nodAspectBaseline! - aspect
+        if pitchDrop >= Thresholds.nodDropDelta
+          || aspectDrop >= Thresholds.nodForeshortenDrop {
+          nodDownSeen = true
+        }
+        return false
+      }
+      // Satisfied once the head returns toward the resting baseline (either
+      // signal recovering is enough).
+      let pitchBack = (nodBaseline! - pitch) <= Thresholds.nodReturnDelta
+      let aspectBack = (nodAspectBaseline! - aspect) <= Thresholds.nodForeshortenReturn
+      return pitchBack || aspectBack
     }
   }
 

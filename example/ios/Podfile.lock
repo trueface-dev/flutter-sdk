@@ -1,75 +1,14 @@
 PODS:
   - Flutter (1.0.0)
-  - GoogleDataTransport (10.1.0):
-    - nanopb (~> 3.30910.0)
-    - PromisesObjC (~> 2.4)
-  - GoogleMLKit/FaceDetection (7.0.0):
-    - GoogleMLKit/MLKitCore
-    - MLKitFaceDetection (~> 6.0.0)
-  - GoogleMLKit/MLKitCore (7.0.0):
-    - MLKitCommon (~> 12.0.0)
-  - GoogleToolboxForMac/Defines (4.2.1)
-  - GoogleToolboxForMac/Logger (4.2.1):
-    - GoogleToolboxForMac/Defines (= 4.2.1)
-  - "GoogleToolboxForMac/NSData+zlib (4.2.1)":
-    - GoogleToolboxForMac/Defines (= 4.2.1)
-  - GoogleUtilities/Environment (8.1.1):
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/Logger (8.1.1):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (8.1.1)
-  - GoogleUtilities/UserDefaults (8.1.1):
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Privacy
-  - GTMSessionFetcher/Core (3.5.0)
   - integration_test (0.0.1):
     - Flutter
   - liveness_detection (0.0.1):
     - Flutter
-    - GoogleMLKit/FaceDetection (~> 7.0)
-  - MLImage (1.0.0-beta6)
-  - MLKitCommon (12.0.0):
-    - GoogleDataTransport (~> 10.0)
-    - GoogleToolboxForMac/Logger (< 5.0, >= 4.2.1)
-    - "GoogleToolboxForMac/NSData+zlib (< 5.0, >= 4.2.1)"
-    - GoogleUtilities/Logger (~> 8.0)
-    - GoogleUtilities/UserDefaults (~> 8.0)
-    - GTMSessionFetcher/Core (< 4.0, >= 3.3.2)
-  - MLKitFaceDetection (6.0.0):
-    - MLKitCommon (~> 12.0)
-    - MLKitVision (~> 8.0)
-  - MLKitVision (8.0.0):
-    - GoogleToolboxForMac/Logger (< 5.0, >= 4.2.1)
-    - "GoogleToolboxForMac/NSData+zlib (< 5.0, >= 4.2.1)"
-    - GTMSessionFetcher/Core (< 4.0, >= 3.3.2)
-    - MLImage (= 1.0.0-beta6)
-    - MLKitCommon (~> 12.0)
-  - nanopb (3.30910.0):
-    - nanopb/decode (= 3.30910.0)
-    - nanopb/encode (= 3.30910.0)
-  - nanopb/decode (3.30910.0)
-  - nanopb/encode (3.30910.0)
-  - PromisesObjC (2.4.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - liveness_detection (from `.symlinks/plugins/liveness_detection/ios`)
-
-SPEC REPOS:
-  trunk:
-    - GoogleDataTransport
-    - GoogleMLKit
-    - GoogleToolboxForMac
-    - GoogleUtilities
-    - GTMSessionFetcher
-    - MLImage
-    - MLKitCommon
-    - MLKitFaceDetection
-    - MLKitVision
-    - nanopb
-    - PromisesObjC
 
 EXTERNAL SOURCES:
   Flutter:
@@ -81,19 +20,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
-  GoogleMLKit: eff9e23ec1d90ea4157a1ee2e32a4f610c5b3318
-  GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
-  GoogleUtilities: 4f2618a4a1e762a1ee134a1e2323bba9843e06da
-  GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
-  liveness_detection: 85fa51c7c656f33583de84ebf4ef96befb65d81c
-  MLImage: 0ad1c5f50edd027672d8b26b0fee78a8b4a0fc56
-  MLKitCommon: 07c2c33ae5640e5380beaaa6e4b9c249a205542d
-  MLKitFaceDetection: 2a593db4837db503ad3426b565e7aab045cefea5
-  MLKitVision: 45e79d68845a2de77e2dd4d7f07947f0ed157b0e
-  nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
-  PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
+  liveness_detection: 7fa65f1ba2fb09a31b1e247840fc570f08ed875c
 
 PODFILE CHECKSUM: 90372e4d5366b75b970970dd4eca546a54763cdb
 

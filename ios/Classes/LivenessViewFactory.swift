@@ -53,7 +53,14 @@ struct LivenessNativeConfig {
   init(map: [String: Any]) {
     let pool = (map["challengePool"] as? [Any])?
       .compactMap { ($0 as? String).flatMap(Challenge.init(rawValue:)) } ?? []
-    challengePool = pool.isEmpty ? Challenge.allCases : pool
+    // Apple Vision cannot reliably detect a nod: its pitch is too compressed
+    // for a gentle nod, and a strong nod tilts the head enough that Vision
+    // loses the face. So nod is excluded from the iOS challenge set (Android,
+    // which uses ML Kit, keeps it). Falls back to the non-nod set if a caller
+    // requested only nod.
+    let requested = pool.isEmpty ? Challenge.allCases : pool
+    let usable = requested.filter { $0 != .nod }
+    challengePool = usable.isEmpty ? [.blink, .smile, .turnLeft, .turnRight] : usable
     numberOfChallenges = max(1, map["numberOfChallenges"] as? Int ?? 3)
     randomizeOrder = map["randomizeOrder"] as? Bool ?? true
     challengeTimeoutMs = map["challengeTimeoutMs"] as? Int ?? 12000

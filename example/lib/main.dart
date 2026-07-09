@@ -62,14 +62,18 @@ class _HomePageState extends State<HomePage> {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       if (result.spoofScore != null)
-                        Text('Realness score: '
-                            '${(result.spoofScore! * 100).toStringAsFixed(0)}%'),
+                        Text(
+                          'Realness score: '
+                          '${(result.spoofScore! * 100).toStringAsFixed(0)}%',
+                        ),
                     ],
                   )
                 else
                   Text(
                     'Failed: ${result.failureReason?.name ?? 'unknown'}',
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                   ),
                 const SizedBox(height: 24),
               ],
@@ -143,12 +147,17 @@ class _LivenessScreenState extends State<LivenessScreen> {
   String _instruction = 'Position your face in the circle';
   int _completed = 0;
   int _total = 0;
-  String _debug = 'waiting for camera frames…'; // TODO: remove after debugging
+  String _debug =
+      'waiting for camera frames…'; // TODO: remove after calibration
 
   void _onEvent(LivenessEvent event) {
     setState(() {
       switch (event) {
-        case ChallengeStartedEvent(:final challenge, :final index, :final total):
+        case ChallengeStartedEvent(
+          :final challenge,
+          :final index,
+          :final total,
+        ):
           _instruction = challenge.instruction;
           _completed = index;
           _total = total;
@@ -203,12 +212,18 @@ class _LivenessScreenState extends State<LivenessScreen> {
               left: 12,
               right: 12,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
                 color: Colors.black54,
                 child: Text(
                   'debug: $_debug',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.greenAccent, fontSize: 13),
+                  style: const TextStyle(
+                    color: Colors.greenAccent,
+                    fontSize: 13,
+                  ),
                 ),
               ),
             ),

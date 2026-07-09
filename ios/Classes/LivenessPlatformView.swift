@@ -1,8 +1,8 @@
 import AVFoundation
+import CoreImage
 import Flutter
-import MLKitFaceDetection
-import MLKitVision
 import UIKit
+import Vision
 
 /// UIView whose backing layer is the capture preview layer.
 private final class CameraPreviewView: UIView {
@@ -14,17 +14,42 @@ private final class CameraPreviewView: UIView {
 
 /// The platform view driving one liveness session.
 ///
-/// ## Orientation / mirroring calibration
-/// The video data output connection is forced to `.portrait` and — for the
-/// front camera — `isVideoMirrored = true`, so the analysis buffer matches
-/// what the (automatically mirrored) preview layer shows. With a mirrored
-/// buffer, ML Kit's head-euler-Y convention ("positive = face turns toward
-/// the right side of the image") means the USER turning to the USER'S LEFT
-/// yields a **negative** euler Y — exactly what the contract and the Dart
-/// docs specify for `turnLeft`. For the back camera nothing is mirrored and
-/// the same sign convention holds from the subject's perspective.
+/// ## Why Apple Vision (not ML Kit)
+/// ML Kit's on-device face detector returns no results on some iOS versions
+/// (notably iOS 26) even though its model resources ship correctly, so iOS
+/// uses Apple's built-in `Vision` framework instead. Android keeps ML Kit.
+/// Vision gives us the bounding box, yaw/pitch/roll and face landmarks; eye
+/// openness and smile are derived geometrically from the landmarks (see
+/// `Calibration`) to reproduce the probabilities the state machine expects.
+///
+/// ## Orientation / mirroring
+/// The data-output buffer is rotated to upright portrait and, for the front
+/// camera, mirrored to match the preview. Vision runs on that upright buffer
+/// with `.up`. Turn/nod direction depends on the yaw/pitch sign after
+/// mirroring; if a challenge triggers on the wrong side on-device, flip
+/// `Calibration.yawSign` / `Calibration.pitchSign`.
 final class LivenessPlatformView: NSObject, FlutterPlatformView,
   AVCaptureVideoDataOutputSampleBufferDelegate {
+
+  /// Geometry → probability calibration. These are principled defaults; tune on
+  /// a device if blink/smile/turn feel too eager or too strict.
+  private enum Calibration {
+    /// Flip if the user turning left is detected as turning right (or nod is
+    /// inverted). Mirroring of the front buffer determines the sign.
+    static let yawSign: CGFloat = 1
+    static let pitchSign: CGFloat = -1
+    /// Eye openness = (eye-region height / width). Below `earClosed` reads as
+    /// shut, above `earOpen` as fully open; mapped linearly to 0…1.
+    static let earClosed: CGFloat = 0.10
+    static let earOpen: CGFloat = 0.28
+    /// Smile, primary cue: mouth-corner lift (corners rising above the mouth
+    /// centre line, normalized by mouth width), mapped 0…1.
+    static let smileLiftNeutral: CGFloat = 0.015
+    static let smileLiftFull: CGFloat = 0.055
+    /// Smile, secondary cue: mouth width / inter-ocular distance, mapped 0…1.
+    static let smileNeutral: CGFloat = 0.92
+    static let smileFull: CGFloat = 1.06
+  }
 
   private let previewView: CameraPreviewView
   private let channel: FlutterMethodChannel
@@ -32,7 +57,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
 
   private let session = AVCaptureSession()
   private let videoQueue = DispatchQueue(label: "com.liveness.video")
-  private let detector: FaceDetector
+  private let landmarksRequest = VNDetectFaceLandmarksRequest()
   private let antiSpoof: AntiSpoofDetector
 
   // All mutable session state below is confined to `videoQueue`.
@@ -41,7 +66,12 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   private var cameraConfigured = false
   private var lastFacePixelBuffer: CVPixelBuffer?
   private var lastFaceBox: CGRect?
-  private var lastDiagAt: TimeInterval = 0
+  private var lastDiagAt: TimeInterval = 0  // TODO: remove after calibration
+  private var lastSmileDebug = ""  // TODO: remove after calibration
+  private var pitchMin: CGFloat = 999  // TODO: remove after calibration
+  private var pitchMax: CGFloat = -999  // TODO: remove after calibration
+  private var aspectMin: CGFloat = 999  // TODO: remove after calibration
+  private var aspectMax: CGFloat = -999  // TODO: remove after calibration
 
   init(
     frame: CGRect,
@@ -57,13 +87,6 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       name: "com.liveness/liveness_\(viewId)",
       binaryMessenger: messenger
     )
-
-    let options = FaceDetectorOptions()
-    options.performanceMode = .accurate
-    options.classificationMode = .all
-    options.landmarkMode = .all
-    options.isTrackingEnabled = true
-    detector = FaceDetector.faceDetector(options: options)
 
     antiSpoof = AntiSpoofDetectors.makeDefault()
     machine = LivenessStateMachine(
@@ -179,8 +202,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
 
     if let connection = output.connection(with: .video) {
       applyPortraitRotation(to: connection)
-      // Mirror the front-camera analysis buffer to match the preview; see the
-      // class docs for how this fixes the turnLeft/turnRight euler-Y sign.
+      // Mirror the front-camera analysis buffer so it matches the preview.
       if config.cameraPosition == .front, connection.isVideoMirroringSupported {
         connection.automaticallyAdjustsVideoMirroring = false
         connection.isVideoMirrored = true
@@ -188,9 +210,9 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     }
   }
 
-  /// Rotates the delivered buffers to upright portrait so ML Kit (fed `.up`)
-  /// and all the downstream coordinate math see an upright face. On iOS 17+
-  /// the legacy `videoOrientation` is deprecated and can silently no-op on the
+  /// Rotates the delivered buffers to upright portrait so Vision (fed `.up`)
+  /// and the downstream coordinate math see an upright face. On iOS 17+ the
+  /// legacy `videoOrientation` is deprecated and can silently no-op on the
   /// data-output connection, so prefer `videoRotationAngle` there.
   private func applyPortraitRotation(to connection: AVCaptureConnection) {
     if #available(iOS 17.0, *) {
@@ -205,30 +227,6 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     }
   }
 
-  /// Mean brightness (0–255) over a coarse grid of the whole BGRA frame. A
-  /// real camera feed is never ~0; the simulator's absent camera reads black.
-  /// TODO: remove after debugging.
-  private func avgLuma(_ pb: CVPixelBuffer) -> Int {
-    guard CVPixelBufferGetPixelFormatType(pb) == kCVPixelFormatType_32BGRA else { return -1 }
-    CVPixelBufferLockBaseAddress(pb, .readOnly)
-    defer { CVPixelBufferUnlockBaseAddress(pb, .readOnly) }
-    guard let base = CVPixelBufferGetBaseAddress(pb) else { return -1 }
-    let bpr = CVPixelBufferGetBytesPerRow(pb)
-    let w = CVPixelBufferGetWidth(pb), h = CVPixelBufferGetHeight(pb)
-    let bytes = base.assumingMemoryBound(to: UInt8.self)
-    let grid = 20
-    var sum = 0, n = 0
-    for gy in 0..<grid {
-      for gx in 0..<grid {
-        let x = w * gx / grid, y = h * gy / grid
-        let p = y * bpr + x * 4
-        sum += (Int(bytes[p]) + Int(bytes[p + 1]) + Int(bytes[p + 2])) / 3
-        n += 1
-      }
-    }
-    return n > 0 ? sum / n : -1
-  }
-
   // MARK: - Frame processing (videoQueue)
 
   func captureOutput(
@@ -239,48 +237,30 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     guard !resultDelivered, !machine.isFinished else { return }
     guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
-    let visionImage = VisionImage(buffer: sampleBuffer)
-    visionImage.orientation = .up  // buffer already rotated to portrait
-    let mlFaces = (try? detector.results(in: visionImage)) ?? []
-
     let width = CGFloat(CVPixelBufferGetWidth(pixelBuffer))
     let height = CGFloat(CVPixelBufferGetHeight(pixelBuffer))
+    let size = CGSize(width: width, height: height)
     let now = CACurrentMediaTime()
 
-    // Throttled diagnostic: try every orientation on the same buffer and report
-    // which one ML Kit actually finds a face in. `-1` means the detector threw.
-    // TODO: remove after debugging.
-    if now - lastDiagAt > 1.0 {
-      lastDiagAt = now
-      let probes: [(String, UIImage.Orientation)] = [
-        ("up", .up), ("rt", .right), ("lf", .left),
-        ("lm", .leftMirrored), ("rm", .rightMirrored),
-      ]
-      var report = "\(Int(width))x\(Int(height)) lum=\(avgLuma(pixelBuffer))"
-      for (name, o) in probes {
-        let vi = VisionImage(buffer: sampleBuffer)
-        vi.orientation = o
-        let count = (try? detector.results(in: vi))?.count ?? -1
-        report += " \(name)=\(count)"
-      }
-      NSLog("[liveness] \(report)")
-      sendEvent(["type": "debug", "message": report])
-    }
+    let faces = detectFaces(pixelBuffer, size: size)
 
-    let faces = mlFaces.map { face -> FaceObservation in
-      FaceObservation(
-        box: face.frame,
-        eulerX: face.hasHeadEulerAngleX ? face.headEulerAngleX : 0,
-        eulerY: face.hasHeadEulerAngleY ? face.headEulerAngleY : 0,
-        leftEyeOpen: face.hasLeftEyeOpenProbability ? face.leftEyeOpenProbability : nil,
-        rightEyeOpen: face.hasRightEyeOpenProbability ? face.rightEyeOpenProbability : nil,
-        smiling: face.hasSmilingProbability ? face.smilingProbability : nil,
-        nose: face.landmark(ofType: .noseBase)?.position.cgPoint,
-        leftCheek: face.landmark(ofType: .leftCheek)?.position.cgPoint
-          ?? face.landmark(ofType: .leftEar)?.position.cgPoint,
-        rightCheek: face.landmark(ofType: .rightCheek)?.position.cgPoint
-          ?? face.landmark(ofType: .rightEar)?.position.cgPoint
-      )
+    // TODO: remove after calibration — live pose/openness readout.
+    if now - lastDiagAt > 0.5 {
+      lastDiagAt = now
+      let msg: String
+      if let f = faces.first {
+        pitchMin = min(pitchMin, f.eulerX)
+        pitchMax = max(pitchMax, f.eulerX)
+        let aspect = f.box.height / max(f.box.width, 1)
+        aspectMin = min(aspectMin, aspect)
+        aspectMax = max(aspectMax, aspect)
+        msg = String(
+          format: "pitch=%.0f(%.0f/%.0f) asp=%.2f(%.2f/%.2f) smile=%.2f",
+          f.eulerX, pitchMin, pitchMax, aspect, aspectMin, aspectMax, f.smiling ?? -1)
+      } else {
+        msg = "no face"
+      }
+      sendEvent(["type": "debug", "message": msg])
     }
 
     var luminance: CGFloat?
@@ -308,12 +288,131 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     let effects = machine.process(
       FrameObservation(
         timestamp: now,
-        imageSize: CGSize(width: width, height: height),
+        imageSize: size,
         faces: faces,
         faceLuminance: luminance
       ))
     handle(effects)
   }
+
+  // MARK: - Vision detection
+
+  /// Runs Apple Vision on the upright buffer and maps each detected face into a
+  /// `FaceObservation` with the same semantics ML Kit produced on Android
+  /// (pixel-space top-left box, euler angles in degrees, 0…1 eye/smile).
+  private func detectFaces(_ pixelBuffer: CVPixelBuffer, size: CGSize) -> [FaceObservation] {
+    let handler = VNImageRequestHandler(
+      cvPixelBuffer: pixelBuffer, orientation: .up, options: [:])
+    do {
+      try handler.perform([landmarksRequest])
+    } catch {
+      return []
+    }
+    guard let results = landmarksRequest.results else { return [] }
+    return results.map { observation in
+      map(observation, size: size)
+    }
+  }
+
+  private func map(_ obs: VNFaceObservation, size: CGSize) -> FaceObservation {
+    // Vision boundingBox: normalized, bottom-left origin → pixel, top-left.
+    let bb = obs.boundingBox
+    let box = CGRect(
+      x: bb.minX * size.width,
+      y: (1 - bb.maxY) * size.height,
+      width: bb.width * size.width,
+      height: bb.height * size.height)
+
+    let eulerY = degrees(obs.yaw) * Calibration.yawSign
+    let eulerX: CGFloat = {
+      if #available(iOS 15.0, *) { return degrees(obs.pitch) * Calibration.pitchSign }
+      return 0
+    }()
+
+    let lm = obs.landmarks
+    let leftEye = points(lm?.leftEye, size)
+    let rightEye = points(lm?.rightEye, size)
+    let lips = points(lm?.outerLips, size)
+    let noseP = points(lm?.nose, size)
+    let contour = points(lm?.faceContour, size)
+
+    let leftOpen = eyeOpenness(leftEye)
+    let rightOpen = eyeOpenness(rightEye)
+    let smile = smileScore(lips: lips, leftEye: leftEye, rightEye: rightEye)
+
+    return FaceObservation(
+      box: box,
+      eulerX: eulerX,
+      eulerY: eulerY,
+      leftEyeOpen: leftOpen,
+      rightEyeOpen: rightOpen,
+      smiling: smile,
+      nose: centroid(noseP),
+      leftCheek: contour.min(by: { $0.x < $1.x }),
+      rightCheek: contour.max(by: { $0.x < $1.x })
+    )
+  }
+
+  private func degrees(_ radians: NSNumber?) -> CGFloat {
+    guard let r = radians?.doubleValue else { return 0 }
+    return CGFloat(r * 180 / .pi)
+  }
+
+  /// Region landmark points in top-left pixel coordinates.
+  private func points(_ region: VNFaceLandmarkRegion2D?, _ size: CGSize) -> [CGPoint] {
+    guard let region else { return [] }
+    return region.pointsInImage(imageSize: size).map {
+      CGPoint(x: $0.x, y: size.height - $0.y)
+    }
+  }
+
+  private func centroid(_ pts: [CGPoint]) -> CGPoint? {
+    guard !pts.isEmpty else { return nil }
+    let sum = pts.reduce(CGPoint.zero) { CGPoint(x: $0.x + $1.x, y: $0.y + $1.y) }
+    return CGPoint(x: sum.x / CGFloat(pts.count), y: sum.y / CGFloat(pts.count))
+  }
+
+  /// Eye openness (0…1) from the aspect ratio of the eye-contour points.
+  private func eyeOpenness(_ pts: [CGPoint]) -> CGFloat? {
+    guard pts.count >= 3 else { return nil }
+    let xs = pts.map { $0.x }, ys = pts.map { $0.y }
+    let w = (xs.max()! - xs.min()!), h = (ys.max()! - ys.min()!)
+    guard w > 0 else { return nil }
+    let ratio = h / w
+    return clamp01((ratio - Calibration.earClosed) / (Calibration.earOpen - Calibration.earClosed))
+  }
+
+  /// Smile (0…1). Primary cue is mouth-corner lift (corners rising above the
+  /// mouth centre line); secondary cue is mouth width vs inter-ocular distance.
+  /// The two are combined with `max` so either a wide grin or a strong corner
+  /// lift registers. Records raw values in `lastSmileDebug` for calibration.
+  private func smileScore(lips: [CGPoint], leftEye: [CGPoint], rightEye: [CGPoint]) -> CGFloat? {
+    guard lips.count >= 3, let le = centroid(leftEye), let re = centroid(rightEye)
+    else { return nil }
+    let leftCorner = lips.min(by: { $0.x < $1.x })!
+    let rightCorner = lips.max(by: { $0.x < $1.x })!
+    let mouthWidth = rightCorner.x - leftCorner.x
+    let interocular = hypot(re.x - le.x, re.y - le.y)
+    guard mouthWidth > 0, interocular > 0 else { return nil }
+
+    // Corner lift: mouth centre y minus average corner y, over mouth width.
+    // Top-left coords, so corners *above* the centre give a positive lift.
+    let centreY = lips.map { $0.y }.reduce(0, +) / CGFloat(lips.count)
+    let lift = (centreY - (leftCorner.y + rightCorner.y) / 2) / mouthWidth
+    let widthRatio = mouthWidth / interocular
+
+    let liftScore = clamp01(
+      (lift - Calibration.smileLiftNeutral)
+        / (Calibration.smileLiftFull - Calibration.smileLiftNeutral))
+    let widthScore = clamp01(
+      (widthRatio - Calibration.smileNeutral)
+        / (Calibration.smileFull - Calibration.smileNeutral))
+
+    lastSmileDebug = String(format: "lift=%.3f wr=%.2f", lift, widthRatio)
+    return max(liftScore, widthScore)
+  }
+
+  private func clamp01(_ v: CGFloat) -> CGFloat { min(1, max(0, v)) }
 
   /// Runs on `videoQueue`.
   private func handle(_ effects: [MachineEffect]) {
@@ -467,8 +566,8 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   }
 
   /// Crops generously around the face box, encodes JPEG at the configured
-  /// quality. `faceBox` is top-left origin (ML Kit); CoreImage is bottom-left
-  /// origin, hence the y-flip. Runs on `videoQueue`.
+  /// quality. `faceBox` is top-left origin; CoreImage is bottom-left origin,
+  /// hence the y-flip. Runs on `videoQueue`.
   private func encodeFaceCrop(
     pixelBuffer: CVPixelBuffer, faceBox: CGRect
   ) -> (data: Data, width: Int, height: Int)? {
@@ -488,8 +587,4 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     guard let data = image.jpegData(compressionQuality: quality) else { return nil }
     return (data, cgImage.width, cgImage.height)
   }
-}
-
-extension VisionPoint {
-  fileprivate var cgPoint: CGPoint { CGPoint(x: x, y: y) }
 }
