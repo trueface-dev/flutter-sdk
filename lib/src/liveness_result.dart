@@ -30,6 +30,20 @@ enum LivenessFailureReason {
       );
 }
 
+/// The backend verdict for a hosted verification.
+enum VerificationStatus {
+  approved,
+  rejected,
+  failed,
+  pending;
+
+  static VerificationStatus fromWire(String value) =>
+      VerificationStatus.values.firstWhere(
+        (s) => s.name == value,
+        orElse: () => VerificationStatus.pending,
+      );
+}
+
 /// The terminal outcome of a liveness session.
 class LivenessResult {
   const LivenessResult({
@@ -40,9 +54,15 @@ class LivenessResult {
     this.spoofScore,
     this.failureReason,
     this.completedChallenges = const [],
+    this.videoPath,
+    this.verificationStatus,
+    this.imageUrl,
+    this.videoUrl,
   });
 
   /// Whether all challenges passed and the frame cleared the anti-spoof check.
+  /// For a hosted verification this reflects the on-device stage only; see
+  /// [verificationStatus] for the backend verdict.
   final bool success;
 
   /// The captured face image as JPEG bytes. Non-null only on [success].
@@ -60,6 +80,16 @@ class LivenessResult {
   /// The challenges that were completed before the session ended.
   final List<LivenessChallenge> completedChallenges;
 
+  /// Local path to the recorded video (hosted verification only).
+  final String? videoPath;
+
+  /// The backend verdict (hosted verification only).
+  final VerificationStatus? verificationStatus;
+
+  /// Remote URLs of the uploaded media (hosted verification only).
+  final String? imageUrl;
+  final String? videoUrl;
+
   factory LivenessResult.fromMap(Map<dynamic, dynamic> map) {
     final base64Image = map['imageBase64'] as String?;
     return LivenessResult(
@@ -74,6 +104,30 @@ class LivenessResult {
       completedChallenges: ((map['completed'] as List?) ?? [])
           .map((c) => LivenessChallenge.fromWire(c as String))
           .toList(),
+      videoPath: map['videoPath'] as String?,
+    );
+  }
+
+  LivenessResult copyWith({
+    bool? success,
+    double? spoofScore,
+    LivenessFailureReason? failureReason,
+    VerificationStatus? verificationStatus,
+    String? imageUrl,
+    String? videoUrl,
+  }) {
+    return LivenessResult(
+      success: success ?? this.success,
+      image: image,
+      imageWidth: imageWidth,
+      imageHeight: imageHeight,
+      spoofScore: spoofScore ?? this.spoofScore,
+      failureReason: failureReason ?? this.failureReason,
+      completedChallenges: completedChallenges,
+      videoPath: videoPath,
+      verificationStatus: verificationStatus ?? this.verificationStatus,
+      imageUrl: imageUrl ?? this.imageUrl,
+      videoUrl: videoUrl ?? this.videoUrl,
     );
   }
 

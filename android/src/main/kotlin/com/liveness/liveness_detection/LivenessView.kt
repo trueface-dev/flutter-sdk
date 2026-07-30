@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageFormat
 import android.graphics.Matrix
 import android.graphics.PointF
 import android.graphics.Rect
+import android.graphics.YuvImage
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -24,7 +26,16 @@ import androidx.camera.core.Preview
 import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.video.FallbackStrategy
+import androidx.camera.video.FileOutputOptions
+import androidx.camera.video.Quality
+import androidx.camera.video.QualitySelector
+import androidx.camera.video.Recorder
+import androidx.camera.video.Recording
+import androidx.camera.video.VideoCapture
+import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.PreviewView
+import java.io.File
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -55,6 +66,8 @@ internal class LivenessConfigParams private constructor(
     val enablePassiveAntiSpoof: Boolean,
     val spoofScoreThreshold: Double,
     val cameraLensDirection: String,
+    val recordVideo: Boolean,
+    val videoMaxDurationMs: Long,
 ) {
     companion object {
         private val DEFAULT_POOL = listOf("blink", "smile", "turnLeft", "turnRight", "nod")
@@ -75,6 +88,8 @@ internal class LivenessConfigParams private constructor(
                 spoofScoreThreshold = ((map["spoofScoreThreshold"] as? Number)?.toDouble() ?: 0.6)
                     .coerceIn(0.0, 1.0),
                 cameraLensDirection = map["cameraLensDirection"] as? String ?: "front",
+                recordVideo = map["recordVideo"] as? Boolean ?: false,
+                videoMaxDurationMs = (map["videoMaxDurationMs"] as? Number)?.toLong() ?: 3000L,
             )
         }
     }
@@ -130,6 +145,16 @@ internal class LivenessView(
     @Volatile private var lastFrameWidth = 0
     @Volatile private var lastFrameHeight = 0
 
+    // Video recording (hosted verification). When [config.recordVideo] is on we
+    // bind VideoCapture instead of ImageCapture and take the final still from a
+    // cached single-face analysis frame.
+    private var videoCapture: VideoCapture<Recorder>? = null
+    private var recording: Recording? = null
+    @Volatile private var videoFile: File? = null
+    @Volatile private var videoFinalized = false
+    @Volatile private var lastFrameJpeg: ByteArray? = null
+    @Volatile private var lastFrameJpegRotation = 0
+
     override val lifecycle: Lifecycle
         get() = lifecycleRegistry
 
@@ -162,6 +187,7 @@ internal class LivenessView(
         disposed = true
         session?.stop()
         session = null
+        if (!resultSent) stopAndDiscardVideo() else recording = null
         channel.setMethodCallHandler(null)
         try {
             cameraProvider?.unbindAll()
@@ -254,10 +280,13 @@ internal class LivenessView(
         val preview = Preview.Builder().build()
         preview.setSurfaceProvider(previewView.surfaceProvider)
 
+        // When recording, source the final still from the analysis stream, so
+        // use a higher analysis resolution for acceptable still quality.
+        val targetSize = if (config.recordVideo) Size(1280, 720) else Size(640, 480)
         val analysisResolution = ResolutionSelector.Builder()
             .setResolutionStrategy(
                 ResolutionStrategy(
-                    Size(640, 480),
+                    targetSize,
                     ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER,
                 ),
             )
@@ -268,17 +297,50 @@ internal class LivenessView(
             .build()
         analysis.setAnalyzer(analysisExecutor) { proxy -> analyzeFrame(proxy) }
 
-        val capture = ImageCapture.Builder()
-            .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
-            .build()
-        imageCapture = capture
-
         try {
             provider.unbindAll()
-            provider.bindToLifecycle(this, selector, preview, analysis, capture)
+            if (config.recordVideo) {
+                // CameraX cannot reliably bind 4 use cases; drop ImageCapture
+                // and record with VideoCapture (Preview + Analysis + Video).
+                val recorder = Recorder.Builder()
+                    .setQualitySelector(
+                        QualitySelector.from(
+                            Quality.HD,
+                            FallbackStrategy.lowerQualityOrHigherThan(Quality.SD),
+                        ),
+                    )
+                    .build()
+                val vc = VideoCapture.withOutput(recorder)
+                videoCapture = vc
+                provider.bindToLifecycle(this, selector, preview, analysis, vc)
+                startVideoRecording()
+            } else {
+                val capture = ImageCapture.Builder()
+                    .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
+                    .build()
+                imageCapture = capture
+                provider.bindToLifecycle(this, selector, preview, analysis, capture)
+            }
         } catch (e: Exception) {
             postFailureResult("cameraError")
         }
+    }
+
+    private fun startVideoRecording() {
+        val vc = videoCapture ?: return
+        videoFinalized = false
+        lastFrameJpeg = null
+        val file = File(appContext.cacheDir, "liveness_${System.currentTimeMillis()}.mp4")
+        videoFile = file
+        val options = FileOutputOptions.Builder(file)
+            .setDurationLimitMillis(config.videoMaxDurationMs)
+            .build()
+        // No .withAudioEnabled() — video only, so no RECORD_AUDIO permission.
+        recording = vc.output
+            .prepareRecording(appContext, options)
+            .start(ContextCompat.getMainExecutor(appContext)) { event ->
+                if (event is VideoRecordEvent.Finalize) videoFinalized = true
+            }
     }
 
     // --------------------------------------------------------------- analysis
@@ -303,12 +365,19 @@ internal class LivenessView(
             } else {
                 null
             }
+        // Cache a JPEG of this frame (throttled) so the final still can be taken
+        // from the analysis stream when recording (ImageCapture isn't bound).
+        val frameJpeg =
+            if (config.recordVideo && frameCounter % 4 == 0) encodeProxyToJpeg(proxy) else null
         val timestamp = SystemClock.elapsedRealtime()
         detector.process(InputImage.fromMediaImage(mediaImage, rotation))
             .addOnSuccessListener { faces ->
                 // ML Kit delivers this on the main thread.
                 if (!disposed) {
-                    handleFaces(faces, frameWidth, frameHeight, meanLuma, lumaCrop, timestamp)
+                    handleFaces(
+                        faces, frameWidth, frameHeight, meanLuma, lumaCrop, timestamp,
+                        frameJpeg, rotation,
+                    )
                 }
             }
             .addOnCompleteListener { proxy.close() }
@@ -321,11 +390,17 @@ internal class LivenessView(
         meanLuma: Double,
         lumaCrop: LumaCrop?,
         timestampMs: Long,
+        frameJpeg: ByteArray?,
+        frameRotation: Int,
     ) {
         if (resultSent) return
         val obs = if (faces.size == 1) {
             val face = faces[0]
             lastFaceBox = Rect(face.boundingBox)
+            if (frameJpeg != null) {
+                lastFrameJpeg = frameJpeg
+                lastFrameJpegRotation = frameRotation
+            }
             lastFrameWidth = frameWidth
             lastFrameHeight = frameHeight
             val landmarks = HashMap<Int, PointF>()
@@ -426,6 +501,7 @@ internal class LivenessView(
         val score: Double? =
             if (config.enablePassiveAntiSpoof) antiSpoof.computeScore() else null
         if (score != null && score < config.spoofScoreThreshold) {
+            if (config.recordVideo) stopAndDiscardVideo()
             sendResult(
                 mapOf(
                     "success" to false,
@@ -441,12 +517,17 @@ internal class LivenessView(
 
     override fun onSessionFailed(reason: String, completed: List<String>) {
         if (disposed) return
+        if (config.recordVideo) stopAndDiscardVideo()
         sendResult(failureMap(reason, completed))
     }
 
     // ---------------------------------------------------------------- capture
 
     private fun captureAndFinish(score: Double?, completed: List<String>) {
+        if (config.recordVideo) {
+            finishWithRecording(score, completed)
+            return
+        }
         val capture = imageCapture
         if (capture == null) {
             sendResult(failureMap("cameraError", completed, score))
@@ -532,11 +613,114 @@ internal class LivenessView(
         return Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top)
     }
 
+    /**
+     * Stops recording, waits for the file to finalize, then builds the result
+     * from the cached single-face frame with the video path attached.
+     */
+    private fun finishWithRecording(score: Double?, completed: List<String>) {
+        recording?.stop()
+        analysisExecutor.execute {
+            val deadline = SystemClock.elapsedRealtime() + 2000
+            while (!videoFinalized && SystemClock.elapsedRealtime() < deadline) {
+                Thread.sleep(50)
+            }
+            val jpeg = lastFrameJpeg
+            val map: Map<String, Any?> = if (jpeg != null) {
+                val base = try {
+                    buildSuccessResult(jpeg, lastFrameJpegRotation, score, completed)
+                } catch (e: Exception) {
+                    failureMap("unknown", completed, score)
+                }
+                base.toMutableMap().apply {
+                    videoFile?.let { if (it.exists()) put("videoPath", it.absolutePath) }
+                }
+            } else {
+                failureMap("unknown", completed, score)
+            }
+            mainHandler.post { sendResult(map) }
+        }
+    }
+
+    /** Stops recording and deletes the temp file — used on failure/cancel. */
+    private fun stopAndDiscardVideo() {
+        try {
+            recording?.stop()
+        } catch (_: Exception) {
+        }
+        recording = null
+        videoFile?.let { runCatching { it.delete() } }
+        videoFile = null
+    }
+
+    /** Encodes a YUV_420_888 [ImageProxy] to an unrotated JPEG. */
+    @androidx.annotation.OptIn(ExperimentalGetImage::class)
+    private fun encodeProxyToJpeg(proxy: ImageProxy): ByteArray? {
+        val image = proxy.image ?: return null
+        if (image.format != ImageFormat.YUV_420_888) return null
+        return try {
+            val nv21 = yuv420ToNv21(proxy)
+            val yuv = YuvImage(nv21, ImageFormat.NV21, proxy.width, proxy.height, null)
+            val out = ByteArrayOutputStream()
+            yuv.compressToJpeg(Rect(0, 0, proxy.width, proxy.height), 95, out)
+            out.toByteArray()
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun yuv420ToNv21(proxy: ImageProxy): ByteArray {
+        val width = proxy.width
+        val height = proxy.height
+        val ySize = width * height
+        val nv21 = ByteArray(ySize + ySize / 2)
+
+        val yPlane = proxy.planes[0]
+        val uPlane = proxy.planes[1]
+        val vPlane = proxy.planes[2]
+
+        // Y
+        var pos = 0
+        val yBuffer = yPlane.buffer
+        val yRowStride = yPlane.rowStride
+        val yPixelStride = yPlane.pixelStride
+        for (row in 0 until height) {
+            var col = 0
+            var yIndex = row * yRowStride
+            while (col < width) {
+                nv21[pos++] = yBuffer.get(yIndex)
+                yIndex += yPixelStride
+                col++
+            }
+        }
+
+        // VU interleaved (NV21 = Y + VU)
+        val uBuffer = uPlane.buffer
+        val vBuffer = vPlane.buffer
+        val uRowStride = uPlane.rowStride
+        val uPixelStride = uPlane.pixelStride
+        val vRowStride = vPlane.rowStride
+        val vPixelStride = vPlane.pixelStride
+        val chromaHeight = height / 2
+        val chromaWidth = width / 2
+        for (row in 0 until chromaHeight) {
+            var uIndex = row * uRowStride
+            var vIndex = row * vRowStride
+            for (col in 0 until chromaWidth) {
+                nv21[pos++] = vBuffer.get(vIndex)
+                nv21[pos++] = uBuffer.get(uIndex)
+                uIndex += uPixelStride
+                vIndex += vPixelStride
+            }
+        }
+        return nv21
+    }
+
     // ----------------------------------------------------------- Dart -> view
 
     private fun onCancel() {
         val completed = session?.completedChallenges ?: emptyList()
         session?.stop()
+        if (config.recordVideo) stopAndDiscardVideo()
         sendResult(failureMap("cancelled", completed))
     }
 

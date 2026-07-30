@@ -73,6 +73,16 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   private var aspectMin: CGFloat = 999  // TODO: remove after calibration
   private var aspectMax: CGFloat = -999  // TODO: remove after calibration
 
+  // Video recording (hosted verification). Confined to `videoQueue`.
+  private var assetWriter: AVAssetWriter?
+  private var writerInput: AVAssetWriterInput?
+  private var pixelAdaptor: AVAssetWriterInputPixelBufferAdaptor?
+  private var recordingStarted = false
+  private var recordingFinalized = false
+  private var challengesBegan = false
+  private var firstFramePTS: CMTime?
+  private var videoURL: URL?
+
   init(
     frame: CGRect,
     viewId: Int64,
@@ -243,6 +253,9 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     let now = CACurrentMediaTime()
 
     let faces = detectFaces(pixelBuffer, size: size)
+
+    // Append face-present frames to the recorded video (hosted verification).
+    recordFrame(sampleBuffer, pixelBuffer, hasFace: !faces.isEmpty)
 
     // TODO: remove after calibration — live pose/openness readout.
     if now - lastDiagAt > 0.5 {
@@ -458,12 +471,18 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       "completed": machine.completed,
     ]
     if let spoofScore { result["spoofScore"] = spoofScore }
-    sendResult(result)
+    // Finalize the recording (if any), then attach its path and deliver.
+    finalizeRecording { [weak self] path in
+      var out = result
+      if let path { out["videoPath"] = path }
+      self?.sendResult(out)
+    }
   }
 
   private func finish(failureReason: String, spoofScore: Double? = nil) {
     guard !resultDelivered else { return }
     resultDelivered = true
+    discardRecording()
     var result: [String: Any] = [
       "success": false,
       "failureReason": failureReason,
@@ -483,11 +502,110 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     lastFacePixelBuffer = nil
     lastFaceBox = nil
     resultDelivered = false
+    discardRecording()
+    resetRecordingState()
     if cameraConfigured, !session.isRunning {
       session.startRunning()
     } else if !cameraConfigured {
       requestCameraAccess()
     }
+  }
+
+  // MARK: - Video recording (videoQueue)
+
+  /// Feeds face-present frames to the asset writer once challenges begin,
+  /// stopping at the configured duration cap. Runs on `videoQueue`.
+  private func recordFrame(
+    _ sampleBuffer: CMSampleBuffer, _ pixelBuffer: CVPixelBuffer, hasFace: Bool
+  ) {
+    guard config.recordVideo, !recordingFinalized else { return }
+    if machine.currentChallenge != nil { challengesBegan = true }
+    guard challengesBegan, hasFace else { return }
+
+    let pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+    if !recordingStarted {
+      guard setupWriter(
+        width: CVPixelBufferGetWidth(pixelBuffer),
+        height: CVPixelBufferGetHeight(pixelBuffer)
+      ) else { return }
+      assetWriter?.startSession(atSourceTime: pts)
+      firstFramePTS = pts
+      recordingStarted = true
+    }
+    if let input = writerInput, input.isReadyForMoreMediaData {
+      pixelAdaptor?.append(pixelBuffer, withPresentationTime: pts)
+    }
+    if let first = firstFramePTS,
+      CMTimeGetSeconds(CMTimeSubtract(pts, first)) >= Double(config.videoMaxDurationMs) / 1000
+    {
+      finalizeRecording(completion: nil)  // cap reached; keep the file
+    }
+  }
+
+  private func setupWriter(width: Int, height: Int) -> Bool {
+    let url = FileManager.default.temporaryDirectory
+      .appendingPathComponent("liveness_\(UUID().uuidString).mp4")
+    guard let writer = try? AVAssetWriter(outputURL: url, fileType: .mp4) else {
+      return false
+    }
+    let settings: [String: Any] = [
+      AVVideoCodecKey: AVVideoCodecType.h264,
+      AVVideoWidthKey: width,
+      AVVideoHeightKey: height,
+    ]
+    let input = AVAssetWriterInput(mediaType: .video, outputSettings: settings)
+    input.expectsMediaDataInRealTime = true
+    let adaptor = AVAssetWriterInputPixelBufferAdaptor(
+      assetWriterInput: input,
+      sourcePixelBufferAttributes: [
+        kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA
+      ])
+    guard writer.canAdd(input) else { return false }
+    writer.add(input)
+    guard writer.startWriting() else { return false }
+    assetWriter = writer
+    writerInput = input
+    pixelAdaptor = adaptor
+    videoURL = url
+    return true
+  }
+
+  /// Finishes writing and hands back the file path (nil if no/failed recording).
+  private func finalizeRecording(completion: ((String?) -> Void)?) {
+    guard recordingStarted else { completion?(nil); return }
+    if recordingFinalized { completion?(videoURL?.path); return }
+    recordingFinalized = true
+    writerInput?.markAsFinished()
+    let url = videoURL
+    assetWriter?.finishWriting { [weak self] in
+      let ok = self?.assetWriter?.status == .completed
+      completion?(ok ? url?.path : nil)
+    }
+  }
+
+  /// Finalizes (if needed) and deletes the temp file — used on failure/cancel.
+  private func discardRecording() {
+    guard recordingStarted, !recordingFinalized else {
+      if let url = videoURL { try? FileManager.default.removeItem(at: url) }
+      return
+    }
+    recordingFinalized = true
+    writerInput?.markAsFinished()
+    let url = videoURL
+    assetWriter?.finishWriting {
+      if let url { try? FileManager.default.removeItem(at: url) }
+    }
+  }
+
+  private func resetRecordingState() {
+    assetWriter = nil
+    writerInput = nil
+    pixelAdaptor = nil
+    recordingStarted = false
+    recordingFinalized = false
+    challengesBegan = false
+    firstFramePTS = nil
+    videoURL = nil
   }
 
   // MARK: - Channel plumbing

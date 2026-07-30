@@ -89,3 +89,11 @@ bar, and the result preview.
 `LivenessConfig` fields: `challengePool`, `numberOfChallenges`,
 `randomizeOrder`, `challengeTimeout`, `imageQuality`, `enablePassiveAntiSpoof`,
 `spoofScoreThreshold`, `cameraLensDirection`.
+
+
+Publishable: pk_test_SFJdgYdzDh84SO2jKDwL6qTxQINZCOI6
+
+Secret: sk_test_FrrvGbScsWuxCsPc_BrRCFlRNXmb4Yfi
+
+Email: demo@example.com
+Password: password123

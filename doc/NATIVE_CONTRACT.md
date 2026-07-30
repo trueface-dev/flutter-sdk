@@ -1,8 +1,8 @@
 # Liveness native contract
 
-The Dart layer is **final** — do not change anything under `lib/` or `pubspec.yaml`.
-Both native platforms must implement exactly this contract so the shared Dart
-code works unchanged.
+This is the cross-platform method-channel contract both native platforms
+implement so the shared Dart code works unchanged. (The Dart layer is no longer
+frozen — the hosted-verification work added networking + video config.)
 
 ## Platform view
 
@@ -16,8 +16,13 @@ code works unchanged.
   - `enablePassiveAntiSpoof`: `bool`.
   - `spoofScoreThreshold`: `double` (0–1) — min realness score to pass.
   - `cameraLensDirection`: `String` — `"front"` or `"back"`.
+  - `recordVideo`: `bool` — record a face-present clip during challenges.
+  - `videoMaxDurationMs`: `int` — cap on the recorded clip (~3000).
 - The view owns the camera. The session **starts automatically** when the view
   is created.
+- When `recordVideo` is true, record only frames where a face is present, front
+  camera, no audio, capped at `videoMaxDurationMs`; on success include the local
+  file path as `videoPath` in the result map (success is NOT gated on the video).
 
 ## Per-view MethodChannel
 
@@ -55,7 +60,8 @@ preview is mirrored, so calibrate the head-Euler-Y sign accordingly.)
   "imageHeight": <int?>,
   "spoofScore": <double?>,    // 0..1 realness; null if passive disabled
   "failureReason": <String?>, // present only when success == false
-  "completed": <List<String>> // completed challenge wire-names
+  "completed": <List<String>>,// completed challenge wire-names
+  "videoPath": <String?>      // recorded clip path, when recordVideo && success
 }
 ```
 `failureReason` ∈ `timeout`, `spoofDetected`, `cancelled`, `faceLost`,

@@ -1,6 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:liveness_detection/liveness_detection.dart';
 
+// Hosted-verification config, supplied at build time, e.g.:
+//   flutter run --dart-define=BACKEND_URL=http://10.0.2.2:3000 \
+//     --dart-define=PUBLIC_KEY=pk_test_... \
+//     --dart-define=VERIFICATION_ID=... --dart-define=CLIENT_SECRET=vs_...
+// (Obtain VERIFICATION_ID + CLIENT_SECRET from POST /v1/verifications with the
+// merchant secret key.) When unset, the demo runs fully on-device.
+const _backendUrl = String.fromEnvironment('BACKEND_URL');
+const _publicKey = String.fromEnvironment('PUBLIC_KEY');
+const _verificationId = String.fromEnvironment('VERIFICATION_ID');
+const _clientSecret = String.fromEnvironment('CLIENT_SECRET');
+
+LivenessConfig buildConfig() {
+  if (_backendUrl.isNotEmpty &&
+      _publicKey.isNotEmpty &&
+      _verificationId.isNotEmpty &&
+      _clientSecret.isNotEmpty) {
+    return LivenessConfig(
+      backendBaseUrl: _backendUrl,
+      publicKey: _publicKey,
+      verificationId: _verificationId,
+      clientSecret: _clientSecret,
+      recordVideo: true,
+    );
+  }
+  return const LivenessConfig(numberOfChallenges: 3);
+}
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -28,7 +55,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _startLiveness() async {
     final result = await Navigator.of(context).push<LivenessResult>(
-      MaterialPageRoute(builder: (_) => const LivenessScreen()),
+      MaterialPageRoute(builder: (_) => LivenessScreen(config: buildConfig())),
     );
     if (result != null) setState(() => _lastResult = result);
   }
@@ -58,7 +85,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'Live face verified ✓',
+                        result.verificationStatus != null
+                            ? 'Verification: ${result.verificationStatus!.name} ✓'
+                            : 'Live face verified ✓',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       if (result.spoofScore != null)
@@ -70,7 +99,9 @@ class _HomePageState extends State<HomePage> {
                   )
                 else
                   Text(
-                    'Failed: ${result.failureReason?.name ?? 'unknown'}',
+                    result.verificationStatus != null
+                        ? 'Verification ${result.verificationStatus!.name}'
+                        : 'Failed: ${result.failureReason?.name ?? 'unknown'}',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.error,
                     ),
@@ -137,7 +168,9 @@ class _FaceGuidePainter extends CustomPainter {
 
 /// Full-screen liveness capture screen driving [LivenessCameraView].
 class LivenessScreen extends StatefulWidget {
-  const LivenessScreen({super.key});
+  const LivenessScreen({super.key, required this.config});
+
+  final LivenessConfig config;
 
   @override
   State<LivenessScreen> createState() => _LivenessScreenState();
@@ -149,6 +182,7 @@ class _LivenessScreenState extends State<LivenessScreen> {
   int _total = 0;
   String _debug =
       'waiting for camera frames…'; // TODO: remove after calibration
+  bool _verifying = false;
 
   void _onEvent(LivenessEvent event) {
     setState(() {
@@ -171,6 +205,16 @@ class _LivenessScreenState extends State<LivenessScreen> {
           _instruction = 'Keep your face in view';
         case FaceDetectedEvent():
           _instruction = 'Hold still';
+        case LivenessUploadingEvent(:final progress):
+          _verifying = true;
+          _instruction = progress == null
+              ? 'Uploading…'
+              : 'Uploading… ${(progress * 100).toStringAsFixed(0)}%';
+        case LivenessVerifyingEvent():
+          _verifying = true;
+          _instruction = 'Verifying your identity…';
+        case LivenessUploadFailedEvent(:final message):
+          _instruction = 'Upload failed: $message';
         case UnknownLivenessEvent(:final type, :final raw):
           if (type == 'debug') _debug = raw?['message']?.toString() ?? '';
       }
@@ -190,7 +234,7 @@ class _LivenessScreenState extends State<LivenessScreen> {
           fit: StackFit.expand,
           children: [
             LivenessCameraView(
-              config: const LivenessConfig(numberOfChallenges: 3),
+              config: widget.config,
               onEvent: _onEvent,
               onResult: _onResult,
             ),
@@ -198,6 +242,26 @@ class _LivenessScreenState extends State<LivenessScreen> {
             const Positioned.fill(
               child: IgnorePointer(child: _FaceGuideOverlay()),
             ),
+            // Backend verifying overlay.
+            if (_verifying)
+              Positioned.fill(
+                child: ColoredBox(
+                  color: Colors.black.withValues(alpha: 0.7),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CircularProgressIndicator(color: Colors.white),
+                        const SizedBox(height: 16),
+                        Text(
+                          _instruction,
+                          style: const TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             Positioned(
               top: 24,
               left: 24,

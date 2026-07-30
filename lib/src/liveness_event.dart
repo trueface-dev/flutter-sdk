@@ -30,6 +30,24 @@ sealed class LivenessEvent {
   }
 }
 
+/// Emitted (by the Dart layer, not native) while uploading the captured media
+/// to the verification backend. [progress] is 0..1 across image+video, or null.
+class LivenessUploadingEvent extends LivenessEvent {
+  const LivenessUploadingEvent({this.progress});
+  final double? progress;
+}
+
+/// Emitted while polling the backend for the digital-spoof verdict.
+class LivenessVerifyingEvent extends LivenessEvent {
+  const LivenessVerifyingEvent();
+}
+
+/// Emitted when uploading to / polling the backend failed (network/timeout).
+class LivenessUploadFailedEvent extends LivenessEvent {
+  const LivenessUploadFailedEvent(this.message);
+  final String message;
+}
+
 /// A live face entered the frame and tracking has started.
 class FaceDetectedEvent extends LivenessEvent {
   const FaceDetectedEvent();

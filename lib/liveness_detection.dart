@@ -3,6 +3,8 @@
 /// success.
 library;
 
+export 'src/liveness_backend_client.dart'
+    show LivenessBackendException, SessionStart, UploadTargets;
 export 'src/liveness_camera_view.dart'
     show LivenessCameraView, LivenessController;
 export 'src/liveness_challenge.dart';

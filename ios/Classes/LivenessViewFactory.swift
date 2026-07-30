@@ -49,6 +49,8 @@ struct LivenessNativeConfig {
   let enablePassiveAntiSpoof: Bool
   let spoofScoreThreshold: Double
   let cameraPosition: AVCaptureDevice.Position
+  let recordVideo: Bool
+  let videoMaxDurationMs: Int
 
   init(map: [String: Any]) {
     let pool = (map["challengePool"] as? [Any])?
@@ -69,6 +71,8 @@ struct LivenessNativeConfig {
     spoofScoreThreshold = map["spoofScoreThreshold"] as? Double ?? 0.6
     cameraPosition =
       (map["cameraLensDirection"] as? String) == "back" ? .back : .front
+    recordVideo = map["recordVideo"] as? Bool ?? false
+    videoMaxDurationMs = map["videoMaxDurationMs"] as? Int ?? 3000
   }
 
   /// Draws the session's challenge sequence from the pool. If more challenges

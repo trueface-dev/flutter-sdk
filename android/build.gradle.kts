@@ -82,6 +82,8 @@ dependencies {
     implementation("androidx.camera:camera-camera2:$cameraxVersion")
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:$cameraxVersion")
+    // VideoCapture (hosted verification: records a short face-present clip).
+    implementation("androidx.camera:camera-video:$cameraxVersion")
 
     // ML Kit face detection (bundled model — no Play Services download needed).
     implementation("com.google.mlkit:face-detection:16.1.7")
