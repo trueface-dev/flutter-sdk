@@ -10,9 +10,9 @@ Pod::Spec.new do |s|
 AVFoundation + Google ML Kit based liveness detection (challenge/response and
 passive anti-spoofing) exposed to Flutter as a platform view.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'http://truface.dev'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'TrueFace' => 'email@example.com' }
+  s.author           = { 'TrueFace' => 'email@truface.dev' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
