@@ -57,7 +57,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   private let config: LivenessNativeConfig
 
   private let session = AVCaptureSession()
-  private let videoQueue = DispatchQueue(label: "com.liveness.video")
+  private let videoQueue = DispatchQueue(label: "com.trueface.video")
   private let landmarksRequest = VNDetectFaceLandmarksRequest()
   private let antiSpoof: TrueFaceLiveness.AntiSpoofDetector
 

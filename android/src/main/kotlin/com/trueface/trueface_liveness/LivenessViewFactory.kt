@@ -1,4 +1,4 @@
-package com.liveness.trueface_liveness
+package com.trueface.trueface_liveness
 
 import android.content.Context
 import io.flutter.plugin.common.BinaryMessenger

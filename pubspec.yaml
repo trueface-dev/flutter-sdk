@@ -37,7 +37,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.liveness.trueface_liveness
+        package: com.trueface.trueface_liveness
         pluginClass: TrueFaceLivenessPlugin
       ios:
         pluginClass: TrueFaceLivenessPlugin

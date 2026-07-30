@@ -1,4 +1,4 @@
-package com.liveness.trueface_liveness
+package com.trueface.trueface_liveness
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
