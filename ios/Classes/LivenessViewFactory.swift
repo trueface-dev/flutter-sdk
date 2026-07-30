@@ -1,6 +1,7 @@
 import AVFoundation
 import Flutter
 import UIKit
+import TrueFaceLiveness
 
 /// Factory for the `com.liveness/liveness_view` platform view.
 final class LivenessViewFactory: NSObject, FlutterPlatformViewFactory {
@@ -28,15 +29,6 @@ final class LivenessViewFactory: NSObject, FlutterPlatformViewFactory {
       messenger: messenger
     )
   }
-}
-
-/// The active challenges, matching the Dart `LivenessChallenge` wire names.
-enum Challenge: String, CaseIterable {
-  case blink
-  case smile
-  case turnLeft
-  case turnRight
-  case nod
 }
 
 /// Creation params decoded from the Dart `LivenessConfig.toMap()`.

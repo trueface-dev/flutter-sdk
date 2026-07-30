@@ -1,0 +1,3817 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TrueFaceLiveness",
+    "printedName": "TrueFaceLiveness",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "CoreGraphics",
+        "printedName": "CoreGraphics",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "AntiSpoofSample",
+        "printedName": "AntiSpoofSample",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "timestamp",
+            "printedName": "timestamp",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV9timestampSdvp",
+            "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV9timestampSdvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Double",
+                    "printedName": "Swift.Double",
+                    "usr": "s:Sd"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV9timestampSdvg",
+                "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV9timestampSdvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "faceBox",
+            "printedName": "faceBox",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "CGRect",
+                "printedName": "CoreFoundation.CGRect",
+                "usr": "c:@S@CGRect"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV7faceBoxSo6CGRectVvp",
+            "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV7faceBoxSo6CGRectVvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGRect",
+                    "printedName": "CoreFoundation.CGRect",
+                    "usr": "c:@S@CGRect"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV7faceBoxSo6CGRectVvg",
+                "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV7faceBoxSo6CGRectVvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "eulerY",
+            "printedName": "eulerY",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "CGFloat",
+                "printedName": "CoreGraphics.CGFloat",
+                "usr": "s:14CoreFoundation7CGFloatV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV6eulerY14CoreFoundation7CGFloatVvp",
+            "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV6eulerY12CoreGraphics7CGFloatVvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV6eulerY14CoreFoundation7CGFloatVvg",
+                "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV6eulerY12CoreGraphics7CGFloatVvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "nose",
+            "printedName": "nose",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV4noseSo7CGPointVSgvp",
+            "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV4noseSo7CGPointVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreFoundation.CGPoint?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGPoint",
+                        "printedName": "CoreFoundation.CGPoint",
+                        "usr": "c:@S@CGPoint"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV4noseSo7CGPointVSgvg",
+                "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV4noseSo7CGPointVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "leftCheek",
+            "printedName": "leftCheek",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV9leftCheekSo7CGPointVSgvp",
+            "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV9leftCheekSo7CGPointVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreFoundation.CGPoint?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGPoint",
+                        "printedName": "CoreFoundation.CGPoint",
+                        "usr": "c:@S@CGPoint"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV9leftCheekSo7CGPointVSgvg",
+                "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV9leftCheekSo7CGPointVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "rightCheek",
+            "printedName": "rightCheek",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV10rightCheekSo7CGPointVSgvp",
+            "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV10rightCheekSo7CGPointVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreFoundation.CGPoint?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGPoint",
+                        "printedName": "CoreFoundation.CGPoint",
+                        "usr": "c:@S@CGPoint"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV10rightCheekSo7CGPointVSgvg",
+                "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV10rightCheekSo7CGPointVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "sharpness",
+            "printedName": "sharpness",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "CGFloat",
+                "printedName": "CoreGraphics.CGFloat",
+                "usr": "s:14CoreFoundation7CGFloatV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV9sharpness14CoreFoundation7CGFloatVvp",
+            "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV9sharpness12CoreGraphics7CGFloatVvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV9sharpness14CoreFoundation7CGFloatVvg",
+                "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV9sharpness12CoreGraphics7CGFloatVvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "isTurnChallenge",
+            "printedName": "isTurnChallenge",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV15isTurnChallengeSbvp",
+            "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV15isTurnChallengeSbvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV15isTurnChallengeSbvg",
+                "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV15isTurnChallengeSbvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(timestamp:faceBox:eulerY:nose:leftCheek:rightCheek:sharpness:isTurnChallenge:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "AntiSpoofSample",
+                "printedName": "TrueFaceLiveness.AntiSpoofSample",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CGRect",
+                "printedName": "CoreFoundation.CGRect",
+                "usr": "c:@S@CGRect"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CGFloat",
+                "printedName": "CoreGraphics.CGFloat",
+                "usr": "s:14CoreFoundation7CGFloatV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CGFloat",
+                "printedName": "CoreGraphics.CGFloat",
+                "usr": "s:14CoreFoundation7CGFloatV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV9timestamp7faceBox6eulerY4nose9leftCheek05rightM09sharpness15isTurnChallengeACSd_So6CGRectV14CoreFoundation7CGFloatVSo7CGPointVSgA2sPSbtcfc",
+            "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV9timestamp7faceBox6eulerY4nose9leftCheek05rightM09sharpness15isTurnChallengeACSd_So6CGRectV12CoreGraphics7CGFloatVSo7CGPointVSgA2sPSbtcfc",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV",
+        "mangledName": "$s16TrueFaceLiveness15AntiSpoofSampleV",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "AntiSpoofDetector",
+        "printedName": "AntiSpoofDetector",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "reset",
+            "printedName": "reset()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness17AntiSpoofDetectorP5resetyyF",
+            "mangledName": "$s16TrueFaceLiveness17AntiSpoofDetectorP5resetyyF",
+            "moduleName": "TrueFaceLiveness",
+            "genericSig": "<τ_0_0 where τ_0_0 : TrueFaceLiveness.AntiSpoofDetector>",
+            "sugared_genericSig": "<Self where Self : TrueFaceLiveness.AntiSpoofDetector>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "ingest",
+            "printedName": "ingest(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "AntiSpoofSample",
+                "printedName": "TrueFaceLiveness.AntiSpoofSample",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness17AntiSpoofDetectorP6ingestyyAA0dE6SampleVF",
+            "mangledName": "$s16TrueFaceLiveness17AntiSpoofDetectorP6ingestyyAA0dE6SampleVF",
+            "moduleName": "TrueFaceLiveness",
+            "genericSig": "<τ_0_0 where τ_0_0 : TrueFaceLiveness.AntiSpoofDetector>",
+            "sugared_genericSig": "<Self where Self : TrueFaceLiveness.AntiSpoofDetector>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "finalScore",
+            "printedName": "finalScore()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness17AntiSpoofDetectorP10finalScoreSdyF",
+            "mangledName": "$s16TrueFaceLiveness17AntiSpoofDetectorP10finalScoreSdyF",
+            "moduleName": "TrueFaceLiveness",
+            "genericSig": "<τ_0_0 where τ_0_0 : TrueFaceLiveness.AntiSpoofDetector>",
+            "sugared_genericSig": "<Self where Self : TrueFaceLiveness.AntiSpoofDetector>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:16TrueFaceLiveness17AntiSpoofDetectorP",
+        "mangledName": "$s16TrueFaceLiveness17AntiSpoofDetectorP",
+        "moduleName": "TrueFaceLiveness",
+        "genericSig": "<τ_0_0 : AnyObject>",
+        "sugared_genericSig": "<Self : AnyObject>",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "AntiSpoofDetectors",
+        "printedName": "AntiSpoofDetectors",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "makeDefault",
+            "printedName": "makeDefault()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "AntiSpoofDetector",
+                "printedName": "any TrueFaceLiveness.AntiSpoofDetector",
+                "usr": "s:16TrueFaceLiveness17AntiSpoofDetectorP"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness18AntiSpoofDetectorsO11makeDefaultAA0dE8Detector_pyFZ",
+            "mangledName": "$s16TrueFaceLiveness18AntiSpoofDetectorsO11makeDefaultAA0dE8Detector_pyFZ",
+            "moduleName": "TrueFaceLiveness",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:16TrueFaceLiveness18AntiSpoofDetectorsO",
+        "mangledName": "$s16TrueFaceLiveness18AntiSpoofDetectorsO",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HeuristicAntiSpoofDetector",
+        "printedName": "HeuristicAntiSpoofDetector",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HeuristicAntiSpoofDetector",
+                "printedName": "TrueFaceLiveness.HeuristicAntiSpoofDetector",
+                "usr": "s:16TrueFaceLiveness26HeuristicAntiSpoofDetectorC"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:16TrueFaceLiveness26HeuristicAntiSpoofDetectorCACycfc",
+            "mangledName": "$s16TrueFaceLiveness26HeuristicAntiSpoofDetectorCACycfc",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "reset",
+            "printedName": "reset()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness26HeuristicAntiSpoofDetectorC5resetyyF",
+            "mangledName": "$s16TrueFaceLiveness26HeuristicAntiSpoofDetectorC5resetyyF",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "ingest",
+            "printedName": "ingest(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "AntiSpoofSample",
+                "printedName": "TrueFaceLiveness.AntiSpoofSample",
+                "usr": "s:16TrueFaceLiveness15AntiSpoofSampleV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness26HeuristicAntiSpoofDetectorC6ingestyyAA0eF6SampleVF",
+            "mangledName": "$s16TrueFaceLiveness26HeuristicAntiSpoofDetectorC6ingestyyAA0eF6SampleVF",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "finalScore",
+            "printedName": "finalScore()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness26HeuristicAntiSpoofDetectorC10finalScoreSdyF",
+            "mangledName": "$s16TrueFaceLiveness26HeuristicAntiSpoofDetectorC10finalScoreSdyF",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:16TrueFaceLiveness26HeuristicAntiSpoofDetectorC",
+        "mangledName": "$s16TrueFaceLiveness26HeuristicAntiSpoofDetectorC",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "Final",
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "AntiSpoofDetector",
+            "printedName": "AntiSpoofDetector",
+            "usr": "s:16TrueFaceLiveness17AntiSpoofDetectorP",
+            "mangledName": "$s16TrueFaceLiveness17AntiSpoofDetectorP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "CoreGraphics",
+        "printedName": "CoreGraphics",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "FaceObservation",
+        "printedName": "FaceObservation",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "box",
+            "printedName": "box",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "CGRect",
+                "printedName": "CoreFoundation.CGRect",
+                "usr": "c:@S@CGRect"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV3boxSo6CGRectVvp",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV3boxSo6CGRectVvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGRect",
+                    "printedName": "CoreFoundation.CGRect",
+                    "usr": "c:@S@CGRect"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV3boxSo6CGRectVvg",
+                "mangledName": "$s16TrueFaceLiveness0B11ObservationV3boxSo6CGRectVvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "eulerX",
+            "printedName": "eulerX",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "CGFloat",
+                "printedName": "CoreGraphics.CGFloat",
+                "usr": "s:14CoreFoundation7CGFloatV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV6eulerX14CoreFoundation7CGFloatVvp",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV6eulerX12CoreGraphics7CGFloatVvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV6eulerX14CoreFoundation7CGFloatVvg",
+                "mangledName": "$s16TrueFaceLiveness0B11ObservationV6eulerX12CoreGraphics7CGFloatVvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "eulerY",
+            "printedName": "eulerY",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "CGFloat",
+                "printedName": "CoreGraphics.CGFloat",
+                "usr": "s:14CoreFoundation7CGFloatV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV6eulerY14CoreFoundation7CGFloatVvp",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV6eulerY12CoreGraphics7CGFloatVvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV6eulerY14CoreFoundation7CGFloatVvg",
+                "mangledName": "$s16TrueFaceLiveness0B11ObservationV6eulerY12CoreGraphics7CGFloatVvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "leftEyeOpen",
+            "printedName": "leftEyeOpen",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreGraphics.CGFloat?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV11leftEyeOpen14CoreFoundation7CGFloatVSgvp",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV11leftEyeOpen12CoreGraphics7CGFloatVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreGraphics.CGFloat?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGFloat",
+                        "printedName": "CoreGraphics.CGFloat",
+                        "usr": "s:14CoreFoundation7CGFloatV"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV11leftEyeOpen14CoreFoundation7CGFloatVSgvg",
+                "mangledName": "$s16TrueFaceLiveness0B11ObservationV11leftEyeOpen12CoreGraphics7CGFloatVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "rightEyeOpen",
+            "printedName": "rightEyeOpen",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreGraphics.CGFloat?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV12rightEyeOpen14CoreFoundation7CGFloatVSgvp",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV12rightEyeOpen12CoreGraphics7CGFloatVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreGraphics.CGFloat?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGFloat",
+                        "printedName": "CoreGraphics.CGFloat",
+                        "usr": "s:14CoreFoundation7CGFloatV"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV12rightEyeOpen14CoreFoundation7CGFloatVSgvg",
+                "mangledName": "$s16TrueFaceLiveness0B11ObservationV12rightEyeOpen12CoreGraphics7CGFloatVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "smiling",
+            "printedName": "smiling",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreGraphics.CGFloat?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV7smiling14CoreFoundation7CGFloatVSgvp",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV7smiling12CoreGraphics7CGFloatVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreGraphics.CGFloat?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGFloat",
+                        "printedName": "CoreGraphics.CGFloat",
+                        "usr": "s:14CoreFoundation7CGFloatV"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV7smiling14CoreFoundation7CGFloatVSgvg",
+                "mangledName": "$s16TrueFaceLiveness0B11ObservationV7smiling12CoreGraphics7CGFloatVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "nose",
+            "printedName": "nose",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV4noseSo7CGPointVSgvp",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV4noseSo7CGPointVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreFoundation.CGPoint?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGPoint",
+                        "printedName": "CoreFoundation.CGPoint",
+                        "usr": "c:@S@CGPoint"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV4noseSo7CGPointVSgvg",
+                "mangledName": "$s16TrueFaceLiveness0B11ObservationV4noseSo7CGPointVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "leftCheek",
+            "printedName": "leftCheek",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV9leftCheekSo7CGPointVSgvp",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV9leftCheekSo7CGPointVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreFoundation.CGPoint?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGPoint",
+                        "printedName": "CoreFoundation.CGPoint",
+                        "usr": "c:@S@CGPoint"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV9leftCheekSo7CGPointVSgvg",
+                "mangledName": "$s16TrueFaceLiveness0B11ObservationV9leftCheekSo7CGPointVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "rightCheek",
+            "printedName": "rightCheek",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV10rightCheekSo7CGPointVSgvp",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV10rightCheekSo7CGPointVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreFoundation.CGPoint?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGPoint",
+                        "printedName": "CoreFoundation.CGPoint",
+                        "usr": "c:@S@CGPoint"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV10rightCheekSo7CGPointVSgvg",
+                "mangledName": "$s16TrueFaceLiveness0B11ObservationV10rightCheekSo7CGPointVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(box:eulerX:eulerY:leftEyeOpen:rightEyeOpen:smiling:nose:leftCheek:rightCheek:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "FaceObservation",
+                "printedName": "TrueFaceLiveness.FaceObservation",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CGRect",
+                "printedName": "CoreFoundation.CGRect",
+                "usr": "c:@S@CGRect"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CGFloat",
+                "printedName": "CoreGraphics.CGFloat",
+                "usr": "s:14CoreFoundation7CGFloatV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CGFloat",
+                "printedName": "CoreGraphics.CGFloat",
+                "usr": "s:14CoreFoundation7CGFloatV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreGraphics.CGFloat?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreGraphics.CGFloat?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreGraphics.CGFloat?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreFoundation.CGPoint?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGPoint",
+                    "printedName": "CoreFoundation.CGPoint",
+                    "usr": "c:@S@CGPoint"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV3box6eulerX0F1Y11leftEyeOpen05righthI07smiling4nose0G5Cheek0jM0ACSo6CGRectV_14CoreFoundation7CGFloatVA2QSgA2RSo7CGPointVSgA2Utcfc",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV3box6eulerX0F1Y11leftEyeOpen05righthI07smiling4nose0G5Cheek0jM0ACSo6CGRectV_12CoreGraphics7CGFloatVA2QSgA2RSo7CGPointVSgA2Utcfc",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:16TrueFaceLiveness0B11ObservationV",
+        "mangledName": "$s16TrueFaceLiveness0B11ObservationV",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "FrameObservation",
+        "printedName": "FrameObservation",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "timestamp",
+            "printedName": "timestamp",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness16FrameObservationV9timestampSdvp",
+            "mangledName": "$s16TrueFaceLiveness16FrameObservationV9timestampSdvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Double",
+                    "printedName": "Swift.Double",
+                    "usr": "s:Sd"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness16FrameObservationV9timestampSdvg",
+                "mangledName": "$s16TrueFaceLiveness16FrameObservationV9timestampSdvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "imageSize",
+            "printedName": "imageSize",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "CGSize",
+                "printedName": "CoreFoundation.CGSize",
+                "usr": "c:@S@CGSize"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness16FrameObservationV9imageSizeSo6CGSizeVvp",
+            "mangledName": "$s16TrueFaceLiveness16FrameObservationV9imageSizeSo6CGSizeVvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGSize",
+                    "printedName": "CoreFoundation.CGSize",
+                    "usr": "c:@S@CGSize"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness16FrameObservationV9imageSizeSo6CGSizeVvg",
+                "mangledName": "$s16TrueFaceLiveness16FrameObservationV9imageSizeSo6CGSizeVvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "faces",
+            "printedName": "faces",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[TrueFaceLiveness.FaceObservation]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "FaceObservation",
+                    "printedName": "TrueFaceLiveness.FaceObservation",
+                    "usr": "s:16TrueFaceLiveness0B11ObservationV"
+                  }
+                ],
+                "usr": "s:Sa"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness16FrameObservationV5facesSayAA0bE0VGvp",
+            "mangledName": "$s16TrueFaceLiveness16FrameObservationV5facesSayAA0bE0VGvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Array",
+                    "printedName": "[TrueFaceLiveness.FaceObservation]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "FaceObservation",
+                        "printedName": "TrueFaceLiveness.FaceObservation",
+                        "usr": "s:16TrueFaceLiveness0B11ObservationV"
+                      }
+                    ],
+                    "usr": "s:Sa"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness16FrameObservationV5facesSayAA0bE0VGvg",
+                "mangledName": "$s16TrueFaceLiveness16FrameObservationV5facesSayAA0bE0VGvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "faceLuminance",
+            "printedName": "faceLuminance",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreGraphics.CGFloat?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness16FrameObservationV13faceLuminance14CoreFoundation7CGFloatVSgvp",
+            "mangledName": "$s16TrueFaceLiveness16FrameObservationV13faceLuminance12CoreGraphics7CGFloatVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreGraphics.CGFloat?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGFloat",
+                        "printedName": "CoreGraphics.CGFloat",
+                        "usr": "s:14CoreFoundation7CGFloatV"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness16FrameObservationV13faceLuminance14CoreFoundation7CGFloatVSgvg",
+                "mangledName": "$s16TrueFaceLiveness16FrameObservationV13faceLuminance12CoreGraphics7CGFloatVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(timestamp:imageSize:faces:faceLuminance:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "FrameObservation",
+                "printedName": "TrueFaceLiveness.FrameObservation",
+                "usr": "s:16TrueFaceLiveness16FrameObservationV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CGSize",
+                "printedName": "CoreFoundation.CGSize",
+                "usr": "c:@S@CGSize"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[TrueFaceLiveness.FaceObservation]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "FaceObservation",
+                    "printedName": "TrueFaceLiveness.FaceObservation",
+                    "usr": "s:16TrueFaceLiveness0B11ObservationV"
+                  }
+                ],
+                "usr": "s:Sa"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreGraphics.CGFloat?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:16TrueFaceLiveness16FrameObservationV9timestamp9imageSize5faces13faceLuminanceACSd_So6CGSizeVSayAA0bE0VG14CoreFoundation7CGFloatVSgtcfc",
+            "mangledName": "$s16TrueFaceLiveness16FrameObservationV9timestamp9imageSize5faces13faceLuminanceACSd_So6CGSizeVSayAA0bE0VG12CoreGraphics7CGFloatVSgtcfc",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:16TrueFaceLiveness16FrameObservationV",
+        "mangledName": "$s16TrueFaceLiveness16FrameObservationV",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "MachineEffect",
+        "printedName": "MachineEffect",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "event",
+            "printedName": "event",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TrueFaceLiveness.MachineEffect.Type) -> ([Swift.String : Any]) -> TrueFaceLiveness.MachineEffect",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "([Swift.String : Any]) -> TrueFaceLiveness.MachineEffect",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MachineEffect",
+                        "printedName": "TrueFaceLiveness.MachineEffect",
+                        "usr": "s:16TrueFaceLiveness13MachineEffectO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Dictionary",
+                        "printedName": "[Swift.String : Any]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ProtocolComposition",
+                            "printedName": "Any"
+                          }
+                        ],
+                        "usr": "s:SD"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TrueFaceLiveness.MachineEffect.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MachineEffect",
+                        "printedName": "TrueFaceLiveness.MachineEffect",
+                        "usr": "s:16TrueFaceLiveness13MachineEffectO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:16TrueFaceLiveness13MachineEffectO5eventyACSDySSypGcACmF",
+            "mangledName": "$s16TrueFaceLiveness13MachineEffectO5eventyACSDySSypGcACmF",
+            "moduleName": "TrueFaceLiveness"
+          },
+          {
+            "kind": "Var",
+            "name": "success",
+            "printedName": "success",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TrueFaceLiveness.MachineEffect.Type) -> TrueFaceLiveness.MachineEffect",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MachineEffect",
+                    "printedName": "TrueFaceLiveness.MachineEffect",
+                    "usr": "s:16TrueFaceLiveness13MachineEffectO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TrueFaceLiveness.MachineEffect.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MachineEffect",
+                        "printedName": "TrueFaceLiveness.MachineEffect",
+                        "usr": "s:16TrueFaceLiveness13MachineEffectO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:16TrueFaceLiveness13MachineEffectO7successyA2CmF",
+            "mangledName": "$s16TrueFaceLiveness13MachineEffectO7successyA2CmF",
+            "moduleName": "TrueFaceLiveness"
+          },
+          {
+            "kind": "Var",
+            "name": "failure",
+            "printedName": "failure",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TrueFaceLiveness.MachineEffect.Type) -> (Swift.String) -> TrueFaceLiveness.MachineEffect",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.String) -> TrueFaceLiveness.MachineEffect",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MachineEffect",
+                        "printedName": "TrueFaceLiveness.MachineEffect",
+                        "usr": "s:16TrueFaceLiveness13MachineEffectO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TrueFaceLiveness.MachineEffect.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MachineEffect",
+                        "printedName": "TrueFaceLiveness.MachineEffect",
+                        "usr": "s:16TrueFaceLiveness13MachineEffectO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:16TrueFaceLiveness13MachineEffectO7failureyACSScACmF",
+            "mangledName": "$s16TrueFaceLiveness13MachineEffectO7failureyACSScACmF",
+            "moduleName": "TrueFaceLiveness"
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:16TrueFaceLiveness13MachineEffectO",
+        "mangledName": "$s16TrueFaceLiveness13MachineEffectO",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "Challenge",
+        "printedName": "Challenge",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "blink",
+            "printedName": "blink",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TrueFaceLiveness.Challenge.Type) -> TrueFaceLiveness.Challenge",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Challenge",
+                    "printedName": "TrueFaceLiveness.Challenge",
+                    "usr": "s:16TrueFaceLiveness9ChallengeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TrueFaceLiveness.Challenge.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Challenge",
+                        "printedName": "TrueFaceLiveness.Challenge",
+                        "usr": "s:16TrueFaceLiveness9ChallengeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:16TrueFaceLiveness9ChallengeO5blinkyA2CmF",
+            "mangledName": "$s16TrueFaceLiveness9ChallengeO5blinkyA2CmF",
+            "moduleName": "TrueFaceLiveness"
+          },
+          {
+            "kind": "Var",
+            "name": "smile",
+            "printedName": "smile",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TrueFaceLiveness.Challenge.Type) -> TrueFaceLiveness.Challenge",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Challenge",
+                    "printedName": "TrueFaceLiveness.Challenge",
+                    "usr": "s:16TrueFaceLiveness9ChallengeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TrueFaceLiveness.Challenge.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Challenge",
+                        "printedName": "TrueFaceLiveness.Challenge",
+                        "usr": "s:16TrueFaceLiveness9ChallengeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:16TrueFaceLiveness9ChallengeO5smileyA2CmF",
+            "mangledName": "$s16TrueFaceLiveness9ChallengeO5smileyA2CmF",
+            "moduleName": "TrueFaceLiveness"
+          },
+          {
+            "kind": "Var",
+            "name": "turnLeft",
+            "printedName": "turnLeft",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TrueFaceLiveness.Challenge.Type) -> TrueFaceLiveness.Challenge",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Challenge",
+                    "printedName": "TrueFaceLiveness.Challenge",
+                    "usr": "s:16TrueFaceLiveness9ChallengeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TrueFaceLiveness.Challenge.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Challenge",
+                        "printedName": "TrueFaceLiveness.Challenge",
+                        "usr": "s:16TrueFaceLiveness9ChallengeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:16TrueFaceLiveness9ChallengeO8turnLeftyA2CmF",
+            "mangledName": "$s16TrueFaceLiveness9ChallengeO8turnLeftyA2CmF",
+            "moduleName": "TrueFaceLiveness"
+          },
+          {
+            "kind": "Var",
+            "name": "turnRight",
+            "printedName": "turnRight",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TrueFaceLiveness.Challenge.Type) -> TrueFaceLiveness.Challenge",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Challenge",
+                    "printedName": "TrueFaceLiveness.Challenge",
+                    "usr": "s:16TrueFaceLiveness9ChallengeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TrueFaceLiveness.Challenge.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Challenge",
+                        "printedName": "TrueFaceLiveness.Challenge",
+                        "usr": "s:16TrueFaceLiveness9ChallengeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:16TrueFaceLiveness9ChallengeO9turnRightyA2CmF",
+            "mangledName": "$s16TrueFaceLiveness9ChallengeO9turnRightyA2CmF",
+            "moduleName": "TrueFaceLiveness"
+          },
+          {
+            "kind": "Var",
+            "name": "nod",
+            "printedName": "nod",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TrueFaceLiveness.Challenge.Type) -> TrueFaceLiveness.Challenge",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Challenge",
+                    "printedName": "TrueFaceLiveness.Challenge",
+                    "usr": "s:16TrueFaceLiveness9ChallengeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TrueFaceLiveness.Challenge.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Challenge",
+                        "printedName": "TrueFaceLiveness.Challenge",
+                        "usr": "s:16TrueFaceLiveness9ChallengeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:16TrueFaceLiveness9ChallengeO3nodyA2CmF",
+            "mangledName": "$s16TrueFaceLiveness9ChallengeO3nodyA2CmF",
+            "moduleName": "TrueFaceLiveness"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(rawValue:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "TrueFaceLiveness.Challenge?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Challenge",
+                    "printedName": "TrueFaceLiveness.Challenge",
+                    "usr": "s:16TrueFaceLiveness9ChallengeO"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:16TrueFaceLiveness9ChallengeO8rawValueACSgSS_tcfc",
+            "mangledName": "$s16TrueFaceLiveness9ChallengeO8rawValueACSgSS_tcfc",
+            "moduleName": "TrueFaceLiveness",
+            "implicit": true,
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Var",
+            "name": "rawValue",
+            "printedName": "rawValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness9ChallengeO8rawValueSSvp",
+            "mangledName": "$s16TrueFaceLiveness9ChallengeO8rawValueSSvp",
+            "moduleName": "TrueFaceLiveness",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness9ChallengeO8rawValueSSvg",
+                "mangledName": "$s16TrueFaceLiveness9ChallengeO8rawValueSSvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "allCases",
+            "printedName": "allCases",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[TrueFaceLiveness.Challenge]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Challenge",
+                    "printedName": "TrueFaceLiveness.Challenge",
+                    "usr": "s:16TrueFaceLiveness9ChallengeO"
+                  }
+                ],
+                "usr": "s:Sa"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness9ChallengeO8allCasesSayACGvpZ",
+            "mangledName": "$s16TrueFaceLiveness9ChallengeO8allCasesSayACGvpZ",
+            "moduleName": "TrueFaceLiveness",
+            "static": true,
+            "implicit": true,
+            "declAttributes": [
+              "Nonisolated"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Array",
+                    "printedName": "[TrueFaceLiveness.Challenge]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Challenge",
+                        "printedName": "TrueFaceLiveness.Challenge",
+                        "usr": "s:16TrueFaceLiveness9ChallengeO"
+                      }
+                    ],
+                    "usr": "s:Sa"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness9ChallengeO8allCasesSayACGvgZ",
+                "mangledName": "$s16TrueFaceLiveness9ChallengeO8allCasesSayACGvgZ",
+                "moduleName": "TrueFaceLiveness",
+                "static": true,
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:16TrueFaceLiveness9ChallengeO",
+        "mangledName": "$s16TrueFaceLiveness9ChallengeO",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "enumRawTypeName": "String",
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "RawRepresentable",
+            "printedName": "RawRepresentable",
+            "children": [
+              {
+                "kind": "TypeWitness",
+                "name": "RawValue",
+                "printedName": "RawValue",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ]
+              }
+            ],
+            "usr": "s:SY",
+            "mangledName": "$sSY"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CaseIterable",
+            "printedName": "CaseIterable",
+            "children": [
+              {
+                "kind": "TypeWitness",
+                "name": "AllCases",
+                "printedName": "AllCases",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Array",
+                    "printedName": "[TrueFaceLiveness.Challenge]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Challenge",
+                        "printedName": "TrueFaceLiveness.Challenge",
+                        "usr": "s:16TrueFaceLiveness9ChallengeO"
+                      }
+                    ],
+                    "usr": "s:Sa"
+                  }
+                ]
+              }
+            ],
+            "usr": "s:s12CaseIterableP",
+            "mangledName": "$ss12CaseIterableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "LivenessStateMachine",
+        "printedName": "LivenessStateMachine",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "completed",
+            "printedName": "completed",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[Swift.String]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sa"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0C12StateMachineC9completedSaySSGvp",
+            "mangledName": "$s16TrueFaceLiveness0C12StateMachineC9completedSaySSGvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "HasStorage",
+              "SetterAccess",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Array",
+                    "printedName": "[Swift.String]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sa"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0C12StateMachineC9completedSaySSGvg",
+                "mangledName": "$s16TrueFaceLiveness0C12StateMachineC9completedSaySSGvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(challenges:timeoutMs:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "LivenessStateMachine",
+                "printedName": "TrueFaceLiveness.LivenessStateMachine",
+                "usr": "s:16TrueFaceLiveness0C12StateMachineC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[TrueFaceLiveness.Challenge]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Challenge",
+                    "printedName": "TrueFaceLiveness.Challenge",
+                    "usr": "s:16TrueFaceLiveness9ChallengeO"
+                  }
+                ],
+                "usr": "s:Sa"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:16TrueFaceLiveness0C12StateMachineC10challenges9timeoutMsACSayAA9ChallengeOG_Sitcfc",
+            "mangledName": "$s16TrueFaceLiveness0C12StateMachineC10challenges9timeoutMsACSayAA9ChallengeOG_Sitcfc",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Var",
+            "name": "currentChallenge",
+            "printedName": "currentChallenge",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "TrueFaceLiveness.Challenge?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Challenge",
+                    "printedName": "TrueFaceLiveness.Challenge",
+                    "usr": "s:16TrueFaceLiveness9ChallengeO"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0C12StateMachineC16currentChallengeAA0G0OSgvp",
+            "mangledName": "$s16TrueFaceLiveness0C12StateMachineC16currentChallengeAA0G0OSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "TrueFaceLiveness.Challenge?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Challenge",
+                        "printedName": "TrueFaceLiveness.Challenge",
+                        "usr": "s:16TrueFaceLiveness9ChallengeO"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0C12StateMachineC16currentChallengeAA0G0OSgvg",
+                "mangledName": "$s16TrueFaceLiveness0C12StateMachineC16currentChallengeAA0G0OSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "isFinished",
+            "printedName": "isFinished",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0C12StateMachineC10isFinishedSbvp",
+            "mangledName": "$s16TrueFaceLiveness0C12StateMachineC10isFinishedSbvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0C12StateMachineC10isFinishedSbvg",
+                "mangledName": "$s16TrueFaceLiveness0C12StateMachineC10isFinishedSbvg",
+                "moduleName": "TrueFaceLiveness",
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "process",
+            "printedName": "process(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[TrueFaceLiveness.MachineEffect]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MachineEffect",
+                    "printedName": "TrueFaceLiveness.MachineEffect",
+                    "usr": "s:16TrueFaceLiveness13MachineEffectO"
+                  }
+                ],
+                "usr": "s:Sa"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "FrameObservation",
+                "printedName": "TrueFaceLiveness.FrameObservation",
+                "usr": "s:16TrueFaceLiveness16FrameObservationV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness0C12StateMachineC7processySayAA0E6EffectOGAA16FrameObservationVF",
+            "mangledName": "$s16TrueFaceLiveness0C12StateMachineC7processySayAA0E6EffectOGAA16FrameObservationVF",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:16TrueFaceLiveness0C12StateMachineC",
+        "mangledName": "$s16TrueFaceLiveness0C12StateMachineC",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "Final",
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "AVFoundation",
+        "printedName": "AVFoundation",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "Import",
+        "name": "CoreImage",
+        "printedName": "CoreImage",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "Import",
+        "name": "Vision",
+        "printedName": "Vision",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "Import",
+        "name": "CommonCrypto",
+        "printedName": "CommonCrypto",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "TrueFaceLivenessDelegate",
+        "printedName": "TrueFaceLivenessDelegate",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "livenessViewController",
+            "printedName": "livenessViewController(_:didUpdateEvent:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceLivenessViewController",
+                "printedName": "TrueFaceLiveness.TrueFaceLivenessViewController",
+                "usr": "c:@M@TrueFaceLiveness@objc(cs)TrueFaceLivenessViewController"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.String : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:SD"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness0abC8DelegateP22livenessViewController_14didUpdateEventyAA0abcfG0C_SDySSypGtF",
+            "mangledName": "$s16TrueFaceLiveness0abC8DelegateP22livenessViewController_14didUpdateEventyAA0abcfG0C_SDySSypGtF",
+            "moduleName": "TrueFaceLiveness",
+            "genericSig": "<τ_0_0 where τ_0_0 : TrueFaceLiveness.TrueFaceLivenessDelegate>",
+            "sugared_genericSig": "<Self where Self : TrueFaceLiveness.TrueFaceLivenessDelegate>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "livenessViewController",
+            "printedName": "livenessViewController(_:didCompleteWithResult:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceLivenessViewController",
+                "printedName": "TrueFaceLiveness.TrueFaceLivenessViewController",
+                "usr": "c:@M@TrueFaceLiveness@objc(cs)TrueFaceLivenessViewController"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.String : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:SD"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness0abC8DelegateP22livenessViewController_21didCompleteWithResultyAA0abcfG0C_SDySSypGtF",
+            "mangledName": "$s16TrueFaceLiveness0abC8DelegateP22livenessViewController_21didCompleteWithResultyAA0abcfG0C_SDySSypGtF",
+            "moduleName": "TrueFaceLiveness",
+            "genericSig": "<τ_0_0 where τ_0_0 : TrueFaceLiveness.TrueFaceLivenessDelegate>",
+            "sugared_genericSig": "<Self where Self : TrueFaceLiveness.TrueFaceLivenessDelegate>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "livenessViewController",
+            "printedName": "livenessViewController(_:didFailWithError:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceLivenessViewController",
+                "printedName": "TrueFaceLiveness.TrueFaceLivenessViewController",
+                "usr": "c:@M@TrueFaceLiveness@objc(cs)TrueFaceLivenessViewController"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Error",
+                "printedName": "any Swift.Error",
+                "usr": "s:s5ErrorP"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness0abC8DelegateP22livenessViewController_16didFailWithErroryAA0abcfG0C_s0K0_ptF",
+            "mangledName": "$s16TrueFaceLiveness0abC8DelegateP22livenessViewController_16didFailWithErroryAA0abcfG0C_s0K0_ptF",
+            "moduleName": "TrueFaceLiveness",
+            "genericSig": "<τ_0_0 where τ_0_0 : TrueFaceLiveness.TrueFaceLivenessDelegate>",
+            "sugared_genericSig": "<Self where Self : TrueFaceLiveness.TrueFaceLivenessDelegate>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:16TrueFaceLiveness0abC8DelegateP",
+        "mangledName": "$s16TrueFaceLiveness0abC8DelegateP",
+        "moduleName": "TrueFaceLiveness",
+        "genericSig": "<τ_0_0 : AnyObject>",
+        "sugared_genericSig": "<Self : AnyObject>",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "TrueFaceConfig",
+        "printedName": "TrueFaceConfig",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "backendBaseUrl",
+            "printedName": "backendBaseUrl",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV14backendBaseUrlSSvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14backendBaseUrlSSvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV14backendBaseUrlSSvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14backendBaseUrlSSvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "publicKey",
+            "printedName": "publicKey",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV9publicKeySSvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV9publicKeySSvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV9publicKeySSvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ConfigV9publicKeySSvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "verificationId",
+            "printedName": "verificationId",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV14verificationIdSSvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14verificationIdSSvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV14verificationIdSSvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14verificationIdSSvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "clientSecret",
+            "printedName": "clientSecret",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV12clientSecretSSvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV12clientSecretSSvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV12clientSecretSSvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ConfigV12clientSecretSSvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "challengeCount",
+            "printedName": "challengeCount",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV14challengeCountSivp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14challengeCountSivp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV14challengeCountSivg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14challengeCountSivg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(backendBaseUrl:publicKey:verificationId:clientSecret:challengeCount:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceConfig",
+                "printedName": "TrueFaceLiveness.TrueFaceConfig",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "hasDefaultArg": true,
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "hasDefaultArg": true,
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV14backendBaseUrl9publicKey14verificationId12clientSecret14challengeCountACSS_S3SSitcfc",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14backendBaseUrl9publicKey14verificationId12clientSecret14challengeCountACSS_S3SSitcfc",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:16TrueFaceLiveness0aB6ConfigV",
+        "mangledName": "$s16TrueFaceLiveness0aB6ConfigV",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "TrueFaceLivenessViewController",
+        "printedName": "TrueFaceLivenessViewController",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "delegate",
+            "printedName": "delegate",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "WeakStorage",
+                "printedName": "(any TrueFaceLiveness.TrueFaceLivenessDelegate)?"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0abC14ViewControllerC8delegateAA0abC8Delegate_pSgvp",
+            "mangledName": "$s16TrueFaceLiveness0abC14ViewControllerC8delegateAA0abC8Delegate_pSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "Preconcurrency",
+              "Custom",
+              "HasStorage",
+              "ReferenceOwnership",
+              "AccessControl"
+            ],
+            "ownership": 1,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "(any TrueFaceLiveness.TrueFaceLivenessDelegate)?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "TrueFaceLivenessDelegate",
+                        "printedName": "any TrueFaceLiveness.TrueFaceLivenessDelegate",
+                        "usr": "s:16TrueFaceLiveness0abC8DelegateP"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0abC14ViewControllerC8delegateAA0abC8Delegate_pSgvg",
+                "mangledName": "$s16TrueFaceLiveness0abC14ViewControllerC8delegateAA0abC8Delegate_pSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "(any TrueFaceLiveness.TrueFaceLivenessDelegate)?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "TrueFaceLivenessDelegate",
+                        "printedName": "any TrueFaceLiveness.TrueFaceLivenessDelegate",
+                        "usr": "s:16TrueFaceLiveness0abC8DelegateP"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0abC14ViewControllerC8delegateAA0abC8Delegate_pSgvs",
+                "mangledName": "$s16TrueFaceLiveness0abC14ViewControllerC8delegateAA0abC8Delegate_pSgvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0abC14ViewControllerC8delegateAA0abC8Delegate_pSgvM",
+                "mangledName": "$s16TrueFaceLiveness0abC14ViewControllerC8delegateAA0abC8Delegate_pSgvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(config:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceLivenessViewController",
+                "printedName": "TrueFaceLiveness.TrueFaceLivenessViewController",
+                "usr": "c:@M@TrueFaceLiveness@objc(cs)TrueFaceLivenessViewController"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceConfig",
+                "printedName": "TrueFaceLiveness.TrueFaceConfig",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:16TrueFaceLiveness0abC14ViewControllerC6configAcA0aB6ConfigV_tcfc",
+            "mangledName": "$s16TrueFaceLiveness0abC14ViewControllerC6configAcA0aB6ConfigV_tcfc",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "Preconcurrency",
+              "Custom",
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "viewDidLoad",
+            "printedName": "viewDidLoad()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@TrueFaceLiveness@objc(cs)TrueFaceLivenessViewController(im)viewDidLoad",
+            "mangledName": "$s16TrueFaceLiveness0abC14ViewControllerC11viewDidLoadyyF",
+            "moduleName": "TrueFaceLiveness",
+            "overriding": true,
+            "objc_name": "viewDidLoad",
+            "declAttributes": [
+              "Final",
+              "ObjC",
+              "Preconcurrency",
+              "Custom",
+              "Override",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "captureOutput",
+            "printedName": "captureOutput(_:didOutput:from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "AVCaptureOutput",
+                "printedName": "AVFoundation.AVCaptureOutput",
+                "usr": "c:objc(cs)AVCaptureOutput"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "CMSampleBuffer",
+                "printedName": "CoreMedia.CMSampleBuffer",
+                "usr": "c:@T@CMSampleBufferRef"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "AVCaptureConnection",
+                "printedName": "AVFoundation.AVCaptureConnection",
+                "usr": "c:objc(cs)AVCaptureConnection"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@TrueFaceLiveness@objc(cs)TrueFaceLivenessViewController(im)captureOutput:didOutputSampleBuffer:fromConnection:",
+            "mangledName": "$s16TrueFaceLiveness0abC14ViewControllerC13captureOutput_03didG04fromySo09AVCaptureG0C_So17CMSampleBufferRefaSo0J10ConnectionCtF",
+            "moduleName": "TrueFaceLiveness",
+            "objc_name": "captureOutput:didOutputSampleBuffer:fromConnection:",
+            "declAttributes": [
+              "Final",
+              "ObjC",
+              "Preconcurrency",
+              "Custom",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(nibName:bundle:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceLivenessViewController",
+                "printedName": "TrueFaceLiveness.TrueFaceLivenessViewController",
+                "usr": "c:@M@TrueFaceLiveness@objc(cs)TrueFaceLivenessViewController"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Foundation.Bundle?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bundle",
+                    "printedName": "Foundation.Bundle",
+                    "usr": "c:objc(cs)NSBundle"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@TrueFaceLiveness@objc(cs)TrueFaceLivenessViewController(im)initWithNibName:bundle:",
+            "mangledName": "$s16TrueFaceLiveness0abC14ViewControllerC7nibName6bundleACSSSg_So8NSBundleCSgtcfc",
+            "moduleName": "TrueFaceLiveness",
+            "overriding": true,
+            "implicit": true,
+            "objc_name": "initWithNibName:bundle:",
+            "declAttributes": [
+              "Dynamic",
+              "ObjC",
+              "Preconcurrency",
+              "Custom",
+              "Override"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "c:@M@TrueFaceLiveness@objc(cs)TrueFaceLivenessViewController",
+        "mangledName": "$s16TrueFaceLiveness0abC14ViewControllerC",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "Preconcurrency",
+          "Custom",
+          "Final",
+          "AccessControl",
+          "ObjC"
+        ],
+        "superclassUsr": "c:objc(cs)UIViewController",
+        "hasMissingDesignatedInitializers": true,
+        "superclassNames": [
+          "UIKit.UIViewController",
+          "UIKit.UIResponder",
+          "ObjectiveC.NSObject"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObserving",
+            "printedName": "_KeyValueCodingAndObserving",
+            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
+            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObservingPublishing",
+            "printedName": "_KeyValueCodingAndObservingPublishing",
+            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
+            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CVarArg",
+            "printedName": "CVarArg",
+            "usr": "s:s7CVarArgP",
+            "mangledName": "$ss7CVarArgP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomDebugStringConvertible",
+            "printedName": "CustomDebugStringConvertible",
+            "usr": "s:s28CustomDebugStringConvertibleP",
+            "mangledName": "$ss28CustomDebugStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomStringConvertible",
+            "printedName": "CustomStringConvertible",
+            "usr": "s:s23CustomStringConvertibleP",
+            "mangledName": "$ss23CustomStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "UITraitChangeObservable",
+            "printedName": "UITraitChangeObservable",
+            "usr": "s:5UIKit23UITraitChangeObservableP",
+            "mangledName": "$s5UIKit23UITraitChangeObservableP"
+          }
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/AntiSpoofDetector.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1150,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/AntiSpoofDetector.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1192,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/AntiSpoofDetector.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1236,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/AntiSpoofDetector.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1266,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/AntiSpoofDetector.swift",
+      "kind": "Array",
+      "offset": 1314,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/AntiSpoofDetector.swift",
+      "kind": "Array",
+      "offset": 1435,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/AntiSpoofDetector.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1473,
+      "length": 3,
+      "value": "600"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1543,
+      "length": 4,
+      "value": "0.25"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1592,
+      "length": 4,
+      "value": "0.60"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1645,
+      "length": 4,
+      "value": "0.15"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1698,
+      "length": 4,
+      "value": "0.18"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1742,
+      "length": 2,
+      "value": "60"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1784,
+      "length": 2,
+      "value": "12"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1833,
+      "length": 3,
+      "value": "0.4"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1905,
+      "length": 4,
+      "value": "0.35"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1944,
+      "length": 4,
+      "value": "0.70"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1981,
+      "length": 4,
+      "value": "0.70"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2021,
+      "length": 2,
+      "value": "25"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2061,
+      "length": 2,
+      "value": "10"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2103,
+      "length": 1,
+      "value": "3"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2146,
+      "length": 1,
+      "value": "2"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 2193,
+      "length": 4,
+      "value": "0.10"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 2245,
+      "length": 4,
+      "value": "0.05"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 2304,
+      "length": 3,
+      "value": "0.8"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 2359,
+      "length": 3,
+      "value": "3.0"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 2417,
+      "length": 3,
+      "value": "0.4"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 2471,
+      "length": 3,
+      "value": "3.0"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2705,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "Array",
+      "offset": 2755,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2808,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2855,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2943,
+      "length": 2,
+      "value": "-1"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2974,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3056,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3095,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3130,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3164,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 722,
+      "length": 26,
+      "value": "\"https:\/\/api.trueface.dev\""
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 837,
+      "length": 1,
+      "value": "3"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 1378,
+      "length": 20,
+      "value": "\"com.trueface.video\""
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1884,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "Array",
+      "offset": 2016,
+      "length": 2,
+      "value": "[]"
+    }
+  ]
+}

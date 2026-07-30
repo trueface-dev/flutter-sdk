@@ -1,0 +1,118 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.3.3 effective-5.10 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)
+// swift-module-flags: -target arm64-apple-ios15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -O -enable-experimental-feature DebugDescriptionMacro -module-name TrueFaceLiveness
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3.3
+import AVFoundation
+import CommonCrypto
+import CoreGraphics
+import CoreImage
+import Foundation
+import Swift
+import UIKit
+import Vision
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public struct AntiSpoofSample {
+  public let timestamp: Foundation.TimeInterval
+  public let faceBox: CoreFoundation.CGRect
+  public let eulerY: CoreFoundation.CGFloat
+  public let nose: CoreFoundation.CGPoint?
+  public let leftCheek: CoreFoundation.CGPoint?
+  public let rightCheek: CoreFoundation.CGPoint?
+  public let sharpness: CoreFoundation.CGFloat
+  public let isTurnChallenge: Swift.Bool
+  public init(timestamp: Foundation.TimeInterval, faceBox: CoreFoundation.CGRect, eulerY: CoreFoundation.CGFloat, nose: CoreFoundation.CGPoint?, leftCheek: CoreFoundation.CGPoint?, rightCheek: CoreFoundation.CGPoint?, sharpness: CoreFoundation.CGFloat, isTurnChallenge: Swift.Bool)
+}
+public protocol AntiSpoofDetector : AnyObject {
+  func reset()
+  func ingest(_ sample: TrueFaceLiveness.AntiSpoofSample)
+  func finalScore() -> Swift.Double
+}
+public enum AntiSpoofDetectors {
+  public static func makeDefault() -> any TrueFaceLiveness.AntiSpoofDetector
+}
+final public class HeuristicAntiSpoofDetector : TrueFaceLiveness.AntiSpoofDetector {
+  public init()
+  final public func reset()
+  final public func ingest(_ sample: TrueFaceLiveness.AntiSpoofSample)
+  final public func finalScore() -> Swift.Double
+  @objc deinit
+}
+public struct FaceObservation {
+  public let box: CoreFoundation.CGRect
+  public let eulerX: CoreFoundation.CGFloat
+  public let eulerY: CoreFoundation.CGFloat
+  public let leftEyeOpen: CoreFoundation.CGFloat?
+  public let rightEyeOpen: CoreFoundation.CGFloat?
+  public let smiling: CoreFoundation.CGFloat?
+  public let nose: CoreFoundation.CGPoint?
+  public let leftCheek: CoreFoundation.CGPoint?
+  public let rightCheek: CoreFoundation.CGPoint?
+  public init(box: CoreFoundation.CGRect, eulerX: CoreFoundation.CGFloat, eulerY: CoreFoundation.CGFloat, leftEyeOpen: CoreFoundation.CGFloat?, rightEyeOpen: CoreFoundation.CGFloat?, smiling: CoreFoundation.CGFloat?, nose: CoreFoundation.CGPoint?, leftCheek: CoreFoundation.CGPoint?, rightCheek: CoreFoundation.CGPoint?)
+}
+public struct FrameObservation {
+  public let timestamp: Foundation.TimeInterval
+  public let imageSize: CoreFoundation.CGSize
+  public let faces: [TrueFaceLiveness.FaceObservation]
+  public let faceLuminance: CoreFoundation.CGFloat?
+  public init(timestamp: Foundation.TimeInterval, imageSize: CoreFoundation.CGSize, faces: [TrueFaceLiveness.FaceObservation], faceLuminance: CoreFoundation.CGFloat?)
+}
+public enum MachineEffect {
+  case event([Swift.String : Any])
+  case success
+  case failure(Swift.String)
+}
+public enum Challenge : Swift.String, Swift.CaseIterable {
+  case blink
+  case smile
+  case turnLeft
+  case turnRight
+  case nod
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [TrueFaceLiveness.Challenge]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [TrueFaceLiveness.Challenge] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+final public class LivenessStateMachine {
+  final public var completed: [Swift.String] {
+    get
+  }
+  public init(challenges: [TrueFaceLiveness.Challenge], timeoutMs: Swift.Int)
+  final public var currentChallenge: TrueFaceLiveness.Challenge? {
+    get
+  }
+  final public var isFinished: Swift.Bool {
+    get
+  }
+  final public func process(_ frame: TrueFaceLiveness.FrameObservation) -> [TrueFaceLiveness.MachineEffect]
+  @objc deinit
+}
+public protocol TrueFaceLivenessDelegate : AnyObject {
+  func livenessViewController(_ vc: TrueFaceLiveness.TrueFaceLivenessViewController, didUpdateEvent event: [Swift.String : Any])
+  func livenessViewController(_ vc: TrueFaceLiveness.TrueFaceLivenessViewController, didCompleteWithResult result: [Swift.String : Any])
+  func livenessViewController(_ vc: TrueFaceLiveness.TrueFaceLivenessViewController, didFailWithError error: any Swift.Error)
+}
+public struct TrueFaceConfig {
+  public let backendBaseUrl: Swift.String
+  public let publicKey: Swift.String
+  public let verificationId: Swift.String
+  public let clientSecret: Swift.String
+  public let challengeCount: Swift.Int
+  public init(backendBaseUrl: Swift.String = "https://api.trueface.dev", publicKey: Swift.String, verificationId: Swift.String, clientSecret: Swift.String, challengeCount: Swift.Int = 3)
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class TrueFaceLivenessViewController : UIKit.UIViewController, AVFoundation.AVCaptureVideoDataOutputSampleBufferDelegate {
+  @_Concurrency.MainActor @preconcurrency weak final public var delegate: (any TrueFaceLiveness.TrueFaceLivenessDelegate)?
+  @_Concurrency.MainActor @preconcurrency public init(config: TrueFaceLiveness.TrueFaceConfig)
+  @_Concurrency.MainActor @preconcurrency @objc override final public func viewDidLoad()
+  @_Concurrency.MainActor @preconcurrency @objc final public func captureOutput(_ output: AVFoundation.AVCaptureOutput, didOutput sampleBuffer: CoreMedia.CMSampleBuffer, from connection: AVFoundation.AVCaptureConnection)
+  @objc deinit
+}
+extension TrueFaceLiveness.Challenge : Swift.Equatable {}
+extension TrueFaceLiveness.Challenge : Swift.Hashable {}
+extension TrueFaceLiveness.Challenge : Swift.RawRepresentable {}

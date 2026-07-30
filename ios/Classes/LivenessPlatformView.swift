@@ -3,6 +3,7 @@ import CoreImage
 import Flutter
 import UIKit
 import Vision
+import TrueFaceLiveness
 
 /// UIView whose backing layer is the capture preview layer.
 private final class CameraPreviewView: UIView {
@@ -58,10 +59,10 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   private let session = AVCaptureSession()
   private let videoQueue = DispatchQueue(label: "com.liveness.video")
   private let landmarksRequest = VNDetectFaceLandmarksRequest()
-  private let antiSpoof: AntiSpoofDetector
+  private let antiSpoof: TrueFaceLiveness.AntiSpoofDetector
 
   // All mutable session state below is confined to `videoQueue`.
-  private var machine: LivenessStateMachine
+  private var machine: TrueFaceLiveness.LivenessStateMachine
   private var resultDelivered = false
   private var cameraConfigured = false
   private var lastFacePixelBuffer: CVPixelBuffer?
@@ -98,8 +99,8 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       binaryMessenger: messenger
     )
 
-    antiSpoof = AntiSpoofDetectors.makeDefault()
-    machine = LivenessStateMachine(
+    antiSpoof = TrueFaceLiveness.AntiSpoofDetectors.makeDefault()
+    machine = TrueFaceLiveness.LivenessStateMachine(
       challenges: config.pickChallenges(),
       timeoutMs: config.challengeTimeoutMs
     )
@@ -286,7 +287,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
 
       let current = machine.currentChallenge
       antiSpoof.ingest(
-        AntiSpoofSample(
+        TrueFaceLiveness.AntiSpoofSample(
           timestamp: now,
           faceBox: face.box,
           eulerY: face.eulerY,
@@ -299,7 +300,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     }
 
     let effects = machine.process(
-      FrameObservation(
+      TrueFaceLiveness.FrameObservation(
         timestamp: now,
         imageSize: size,
         faces: faces,
@@ -313,7 +314,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   /// Runs Apple Vision on the upright buffer and maps each detected face into a
   /// `FaceObservation` with the same semantics ML Kit produced on Android
   /// (pixel-space top-left box, euler angles in degrees, 0…1 eye/smile).
-  private func detectFaces(_ pixelBuffer: CVPixelBuffer, size: CGSize) -> [FaceObservation] {
+  private func detectFaces(_ pixelBuffer: CVPixelBuffer, size: CGSize) -> [TrueFaceLiveness.FaceObservation] {
     let handler = VNImageRequestHandler(
       cvPixelBuffer: pixelBuffer, orientation: .up, options: [:])
     do {
@@ -327,7 +328,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     }
   }
 
-  private func map(_ obs: VNFaceObservation, size: CGSize) -> FaceObservation {
+  private func map(_ obs: VNFaceObservation, size: CGSize) -> TrueFaceLiveness.FaceObservation {
     // Vision boundingBox: normalized, bottom-left origin → pixel, top-left.
     let bb = obs.boundingBox
     let box = CGRect(
@@ -353,7 +354,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     let rightOpen = eyeOpenness(rightEye)
     let smile = smileScore(lips: lips, leftEye: leftEye, rightEye: rightEye)
 
-    return FaceObservation(
+    return TrueFaceLiveness.FaceObservation(
       box: box,
       eulerX: eulerX,
       eulerY: eulerY,
@@ -494,7 +495,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
 
   /// Runs on `videoQueue`. Restarts the whole sequence from scratch.
   private func restart() {
-    machine = LivenessStateMachine(
+    machine = TrueFaceLiveness.LivenessStateMachine(
       challenges: config.pickChallenges(),
       timeoutMs: config.challengeTimeoutMs
     )

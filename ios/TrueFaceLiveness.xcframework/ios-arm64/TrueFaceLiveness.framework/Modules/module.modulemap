@@ -1,0 +1,4 @@
+module TrueFaceLiveness {
+header "TrueFaceLiveness-Swift.h"
+export *
+}
