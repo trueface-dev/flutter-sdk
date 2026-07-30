@@ -18,8 +18,10 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
     }
 }
+
 
 plugins {
     id("com.android.library")
@@ -87,6 +89,9 @@ dependencies {
 
     // ML Kit face detection (bundled model — no Play Services download needed).
     implementation("com.google.mlkit:face-detection:16.1.7")
+
+    // Standalone TrueFace Android Liveness SDK
+    implementation("dev.trueface:trueface-liveness:0.1.2")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.mockito:mockito-core:5.0.0")

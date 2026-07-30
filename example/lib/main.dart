@@ -1,32 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:liveness_detection/liveness_detection.dart';
-
-// Hosted-verification config, supplied at build time, e.g.:
-//   flutter run --dart-define=BACKEND_URL=http://10.0.2.2:3000 \
-//     --dart-define=PUBLIC_KEY=pk_test_... \
-//     --dart-define=VERIFICATION_ID=... --dart-define=CLIENT_SECRET=vs_...
-// (Obtain VERIFICATION_ID + CLIENT_SECRET from POST /v1/verifications with the
-// merchant secret key.) When unset, the demo runs fully on-device.
-const _backendUrl = String.fromEnvironment('BACKEND_URL');
-const _publicKey = String.fromEnvironment('PUBLIC_KEY');
-const _verificationId = String.fromEnvironment('VERIFICATION_ID');
-const _clientSecret = String.fromEnvironment('CLIENT_SECRET');
-
-LivenessConfig buildConfig() {
-  if (_backendUrl.isNotEmpty &&
-      _publicKey.isNotEmpty &&
-      _verificationId.isNotEmpty &&
-      _clientSecret.isNotEmpty) {
-    return LivenessConfig(
-      backendBaseUrl: _backendUrl,
-      publicKey: _publicKey,
-      verificationId: _verificationId,
-      clientSecret: _clientSecret,
-      recordVideo: true,
-    );
-  }
-  return const LivenessConfig(numberOfChallenges: 3);
-}
 
 void main() => runApp(const MyApp());
 
@@ -37,7 +12,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Liveness Demo',
-      theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
+      theme: ThemeData(
+        colorSchemeSeed: Colors.indigo,
+        useMaterial3: true,
+        brightness: Brightness.light,
+      ),
+      darkTheme: ThemeData(
+        colorSchemeSeed: Colors.indigo,
+        useMaterial3: true,
+        brightness: Brightness.dark,
+      ),
+      themeMode: ThemeMode.system,
       home: const HomePage(),
     );
   }
@@ -52,70 +37,440 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   LivenessResult? _lastResult;
+  bool _useHostedApi = true;
+  bool _isLoading = false;
+  String? _errorMessage;
+
+  late final _backendUrlController = TextEditingController(
+    text:'https://e66b-102-88-167-64.ngrok-free.app',// Platform.isAndroid ? 'http://10.0.2.2:3000' : 'http://localhost:3000',
+  );
+  final _publicKeyController = TextEditingController(
+    text: 'pk_test_SFJdgYdzDh84SO2jKDwL6qTxQINZCOI6',
+  );
+  final _secretKeyController = TextEditingController(
+    text: 'sk_test_FrrvGbScsWuxCsPc_BrRCFlRNXmb4Yfi',
+  );
+  late final _webhookUrlController = TextEditingController(
+    text:'https://e66b-102-88-167-64.ngrok-free.app',// Platform.isAndroid ? 'http://10.0.2.2:5050/webhook' : 'http://localhost:5050/webhook',
+  );
+  final _userIdentifierController = TextEditingController(
+    text: 'user_demo_123',
+  );
+  final _matchImageUrlController = TextEditingController();
+  
+  int _challengeCount = 3;
+
+  @override
+  void dispose() {
+    _backendUrlController.dispose();
+    _publicKeyController.dispose();
+    _secretKeyController.dispose();
+    _webhookUrlController.dispose();
+    _userIdentifierController.dispose();
+    _matchImageUrlController.dispose();
+    super.dispose();
+  }
 
   Future<void> _startLiveness() async {
-    final result = await Navigator.of(context).push<LivenessResult>(
-      MaterialPageRoute(builder: (_) => LivenessScreen(config: buildConfig())),
-    );
-    if (result != null) setState(() => _lastResult = result);
+    setState(() {
+      _errorMessage = null;
+      _isLoading = true;
+    });
+
+    try {
+      LivenessConfig config;
+
+      if (_useHostedApi) {
+        // Step 1: Create verification session dynamically
+        final backendUrl = _backendUrlController.text.trim();
+        final secretKey = _secretKeyController.text.trim();
+        final publicKey = _publicKeyController.text.trim();
+        final webhookUrl = _webhookUrlController.text.trim();
+        final userIdentifier = _userIdentifierController.text.trim();
+        final matchImageUrl = _matchImageUrlController.text.trim();
+
+        if (backendUrl.isEmpty || secretKey.isEmpty || publicKey.isEmpty) {
+          throw Exception('Backend URL, Secret Key, and Publishable Key are required for Hosted Mode.');
+        }
+
+        final sessionData = await _createVerificationSession(
+          backendUrl: backendUrl,
+          secretKey: secretKey,
+          webhookUrl: webhookUrl,
+          challengeCount: _challengeCount,
+          userIdentifier: userIdentifier,
+          matchImageUrl: matchImageUrl,
+        );
+
+        config = LivenessConfig(
+          backendBaseUrl: backendUrl,
+          publicKey: publicKey,
+          verificationId: sessionData['id']!,
+          clientSecret: sessionData['clientSecret']!,
+          recordVideo: true,
+        );
+      } else {
+        // Local on-device mode
+        config = LivenessConfig(numberOfChallenges: _challengeCount);
+      }
+
+      setState(() => _isLoading = false);
+
+      if (!mounted) return;
+
+      final result = await Navigator.of(context).push<LivenessResult>(
+        MaterialPageRoute(builder: (_) => LivenessScreen(config: config)),
+      );
+
+      if (result != null) {
+        setState(() => _lastResult = result);
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.toString().replaceAll('Exception: ', '');
+      });
+    }
+  }
+
+  Future<Map<String, String>> _createVerificationSession({
+    required String backendUrl,
+    required String secretKey,
+    required String webhookUrl,
+    required int challengeCount,
+    required String userIdentifier,
+    required String matchImageUrl,
+  }) async {
+    final cleanUrl = backendUrl.replaceAll(RegExp(r'/$'), '');
+    final uri = Uri.parse('$cleanUrl/v1/verifications');
+
+    final response = await http.post(
+      uri,
+      headers: {
+        'content-type': 'application/json',
+        'authorization': 'Bearer $secretKey',
+      },
+      body: jsonEncode({
+        if (webhookUrl.isNotEmpty) 'webhookUrl': webhookUrl,
+        if (userIdentifier.isNotEmpty) 'userIdentifier': userIdentifier,
+        if (matchImageUrl.isNotEmpty) 'matchImageUrl': matchImageUrl,
+        'challengeCount': challengeCount,
+      }),
+    ).timeout(const Duration(seconds: 10));
+
+    if (response.statusCode >= 300) {
+      throw Exception('Server error (${response.statusCode}): ${response.body}');
+    }
+
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    return {
+      'id': data['id'] as String,
+      'clientSecret': data['clientSecret'] as String,
+    };
   }
 
   @override
   Widget build(BuildContext context) {
     final result = _lastResult;
     return Scaffold(
-      appBar: AppBar(title: const Text('Liveness Detection')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (result != null) ...[
-                if (result.success && result.image != null)
-                  Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.memory(
-                          result.image!,
-                          height: 260,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        result.verificationStatus != null
-                            ? 'Verification: ${result.verificationStatus!.name} ✓'
-                            : 'Live face verified ✓',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      if (result.spoofScore != null)
+      appBar: AppBar(
+        title: const Text('Liveness SDK Demo'),
+        centerTitle: true,
+      ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Mode selector
+                SegmentedButton<bool>(
+                  segments: const [
+                    ButtonSegment<bool>(
+                      value: false,
+                      icon: Icon(Icons.phonelink_setup),
+                      label: Text('Local Mode'),
+                    ),
+                    ButtonSegment<bool>(
+                      value: true,
+                      icon: Icon(Icons.cloud),
+                      label: Text('Hosted API Mode'),
+                    ),
+                  ],
+                  selected: {_useHostedApi},
+                  onSelectionChanged: (set) {
+                    setState(() {
+                      _useHostedApi = set.first;
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                // Settings card
+                Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          'Realness score: '
-                          '${(result.spoofScore! * 100).toStringAsFixed(0)}%',
+                          'Configuration Settings',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
-                    ],
-                  )
-                else
-                  Text(
-                    result.verificationStatus != null
-                        ? 'Verification ${result.verificationStatus!.name}'
-                        : 'Failed: ${result.failureReason?.name ?? 'unknown'}',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
+                        const SizedBox(height: 16),
+                        if (_useHostedApi) ...[
+                          TextFormField(
+                            controller: _backendUrlController,
+                            decoration: const InputDecoration(
+                              labelText: 'Backend base URL',
+                              prefixIcon: Icon(Icons.link),
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextFormField(
+                            controller: _publicKeyController,
+                            decoration: const InputDecoration(
+                              labelText: 'Publishable Key',
+                              prefixIcon: Icon(Icons.vpn_key),
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextFormField(
+                            controller: _secretKeyController,
+                            decoration: const InputDecoration(
+                              labelText: 'Merchant Secret Key',
+                              prefixIcon: Icon(Icons.security),
+                              border: OutlineInputBorder(),
+                            ),
+                            obscureText: true,
+                          ),
+                          const SizedBox(height: 12),
+                          TextFormField(
+                            controller: _webhookUrlController,
+                            decoration: const InputDecoration(
+                              labelText: 'Webhook URL',
+                              prefixIcon: Icon(Icons.webhook),
+                              border: OutlineInputBorder(),
+                              helperText: 'Triggers when verification completes',
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextFormField(
+                            controller: _userIdentifierController,
+                            decoration: const InputDecoration(
+                              labelText: 'User Identifier',
+                              prefixIcon: Icon(Icons.person),
+                              border: OutlineInputBorder(),
+                              helperText: 'Unique ID to identify this user',
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextFormField(
+                            controller: _matchImageUrlController,
+                            decoration: const InputDecoration(
+                              labelText: 'Match Image URL (AWS Rekognition)',
+                              prefixIcon: Icon(Icons.compare),
+                              border: OutlineInputBorder(),
+                              helperText: 'Optional reference image URL to match face against',
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+                        DropdownButtonFormField<int>(
+                          value: _challengeCount,
+                          decoration: const InputDecoration(
+                            labelText: 'Number of active challenges',
+                            prefixIcon: Icon(Icons.psychology),
+                            border: OutlineInputBorder(),
+                          ),
+                          items: List.generate(5, (index) => index + 1)
+                              .map(
+                                (c) => DropdownMenuItem(
+                                  value: c,
+                                  child: Text('$c challenge${c > 1 ? 's' : ''}'),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (val) {
+                            if (val != null) {
+                              setState(() => _challengeCount = val);
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
+                ),
+                const SizedBox(height: 20),
+
+                // Error message
+                if (_errorMessage != null) ...[
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.errorContainer,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.error,
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.error_outline,
+                            color: Theme.of(context).colorScheme.error),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            _errorMessage!,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onErrorContainer),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+
+                // Action button
+                FilledButton.icon(
+                  onPressed: _isLoading ? null : _startLiveness,
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  icon: const Icon(Icons.face_retouching_natural),
+                  label: Text(_useHostedApi
+                      ? 'Create Session & Start Check'
+                      : 'Start Local Liveness Check'),
+                ),
                 const SizedBox(height: 24),
+
+                // Last result display
+                if (result != null) ...[
+                  Card(
+                    color: result.success
+                        ? Colors.green.shade50
+                        : Colors.red.shade50,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(
+                        color: result.success ? Colors.green : Colors.red,
+                        width: 1,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                result.success
+                                    ? Icons.check_circle
+                                    : Icons.cancel,
+                                color: result.success ? Colors.green : Colors.red,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                result.success
+                                    ? 'Liveness Completed ✓'
+                                    : 'Liveness Failed ✗',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: result.success ? Colors.green.shade900 : Colors.red.shade900,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          if (result.success && result.image != null) ...[
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.memory(
+                                result.image!,
+                                height: 200,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                          _buildDetailRow('Verification Status', result.verificationStatus?.name ?? 'n/a'),
+                          if (result.spoofScore != null)
+                            _buildDetailRow('Realness Score', '${(result.spoofScore! * 100).toStringAsFixed(1)}%'),
+                          if (result.failureReason != null)
+                            _buildDetailRow('Failure Reason', result.failureReason!.name),
+                          if (result.imageUrl != null)
+                            _buildDetailRow('Image Key', result.imageUrl!),
+                          if (result.videoUrl != null)
+                            _buildDetailRow('Video Key', result.videoUrl!),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ],
-              FilledButton.icon(
-                onPressed: _startLiveness,
-                icon: const Icon(Icons.face_retouching_natural),
-                label: const Text('Start liveness check'),
-              ),
-            ],
+            ),
           ),
-        ),
+          if (_isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black45,
+                child: const Center(
+                  child: Card(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 16),
+                          Text('Creating verification session...'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+        ],
       ),
     );
   }

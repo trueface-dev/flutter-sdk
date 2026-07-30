@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 import 'package:http/http.dart' as http;
+import 'package:encrypt/encrypt.dart' as enc;
 
 import 'liveness_challenge.dart';
 
@@ -120,14 +122,27 @@ class LivenessBackendClient {
       'videoKey': targets.videoKey,
       'completedChallenges': completedChallenges.map((c) => c.wireName).toList(),
       'clientSecret': clientSecret,
+      'deviceOs': Platform.operatingSystem,
+      'deviceModel': Platform.operatingSystemVersion,
     };
     if (onDeviceSpoofScore != null) {
       payload['onDeviceSpoofScore'] = onDeviceSpoofScore;
     }
+
+    final key = enc.Key.fromUtf8(clientSecret.padRight(32).substring(0, 32));
+    final iv = enc.IV.fromSecureRandom(16);
+    final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
+    final encrypted = encrypter.encrypt(jsonEncode(payload), iv: iv);
+
+    final requestBody = <String, dynamic>{
+      'encryptedData': encrypted.base64,
+      'iv': iv.base64,
+    };
+
     final res = await _client.post(
       _u('$_session/complete'),
       headers: _headers,
-      body: jsonEncode(payload),
+      body: jsonEncode(requestBody),
     );
     _ensureOk(res, 'complete');
   }
