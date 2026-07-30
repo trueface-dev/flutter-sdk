@@ -1,4 +1,4 @@
-package com.liveness.liveness_detection
+package com.liveness.trueface_liveness
 
 import android.Manifest
 import android.app.Activity
@@ -16,18 +16,18 @@ import io.flutter.plugin.common.PluginRegistry
 /**
  * Entry point of the liveness detection plugin.
  *
- * Registers the [LivenessViewFactory] for the `com.liveness/liveness_view`
+ * Registers the [LivenessViewFactory] for the `com.trueface/trueface_liveness_view`
  * platform view and, via [ActivityAware], exposes the current [Activity] so
  * views can request the runtime camera permission.
  */
-class LivenessDetectionPlugin :
+class TrueFaceLivenessPlugin :
     FlutterPlugin,
     ActivityAware,
     MethodCallHandler,
     PluginRegistry.RequestPermissionsResultListener {
 
     companion object {
-        const val VIEW_TYPE = "com.liveness/liveness_view"
+        const val VIEW_TYPE = "com.trueface/trueface_liveness_view"
         private const val CAMERA_PERMISSION_REQUEST_CODE = 4907
     }
 
@@ -40,7 +40,7 @@ class LivenessDetectionPlugin :
         get() = activityBinding?.activity
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "liveness_detection")
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "trueface_liveness")
         channel.setMethodCallHandler(this)
         flutterPluginBinding.platformViewRegistry.registerViewFactory(
             VIEW_TYPE,

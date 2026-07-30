@@ -1,6 +1,6 @@
-# liveness_detection_example
+# trueface_liveness_example
 
-Demonstrates how to use the liveness_detection plugin.
+Demonstrates how to use the trueface_liveness plugin.
 
 ## Getting Started
 

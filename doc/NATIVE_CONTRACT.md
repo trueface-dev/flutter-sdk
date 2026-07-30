@@ -6,7 +6,7 @@ frozen — the hosted-verification work added networking + video config.)
 
 ## Platform view
 
-- Register a `PlatformViewFactory` for view type: **`com.liveness/liveness_view`**.
+- Register a `PlatformViewFactory` for view type: **`com.trueface/trueface_liveness_view`**.
 - Creation params arrive as a `StandardMessageCodec` **Map** with keys:
   - `challengePool`: `List<String>` — pool of challenge wire-names to draw from.
   - `numberOfChallenges`: `int`.
@@ -26,7 +26,7 @@ frozen — the hosted-verification work added networking + video config.)
 
 ## Per-view MethodChannel
 
-Name: **`com.liveness/liveness_<viewId>`** where `<viewId>` is the integer id
+Name: **`com.trueface/trueface_liveness_<viewId>`** where `<viewId>` is the integer id
 the platform view factory receives for this instance.
 
 ### Dart → native (you handle these)

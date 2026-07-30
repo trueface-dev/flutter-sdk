@@ -1,4 +1,4 @@
-# GoogleMLKit/FaceDetection (used by the liveness_detection plugin) requires iOS 15.5+.
+# GoogleMLKit/FaceDetection (used by the trueface_liveness plugin) requires iOS 15.5+.
 platform :ios, '15.5'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.

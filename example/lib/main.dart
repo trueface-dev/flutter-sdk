@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:liveness_detection/liveness_detection.dart';
+import 'package:trueface_liveness/trueface_liveness.dart';
 
 void main() => runApp(const MyApp());
 

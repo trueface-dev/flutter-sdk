@@ -1,9 +1,9 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint liveness_detection.podspec` to validate before publishing.
+# Run `pod lib lint trueface_liveness.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'liveness_detection'
+  s.name             = 'trueface_liveness'
   s.version          = '0.0.1'
   s.summary          = 'Active + passive liveness detection for Flutter.'
   s.description      = <<-DESC
@@ -41,5 +41,5 @@ passive anti-spoofing) exposed to Flutter as a platform view.
   # required reason APIs, update the PrivacyInfo.xcprivacy file to describe your
   # plugin's privacy impact, and then uncomment this line. For more information,
   # see https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
-  # s.resource_bundles = {'liveness_detection_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
+  # s.resource_bundles = {'trueface_liveness_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
 end

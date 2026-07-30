@@ -95,7 +95,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     previewView.backgroundColor = .black
     previewView.previewLayer.videoGravity = .resizeAspectFill
     channel = FlutterMethodChannel(
-      name: "com.liveness/liveness_\(viewId)",
+      name: "com.trueface/trueface_liveness_\(viewId)",
       binaryMessenger: messenger
     )
 

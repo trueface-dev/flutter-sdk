@@ -1,4 +1,4 @@
-name: liveness_detection
+name: trueface_liveness
 description: "Camera-based face liveness detection with randomized active challenges and passive anti-spoofing; returns the captured face image."
 version: 0.0.1
 homepage:
@@ -37,10 +37,10 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.liveness.liveness_detection
-        pluginClass: LivenessDetectionPlugin
+        package: com.liveness.trueface_liveness
+        pluginClass: TrueFaceLivenessPlugin
       ios:
-        pluginClass: LivenessDetectionPlugin
+        pluginClass: TrueFaceLivenessPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

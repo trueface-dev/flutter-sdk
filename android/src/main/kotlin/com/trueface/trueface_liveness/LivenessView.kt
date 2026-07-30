@@ -1,4 +1,4 @@
-package com.liveness.liveness_detection
+package com.liveness.trueface_liveness
 
 import android.Manifest
 import android.content.Context
@@ -111,7 +111,7 @@ internal class LivenessView(
     context: Context,
     viewId: Int,
     messenger: BinaryMessenger,
-    private val plugin: LivenessDetectionPlugin,
+    private val plugin: TrueFaceLivenessPlugin,
     params: Map<*, *>,
 ) : PlatformView, LifecycleOwner, ChallengeSession.Listener {
 
@@ -130,7 +130,7 @@ internal class LivenessView(
     private val appContext: Context = context.applicationContext
     private val config = LivenessConfigParams.fromMap(params)
     private val previewView = PreviewView(context)
-    private val channel = MethodChannel(messenger, "com.liveness/liveness_$viewId")
+    private val channel = MethodChannel(messenger, "com.trueface/trueface_liveness_$viewId")
     private val mainHandler = Handler(Looper.getMainLooper())
     private val lifecycleRegistry = LifecycleRegistry(this)
     private val analysisExecutor: ExecutorService = Executors.newSingleThreadExecutor()

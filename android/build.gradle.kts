@@ -1,4 +1,4 @@
-group = "com.liveness.liveness_detection"
+group = "com.liveness.trueface_liveness"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -29,7 +29,7 @@ plugins {
 }
 
 android {
-    namespace = "com.liveness.liveness_detection"
+    namespace = "com.liveness.trueface_liveness"
 
     compileSdk = 36
 

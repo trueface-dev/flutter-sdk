@@ -1,4 +1,4 @@
-# liveness_detection
+# trueface_liveness
 
 A Flutter plugin for **camera-based face liveness detection**. The user is asked
 to complete a short, **randomly ordered sequence of active challenges** (blink,
@@ -43,7 +43,7 @@ Presentation attacks are handled in two layers:
 ## Usage
 
 ```dart
-import 'package:liveness_detection/liveness_detection.dart';
+import 'package:trueface_liveness/trueface_liveness.dart';
 
 // Show the full-screen camera view; it starts the session automatically.
 LivenessCameraView(

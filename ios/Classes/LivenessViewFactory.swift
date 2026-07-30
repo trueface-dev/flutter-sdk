@@ -3,7 +3,7 @@ import Flutter
 import UIKit
 import TrueFaceLiveness
 
-/// Factory for the `com.liveness/liveness_view` platform view.
+/// Factory for the `com.trueface/trueface_liveness_view` platform view.
 final class LivenessViewFactory: NSObject, FlutterPlatformViewFactory {
   private let messenger: FlutterBinaryMessenger
 

@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'package:liveness_detection/liveness_detection.dart';
+import 'package:trueface_liveness/trueface_liveness.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

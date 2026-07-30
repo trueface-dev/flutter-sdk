@@ -1,1 +1,1 @@
-rootProject.name = 'liveness_detection'
+rootProject.name = 'trueface_liveness'

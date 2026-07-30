@@ -47,7 +47,7 @@ class LivenessCameraView extends StatefulWidget {
   State<LivenessCameraView> createState() => _LivenessCameraViewState();
 }
 
-const String _viewType = 'com.liveness/liveness_view';
+const String _viewType = 'com.trueface/trueface_liveness_view';
 
 class _LivenessCameraViewState extends State<LivenessCameraView> {
   MethodChannel? _channel;
@@ -154,7 +154,7 @@ class _LivenessCameraViewState extends State<LivenessCameraView> {
   }
 
   void _onPlatformViewCreated(int id) {
-    final channel = MethodChannel('com.liveness/liveness_$id');
+    final channel = MethodChannel('com.trueface/trueface_liveness_$id');
     channel.setMethodCallHandler(_handleNativeCall);
     _channel = channel;
     _controller = LivenessController._(channel);

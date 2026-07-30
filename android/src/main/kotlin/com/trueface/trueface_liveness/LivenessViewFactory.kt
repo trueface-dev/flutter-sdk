@@ -1,4 +1,4 @@
-package com.liveness.liveness_detection
+package com.liveness.trueface_liveness
 
 import android.content.Context
 import io.flutter.plugin.common.BinaryMessenger
@@ -9,7 +9,7 @@ import io.flutter.plugin.platform.PlatformViewFactory
 /** Builds a [LivenessView] from the creation params sent by the Dart side. */
 class LivenessViewFactory(
     private val messenger: BinaryMessenger,
-    private val plugin: LivenessDetectionPlugin,
+    private val plugin: TrueFaceLivenessPlugin,
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
     override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
