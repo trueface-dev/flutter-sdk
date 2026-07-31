@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
   String? _errorMessage;
 
   late final _backendUrlController = TextEditingController(
-    text: 'https://api.trueface.dev'
+    text: 'https://api.trueface.dev',
   );
   final _publicKeyController = TextEditingController(
     text: 'pk_test_SFJdgYdzDh84SO2jKDwL6qTxQINZCOI6',
