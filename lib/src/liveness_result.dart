@@ -132,7 +132,7 @@ class LivenessResult {
   }
 
   static LivenessResult cancelled() => const LivenessResult(
-        success: false,
-        failureReason: LivenessFailureReason.cancelled,
-      );
+    success: false,
+    failureReason: LivenessFailureReason.cancelled,
+  );
 }

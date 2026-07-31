@@ -4,17 +4,17 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'trueface_liveness'
-  s.version          = '0.0.1'
+  s.version          = '0.1.0'
   s.summary          = 'Active + passive liveness detection for Flutter.'
   s.description      = <<-DESC
-AVFoundation + Google ML Kit based liveness detection (challenge/response and
+AVFoundation + Apple Vision based liveness detection (challenge/response and
 passive anti-spoofing) exposed to Flutter as a platform view.
                        DESC
-  s.homepage         = 'http://truface.dev'
+  s.homepage         = 'https://trueface.dev'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'TrueFace' => 'email@truface.dev' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'trueface_liveness/Sources/trueface_liveness/**/*.swift'
   s.dependency 'Flutter'
   # iOS face detection uses Apple's built-in Vision framework (no third-party
   # dependency); Vision exposes face pitch on iOS 15+.
@@ -36,10 +36,7 @@ passive anti-spoofing) exposed to Flutter as a platform view.
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
-
-  # If your plugin requires a privacy manifest, for example if it uses any
-  # required reason APIs, update the PrivacyInfo.xcprivacy file to describe your
-  # plugin's privacy impact, and then uncomment this line. For more information,
-  # see https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
-  # s.resource_bundles = {'trueface_liveness_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
+  s.resource_bundles = {
+    'trueface_liveness_privacy' => ['trueface_liveness/Sources/trueface_liveness/PrivacyInfo.xcprivacy']
+  }
 end

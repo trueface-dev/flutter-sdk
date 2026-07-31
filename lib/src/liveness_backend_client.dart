@@ -57,10 +57,10 @@ class LivenessBackendClient {
   final http.Client _client;
 
   Map<String, String> get _headers => {
-        'content-type': 'application/json',
-        'x-public-key': publicKey,
-        'x-client-secret': clientSecret,
-      };
+    'content-type': 'application/json',
+    'x-public-key': publicKey,
+    'x-client-secret': clientSecret,
+  };
 
   Uri _u(String path) =>
       Uri.parse('${baseUrl.replaceAll(RegExp(r'/$'), '')}$path');
@@ -77,15 +77,18 @@ class LivenessBackendClient {
     final capture = (body['capture'] as Map?) ?? const {};
     return SessionStart(
       challenges: challenges,
-      videoMaxDurationMs: (capture['videoMaxDurationMs'] as num?)?.toInt() ?? 3000,
+      videoMaxDurationMs:
+          (capture['videoMaxDurationMs'] as num?)?.toInt() ?? 3000,
       challengeTimeoutMs:
           (capture['challengeTimeoutMs'] as num?)?.toInt() ?? 12000,
     );
   }
 
   Future<UploadTargets> requestUploadUrls() async {
-    final res =
-        await _client.post(_u('$_session/upload-urls'), headers: _headers);
+    final res = await _client.post(
+      _u('$_session/upload-urls'),
+      headers: _headers,
+    );
     _ensureOk(res, 'upload-urls');
     final body = jsonDecode(res.body) as Map<String, dynamic>;
     final image = body['image'] as Map<String, dynamic>;
@@ -101,7 +104,11 @@ class LivenessBackendClient {
   }
 
   /// Uploads bytes to a presigned S3 PUT URL.
-  Future<void> uploadFile(String putUrl, List<int> bytes, String contentType) async {
+  Future<void> uploadFile(
+    String putUrl,
+    List<int> bytes,
+    String contentType,
+  ) async {
     final res = await _client.put(
       Uri.parse(putUrl),
       headers: {'content-type': contentType},
@@ -120,7 +127,9 @@ class LivenessBackendClient {
     final payload = <String, dynamic>{
       'imageKey': targets.imageKey,
       'videoKey': targets.videoKey,
-      'completedChallenges': completedChallenges.map((c) => c.wireName).toList(),
+      'completedChallenges': completedChallenges
+          .map((c) => c.wireName)
+          .toList(),
       'clientSecret': clientSecret,
       'deviceOs': Platform.operatingSystem,
       'deviceModel': Platform.operatingSystemVersion,
@@ -159,7 +168,9 @@ class LivenessBackendClient {
 
   void _ensureOk(http.Response res, String op) {
     if (res.statusCode >= 300) {
-      throw LivenessBackendException('$op failed (${res.statusCode}): ${res.body}');
+      throw LivenessBackendException(
+        '$op failed (${res.statusCode}): ${res.body}',
+      );
     }
   }
 }

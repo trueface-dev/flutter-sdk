@@ -24,10 +24,10 @@ class LivenessConfig {
     this.clientSecret,
     this.recordVideo = false,
     this.videoMaxDurationMs = 3000,
-  })  : assert(numberOfChallenges > 0),
-        assert(imageQuality >= 1 && imageQuality <= 100),
-        assert(spoofScoreThreshold >= 0 && spoofScoreThreshold <= 1),
-        assert(videoMaxDurationMs > 0);
+  }) : assert(numberOfChallenges > 0),
+       assert(imageQuality >= 1 && imageQuality <= 100),
+       assert(spoofScoreThreshold >= 0 && spoofScoreThreshold <= 1),
+       assert(videoMaxDurationMs > 0);
 
   /// The pool of challenges to draw from.
   final List<LivenessChallenge> challengePool;
@@ -103,8 +103,9 @@ class LivenessConfig {
     final challenges = challengesOverride ?? challengePool;
     return {
       'challengePool': challenges.map((c) => c.wireName).toList(),
-      'numberOfChallenges':
-          challengesOverride != null ? challenges.length : numberOfChallenges,
+      'numberOfChallenges': challengesOverride != null
+          ? challenges.length
+          : numberOfChallenges,
       'randomizeOrder': challengesOverride != null ? false : randomizeOrder,
       'challengeTimeoutMs': challengeTimeout.inMilliseconds,
       'imageQuality': imageQuality,

@@ -1,6 +1,6 @@
 name: trueface_liveness
 description: "Camera-based face liveness detection with randomized active challenges and passive anti-spoofing; returns the captured face image."
-version: 0.0.1
+version: 0.1.0
 homepage:
 
 environment:

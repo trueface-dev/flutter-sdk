@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
   String? _errorMessage;
 
   late final _backendUrlController = TextEditingController(
-    text:'https://e66b-102-88-167-64.ngrok-free.app',// Platform.isAndroid ? 'http://10.0.2.2:3000' : 'http://localhost:3000',
+    text: 'https://api.trueface.dev'
   );
   final _publicKeyController = TextEditingController(
     text: 'pk_test_SFJdgYdzDh84SO2jKDwL6qTxQINZCOI6',
@@ -50,14 +50,12 @@ class _HomePageState extends State<HomePage> {
   final _secretKeyController = TextEditingController(
     text: 'sk_test_FrrvGbScsWuxCsPc_BrRCFlRNXmb4Yfi',
   );
-  late final _webhookUrlController = TextEditingController(
-    text:'https://e66b-102-88-167-64.ngrok-free.app',// Platform.isAndroid ? 'http://10.0.2.2:5050/webhook' : 'http://localhost:5050/webhook',
-  );
+
   final _userIdentifierController = TextEditingController(
     text: 'user_demo_123',
   );
   final _matchImageUrlController = TextEditingController();
-  
+
   int _challengeCount = 3;
 
   @override
@@ -65,7 +63,6 @@ class _HomePageState extends State<HomePage> {
     _backendUrlController.dispose();
     _publicKeyController.dispose();
     _secretKeyController.dispose();
-    _webhookUrlController.dispose();
     _userIdentifierController.dispose();
     _matchImageUrlController.dispose();
     super.dispose();
@@ -85,18 +82,18 @@ class _HomePageState extends State<HomePage> {
         final backendUrl = _backendUrlController.text.trim();
         final secretKey = _secretKeyController.text.trim();
         final publicKey = _publicKeyController.text.trim();
-        final webhookUrl = _webhookUrlController.text.trim();
         final userIdentifier = _userIdentifierController.text.trim();
         final matchImageUrl = _matchImageUrlController.text.trim();
 
         if (backendUrl.isEmpty || secretKey.isEmpty || publicKey.isEmpty) {
-          throw Exception('Backend URL, Secret Key, and Publishable Key are required for Hosted Mode.');
+          throw Exception(
+            'Backend URL, Secret Key, and Publishable Key are required for Hosted Mode.',
+          );
         }
 
         final sessionData = await _createVerificationSession(
           backendUrl: backendUrl,
           secretKey: secretKey,
-          webhookUrl: webhookUrl,
           challengeCount: _challengeCount,
           userIdentifier: userIdentifier,
           matchImageUrl: matchImageUrl,
@@ -136,7 +133,6 @@ class _HomePageState extends State<HomePage> {
   Future<Map<String, String>> _createVerificationSession({
     required String backendUrl,
     required String secretKey,
-    required String webhookUrl,
     required int challengeCount,
     required String userIdentifier,
     required String matchImageUrl,
@@ -144,22 +140,25 @@ class _HomePageState extends State<HomePage> {
     final cleanUrl = backendUrl.replaceAll(RegExp(r'/$'), '');
     final uri = Uri.parse('$cleanUrl/v1/verifications');
 
-    final response = await http.post(
-      uri,
-      headers: {
-        'content-type': 'application/json',
-        'authorization': 'Bearer $secretKey',
-      },
-      body: jsonEncode({
-        if (webhookUrl.isNotEmpty) 'webhookUrl': webhookUrl,
-        if (userIdentifier.isNotEmpty) 'userIdentifier': userIdentifier,
-        if (matchImageUrl.isNotEmpty) 'matchImageUrl': matchImageUrl,
-        'challengeCount': challengeCount,
-      }),
-    ).timeout(const Duration(seconds: 10));
+    final response = await http
+        .post(
+          uri,
+          headers: {
+            'content-type': 'application/json',
+            'authorization': 'Bearer $secretKey',
+          },
+          body: jsonEncode({
+            if (userIdentifier.isNotEmpty) 'userIdentifier': userIdentifier,
+            if (matchImageUrl.isNotEmpty) 'matchImageUrl': matchImageUrl,
+            'challengeCount': challengeCount,
+          }),
+        )
+        .timeout(const Duration(seconds: 10));
 
     if (response.statusCode >= 300) {
-      throw Exception('Server error (${response.statusCode}): ${response.body}');
+      throw Exception(
+        'Server error (${response.statusCode}): ${response.body}',
+      );
     }
 
     final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -173,10 +172,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final result = _lastResult;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Liveness SDK Demo'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Liveness SDK Demo'), centerTitle: true),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -220,7 +216,8 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Text(
                           'Configuration Settings',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -254,16 +251,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             obscureText: true,
                           ),
-                          const SizedBox(height: 12),
-                          TextFormField(
-                            controller: _webhookUrlController,
-                            decoration: const InputDecoration(
-                              labelText: 'Webhook URL',
-                              prefixIcon: Icon(Icons.webhook),
-                              border: OutlineInputBorder(),
-                              helperText: 'Triggers when verification completes',
-                            ),
-                          ),
+
                           const SizedBox(height: 12),
                           TextFormField(
                             controller: _userIdentifierController,
@@ -281,7 +269,8 @@ class _HomePageState extends State<HomePage> {
                               labelText: 'Match Image URL (AWS Rekognition)',
                               prefixIcon: Icon(Icons.compare),
                               border: OutlineInputBorder(),
-                              helperText: 'Optional reference image URL to match face against',
+                              helperText:
+                                  'Optional reference image URL to match face against',
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -297,7 +286,9 @@ class _HomePageState extends State<HomePage> {
                               .map(
                                 (c) => DropdownMenuItem(
                                   value: c,
-                                  child: Text('$c challenge${c > 1 ? 's' : ''}'),
+                                  child: Text(
+                                    '$c challenge${c > 1 ? 's' : ''}',
+                                  ),
                                 ),
                               )
                               .toList(),
@@ -327,14 +318,19 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.error_outline,
-                            color: Theme.of(context).colorScheme.error),
+                        Icon(
+                          Icons.error_outline,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             _errorMessage!,
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.onErrorContainer),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onErrorContainer,
+                            ),
                           ),
                         ),
                       ],
@@ -353,9 +349,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   icon: const Icon(Icons.face_retouching_natural),
-                  label: Text(_useHostedApi
-                      ? 'Create Session & Start Check'
-                      : 'Start Local Liveness Check'),
+                  label: Text(
+                    _useHostedApi
+                        ? 'Create Session & Start Check'
+                        : 'Start Local Liveness Check',
+                  ),
                 ),
                 const SizedBox(height: 24),
 
@@ -383,7 +381,9 @@ class _HomePageState extends State<HomePage> {
                                 result.success
                                     ? Icons.check_circle
                                     : Icons.cancel,
-                                color: result.success ? Colors.green : Colors.red,
+                                color: result.success
+                                    ? Colors.green
+                                    : Colors.red,
                               ),
                               const SizedBox(width: 12),
                               Text(
@@ -393,7 +393,9 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
-                                  color: result.success ? Colors.green.shade900 : Colors.red.shade900,
+                                  color: result.success
+                                      ? Colors.green.shade900
+                                      : Colors.red.shade900,
                                 ),
                               ),
                             ],
@@ -410,11 +412,20 @@ class _HomePageState extends State<HomePage> {
                             ),
                             const SizedBox(height: 16),
                           ],
-                          _buildDetailRow('Verification Status', result.verificationStatus?.name ?? 'n/a'),
+                          _buildDetailRow(
+                            'Verification Status',
+                            result.verificationStatus?.name ?? 'n/a',
+                          ),
                           if (result.spoofScore != null)
-                            _buildDetailRow('Realness Score', '${(result.spoofScore! * 100).toStringAsFixed(1)}%'),
+                            _buildDetailRow(
+                              'Realness Score',
+                              '${(result.spoofScore! * 100).toStringAsFixed(1)}%',
+                            ),
                           if (result.failureReason != null)
-                            _buildDetailRow('Failure Reason', result.failureReason!.name),
+                            _buildDetailRow(
+                              'Failure Reason',
+                              result.failureReason!.name,
+                            ),
                           if (result.imageUrl != null)
                             _buildDetailRow('Image Key', result.imageUrl!),
                           if (result.videoUrl != null)
@@ -434,7 +445,10 @@ class _HomePageState extends State<HomePage> {
                 child: const Center(
                   child: Card(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 20,
+                      ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -610,7 +624,10 @@ class _LivenessScreenState extends State<LivenessScreen> {
                         const SizedBox(height: 16),
                         Text(
                           _instruction,
-                          style: const TextStyle(color: Colors.white, fontSize: 18),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
                         ),
                       ],
                     ),

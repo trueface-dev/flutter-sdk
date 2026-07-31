@@ -87,11 +87,13 @@ class _LivenessCameraViewState extends State<LivenessCameraView> {
       });
     } catch (e) {
       if (!mounted) return;
-      _deliver(LivenessResult(
-        success: false,
-        failureReason: LivenessFailureReason.unknown,
-        verificationStatus: VerificationStatus.failed,
-      ));
+      _deliver(
+        LivenessResult(
+          success: false,
+          failureReason: LivenessFailureReason.unknown,
+          verificationStatus: VerificationStatus.failed,
+        ),
+      );
     } finally {
       client.close();
     }
@@ -127,17 +129,20 @@ class _LivenessCameraViewState extends State<LivenessCameraView> {
             hitTestBehavior: PlatformViewHitTestBehavior.opaque,
           ),
           onCreatePlatformView: (params) {
-            final controller = PlatformViewsService.initSurfaceAndroidView(
-              id: params.id,
-              viewType: _viewType,
-              layoutDirection: TextDirection.ltr,
-              creationParams: creationParams,
-              creationParamsCodec: codec,
-              onFocus: () => params.onFocusChanged(true),
-            )
-              ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
-              ..addOnPlatformViewCreatedListener(_onPlatformViewCreated)
-              ..create();
+            final controller =
+                PlatformViewsService.initSurfaceAndroidView(
+                    id: params.id,
+                    viewType: _viewType,
+                    layoutDirection: TextDirection.ltr,
+                    creationParams: creationParams,
+                    creationParamsCodec: codec,
+                    onFocus: () => params.onFocusChanged(true),
+                  )
+                  ..addOnPlatformViewCreatedListener(
+                    params.onPlatformViewCreated,
+                  )
+                  ..addOnPlatformViewCreatedListener(_onPlatformViewCreated)
+                  ..create();
             return controller;
           },
         );
@@ -211,8 +216,7 @@ class LivenessController {
   Future<void> cancel() => _channel?.invokeMethod('cancel') ?? Future.value();
 
   /// Restarts the challenge sequence from the beginning.
-  Future<void> restart() =>
-      _channel?.invokeMethod('restart') ?? Future.value();
+  Future<void> restart() => _channel?.invokeMethod('restart') ?? Future.value();
 
   void _detach() => _channel = null;
 }
@@ -221,6 +225,6 @@ class _UnsupportedPlatform extends StatelessWidget {
   const _UnsupportedPlatform();
   @override
   Widget build(BuildContext context) => const Center(
-        child: Text('Liveness is only supported on Android and iOS'),
-      );
+    child: Text('Liveness is only supported on Android and iOS'),
+  );
 }

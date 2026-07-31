@@ -5,8 +5,8 @@ to complete a short, **randomly ordered sequence of active challenges** (blink,
 smile, turn head, nod) while a **passive anti-spoof** check runs in parallel.
 On success the plugin returns the **captured face image**.
 
-Native ML runs on-device with Google ML Kit Face Detection — no network calls,
-no images leave the device.
+Native ML runs on-device with Google ML Kit Face Detection on Android and Apple
+Vision on iOS. No network calls are made and no images leave the device.
 
 ## Anti-spoofing
 
@@ -33,7 +33,23 @@ Presentation attacks are handled in two layers:
 | | Min version | Engine |
 |---|---|---|
 | Android | API 24 | CameraX + ML Kit Face Detection |
-| iOS | 15.0 | AVFoundation + ML Kit Face Detection |
+| iOS | 15.0 | AVFoundation + Apple Vision |
+
+## Installation
+
+Add the plugin to your Flutter application:
+
+```yaml
+dependencies:
+  trueface_liveness: ^0.1.0
+```
+
+Flutter 3.44 and later resolves the iOS implementation with Swift Package
+Manager. The plugin depends on the public
+[`trueface-dev/ios-artifact`](https://github.com/trueface-dev/ios-artifact)
+package from version `1.0.1`, which distributes the native SDK as a binary
+XCFramework. CocoaPods remains supported for Flutter projects that have not yet
+migrated to Swift Package Manager.
 
 ## Permissions
 

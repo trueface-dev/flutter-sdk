@@ -17,13 +17,14 @@ class LivenessVerificationOrchestrator {
     required this.config,
     required this.onEvent,
     LivenessBackendClient? client,
-  }) : _client = client ??
-            LivenessBackendClient(
-              baseUrl: config.backendBaseUrl!,
-              publicKey: config.publicKey!,
-              verificationId: config.verificationId!,
-              clientSecret: config.clientSecret!,
-            );
+  }) : _client =
+           client ??
+           LivenessBackendClient(
+             baseUrl: config.backendBaseUrl!,
+             publicKey: config.publicKey!,
+             verificationId: config.verificationId!,
+             clientSecret: config.clientSecret!,
+           );
 
   final LivenessConfig config;
   final void Function(LivenessEvent event) onEvent;
@@ -42,7 +43,10 @@ class LivenessVerificationOrchestrator {
       final image = nativeResult.image;
       if (image != null) {
         await _client.uploadFile(
-            targets.imagePutUrl, image, targets.imageContentType);
+          targets.imagePutUrl,
+          image,
+          targets.imageContentType,
+        );
       }
       onEvent(const LivenessUploadingEvent(progress: 0.5));
 
@@ -50,7 +54,10 @@ class LivenessVerificationOrchestrator {
       if (videoPath != null && File(videoPath).existsSync()) {
         final bytes = await File(videoPath).readAsBytes();
         await _client.uploadFile(
-            targets.videoPutUrl, bytes, targets.videoContentType);
+          targets.videoPutUrl,
+          bytes,
+          targets.videoContentType,
+        );
       }
       onEvent(const LivenessUploadingEvent(progress: 1.0));
       if (_cancelled) return _failed(nativeResult);
@@ -93,10 +100,10 @@ class LivenessVerificationOrchestrator {
   }
 
   LivenessResult _failed(LivenessResult native) => native.copyWith(
-        success: false,
-        verificationStatus: VerificationStatus.failed,
-        failureReason: LivenessFailureReason.unknown,
-      );
+    success: false,
+    verificationStatus: VerificationStatus.failed,
+    failureReason: LivenessFailureReason.unknown,
+  );
 
   Future<void> _deleteTemp(String? path) async {
     if (path == null) return;

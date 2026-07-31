@@ -13,18 +13,18 @@ sealed class LivenessEvent {
       'faceDetected' => const FaceDetectedEvent(),
       'faceLost' => const FaceLostEvent(),
       'challengeStarted' => ChallengeStartedEvent(
-          challenge: LivenessChallenge.fromWire(map['challenge'] as String),
-          index: map['index'] as int,
-          total: map['total'] as int,
-        ),
+        challenge: LivenessChallenge.fromWire(map['challenge'] as String),
+        index: map['index'] as int,
+        total: map['total'] as int,
+      ),
       'challengeCompleted' => ChallengeCompletedEvent(
-          challenge: LivenessChallenge.fromWire(map['challenge'] as String),
-          index: map['index'] as int,
-          total: map['total'] as int,
-        ),
+        challenge: LivenessChallenge.fromWire(map['challenge'] as String),
+        index: map['index'] as int,
+        total: map['total'] as int,
+      ),
       'hint' => LivenessHintEvent(
-          hint: LivenessHint.fromWire(map['code'] as String),
-        ),
+        hint: LivenessHint.fromWire(map['code'] as String),
+      ),
       _ => UnknownLivenessEvent(type, map),
     };
   }
@@ -97,14 +97,14 @@ enum LivenessHint {
       LivenessHint.values.firstWhere((h) => h.name == value);
 
   String get message => switch (this) {
-        LivenessHint.moveCloser => 'Move a little closer',
-        LivenessHint.moveBack => 'Move a little back',
-        LivenessHint.centerFace => 'Center your face in the frame',
-        LivenessHint.holdStill => 'Hold still',
-        LivenessHint.faceTooDark => 'Find better lighting',
-        LivenessHint.multipleFaces => 'Only one face should be visible',
-        LivenessHint.lookStraight => 'Look straight at the camera',
-      };
+    LivenessHint.moveCloser => 'Move a little closer',
+    LivenessHint.moveBack => 'Move a little back',
+    LivenessHint.centerFace => 'Center your face in the frame',
+    LivenessHint.holdStill => 'Hold still',
+    LivenessHint.faceTooDark => 'Find better lighting',
+    LivenessHint.multipleFaces => 'Only one face should be visible',
+    LivenessHint.lookStraight => 'Look straight at the camera',
+  };
 }
 
 /// A positioning/environment hint for the user.

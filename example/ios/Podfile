@@ -1,5 +1,5 @@
-# GoogleMLKit/FaceDetection (used by the trueface_liveness plugin) requires iOS 15.5+.
-platform :ios, '15.5'
+# The trueface_liveness Swift package requires iOS 15 or later.
+platform :ios, '15.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'

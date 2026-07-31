@@ -27,10 +27,10 @@ enum LivenessChallenge {
 
   /// A human-readable instruction to show the user for this challenge.
   String get instruction => switch (this) {
-        LivenessChallenge.blink => 'Blink your eyes',
-        LivenessChallenge.smile => 'Smile',
-        LivenessChallenge.turnLeft => 'Slowly turn your head left',
-        LivenessChallenge.turnRight => 'Slowly turn your head right',
-        LivenessChallenge.nod => 'Nod your head',
-      };
+    LivenessChallenge.blink => 'Blink your eyes',
+    LivenessChallenge.smile => 'Smile',
+    LivenessChallenge.turnLeft => 'Slowly turn your head left',
+    LivenessChallenge.turnRight => 'Slowly turn your head right',
+    LivenessChallenge.nod => 'Nod your head',
+  };
 }
