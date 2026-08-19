@@ -826,6 +826,249 @@
       },
       {
         "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "Import",
+        "name": "CommonCrypto",
+        "printedName": "CommonCrypto",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HostedVerificationClient",
+        "printedName": "HostedVerificationClient",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "performVerification",
+            "printedName": "performVerification(backendUrl:verificationId:publicKey:clientSecret:imageData:videoData:completedChallenges:onDeviceSpoofScore:onProgress:onSuccess:onError:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Foundation.Data?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Data",
+                    "printedName": "Foundation.Data",
+                    "usr": "s:10Foundation4DataV"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Foundation.Data?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Data",
+                    "printedName": "Foundation.Data",
+                    "usr": "s:10Foundation4DataV"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[Swift.String]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sa"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.Double?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Double",
+                    "printedName": "Swift.Double",
+                    "usr": "s:Sd"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Swift.String, Swift.Double) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Tuple",
+                    "printedName": "(Swift.String, Swift.Double)",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Double",
+                        "printedName": "Swift.Double",
+                        "usr": "s:Sd"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Swift.String) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ]
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Swift.String, Swift.String?) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Tuple",
+                    "printedName": "(Swift.String, Swift.String?)",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "Swift.String?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness24HostedVerificationClientC07performE010backendUrl14verificationId9publicKey12clientSecret9imageData05videoQ019completedChallenges18onDeviceSpoofScore0U8Progress0U7Success0U5ErrorySS_S3S10Foundation0Q0VSgASSaySSGSdSgySS_SdtcySScySS_SSSgtctFZ",
+            "mangledName": "$s16TrueFaceLiveness24HostedVerificationClientC07performE010backendUrl14verificationId9publicKey12clientSecret9imageData05videoQ019completedChallenges18onDeviceSpoofScore0U8Progress0U7Success0U5ErrorySS_S3S10Foundation0Q0VSgASSaySSGSdSgySS_SdtcySScySS_SSSgtctFZ",
+            "moduleName": "TrueFaceLiveness",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:16TrueFaceLiveness24HostedVerificationClientC",
+        "mangledName": "$s16TrueFaceLiveness24HostedVerificationClientC",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "Final",
+          "AccessControl"
+        ],
+        "hasMissingDesignatedInitializers": true,
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
         "name": "CoreGraphics",
         "printedName": "CoreGraphics",
         "declKind": "Import",
@@ -1157,6 +1400,66 @@
           },
           {
             "kind": "Var",
+            "name": "mouthOpen",
+            "printedName": "mouthOpen",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "CoreGraphics.CGFloat?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV9mouthOpen14CoreFoundation7CGFloatVSgvp",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV9mouthOpen12CoreGraphics7CGFloatVSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "CoreGraphics.CGFloat?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "CGFloat",
+                        "printedName": "CoreGraphics.CGFloat",
+                        "usr": "s:14CoreFoundation7CGFloatV"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0B11ObservationV9mouthOpen14CoreFoundation7CGFloatVSgvg",
+                "mangledName": "$s16TrueFaceLiveness0B11ObservationV9mouthOpen12CoreGraphics7CGFloatVSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
             "name": "nose",
             "printedName": "nose",
             "children": [
@@ -1338,7 +1641,7 @@
           {
             "kind": "Constructor",
             "name": "init",
-            "printedName": "init(box:eulerX:eulerY:leftEyeOpen:rightEyeOpen:smiling:nose:leftCheek:rightCheek:)",
+            "printedName": "init(box:eulerX:eulerY:leftEyeOpen:rightEyeOpen:smiling:mouthOpen:nose:leftCheek:rightCheek:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -1409,6 +1712,21 @@
               {
                 "kind": "TypeNominal",
                 "name": "Optional",
+                "printedName": "CoreGraphics.CGFloat?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "CGFloat",
+                    "printedName": "CoreGraphics.CGFloat",
+                    "usr": "s:14CoreFoundation7CGFloatV"
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
                 "printedName": "CoreFoundation.CGPoint?",
                 "children": [
                   {
@@ -1450,8 +1768,8 @@
               }
             ],
             "declKind": "Constructor",
-            "usr": "s:16TrueFaceLiveness0B11ObservationV3box6eulerX0F1Y11leftEyeOpen05righthI07smiling4nose0G5Cheek0jM0ACSo6CGRectV_14CoreFoundation7CGFloatVA2QSgA2RSo7CGPointVSgA2Utcfc",
-            "mangledName": "$s16TrueFaceLiveness0B11ObservationV3box6eulerX0F1Y11leftEyeOpen05righthI07smiling4nose0G5Cheek0jM0ACSo6CGRectV_12CoreGraphics7CGFloatVA2QSgA2RSo7CGPointVSgA2Utcfc",
+            "usr": "s:16TrueFaceLiveness0B11ObservationV3box6eulerX0F1Y11leftEyeOpen05righthI07smiling05mouthI04nose0G5Cheek0jN0ACSo6CGRectV_14CoreFoundation7CGFloatVA2RSgA3SSo7CGPointVSgA2Vtcfc",
+            "mangledName": "$s16TrueFaceLiveness0B11ObservationV3box6eulerX0F1Y11leftEyeOpen05righthI07smiling05mouthI04nose0G5Cheek0jN0ACSo6CGRectV_12CoreGraphics7CGFloatVA2RSgA3SSo7CGPointVSgA2Vtcfc",
             "moduleName": "TrueFaceLiveness",
             "declAttributes": [
               "AccessControl"
@@ -2153,6 +2471,43 @@
             "moduleName": "TrueFaceLiveness"
           },
           {
+            "kind": "Var",
+            "name": "openMouth",
+            "printedName": "openMouth",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TrueFaceLiveness.Challenge.Type) -> TrueFaceLiveness.Challenge",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Challenge",
+                    "printedName": "TrueFaceLiveness.Challenge",
+                    "usr": "s:16TrueFaceLiveness9ChallengeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TrueFaceLiveness.Challenge.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Challenge",
+                        "printedName": "TrueFaceLiveness.Challenge",
+                        "usr": "s:16TrueFaceLiveness9ChallengeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:16TrueFaceLiveness9ChallengeO9openMouthyA2CmF",
+            "mangledName": "$s16TrueFaceLiveness9ChallengeO9openMouthyA2CmF",
+            "moduleName": "TrueFaceLiveness"
+          },
+          {
             "kind": "Constructor",
             "name": "init",
             "printedName": "init(rawValue:)",
@@ -2689,6 +3044,13 @@
         "moduleName": "TrueFaceLiveness"
       },
       {
+        "kind": "Import",
+        "name": "CryptoKit",
+        "printedName": "CryptoKit",
+        "declKind": "Import",
+        "moduleName": "TrueFaceLiveness"
+      },
+      {
         "kind": "TypeDecl",
         "name": "TrueFaceLivenessDelegate",
         "printedName": "TrueFaceLivenessDelegate",
@@ -2817,6 +3179,51 @@
             "protocolReq": true,
             "reqNewWitnessTableEntry": true,
             "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "livenessViewController",
+            "printedName": "livenessViewController(_:didUpdateEvent:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceLivenessViewController",
+                "printedName": "TrueFaceLiveness.TrueFaceLivenessViewController",
+                "usr": "c:@M@TrueFaceLiveness@objc(cs)TrueFaceLivenessViewController"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.String : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:SD"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:16TrueFaceLiveness0abC8DelegatePAAE22livenessViewController_14didUpdateEventyAA0abcfG0C_SDySSypGtF",
+            "mangledName": "$s16TrueFaceLiveness0abC8DelegatePAAE22livenessViewController_14didUpdateEventyAA0abcfG0C_SDySSypGtF",
+            "moduleName": "TrueFaceLiveness",
+            "genericSig": "<τ_0_0 where τ_0_0 : TrueFaceLiveness.TrueFaceLivenessDelegate>",
+            "sugared_genericSig": "<Self where Self : TrueFaceLiveness.TrueFaceLivenessDelegate>",
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
           }
         ],
         "declKind": "Protocol",
@@ -2842,6 +3249,977 @@
             "printedName": "Copyable",
             "usr": "s:s8CopyableP",
             "mangledName": "$ss8CopyableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "TrueFaceColors",
+        "printedName": "TrueFaceColors",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "primaryColor",
+            "printedName": "primaryColor",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV12primaryColorSo7UIColorCvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV12primaryColorSo7UIColorCvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV12primaryColorSo7UIColorCvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV12primaryColorSo7UIColorCvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV12primaryColorSo7UIColorCvs",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV12primaryColorSo7UIColorCvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV12primaryColorSo7UIColorCvM",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV12primaryColorSo7UIColorCvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "backgroundColor",
+            "printedName": "backgroundColor",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV15backgroundColorSo7UIColorCvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15backgroundColorSo7UIColorCvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV15backgroundColorSo7UIColorCvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15backgroundColorSo7UIColorCvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV15backgroundColorSo7UIColorCvs",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15backgroundColorSo7UIColorCvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV15backgroundColorSo7UIColorCvM",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15backgroundColorSo7UIColorCvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "cardBackgroundColor",
+            "printedName": "cardBackgroundColor",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV19cardBackgroundColorSo7UIColorCvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV19cardBackgroundColorSo7UIColorCvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV19cardBackgroundColorSo7UIColorCvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV19cardBackgroundColorSo7UIColorCvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV19cardBackgroundColorSo7UIColorCvs",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV19cardBackgroundColorSo7UIColorCvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV19cardBackgroundColorSo7UIColorCvM",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV19cardBackgroundColorSo7UIColorCvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "textColor",
+            "printedName": "textColor",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV9textColorSo7UIColorCvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV9textColorSo7UIColorCvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV9textColorSo7UIColorCvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV9textColorSo7UIColorCvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV9textColorSo7UIColorCvs",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV9textColorSo7UIColorCvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV9textColorSo7UIColorCvM",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV9textColorSo7UIColorCvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "subtitleColor",
+            "printedName": "subtitleColor",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV13subtitleColorSo7UIColorCvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV13subtitleColorSo7UIColorCvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV13subtitleColorSo7UIColorCvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV13subtitleColorSo7UIColorCvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV13subtitleColorSo7UIColorCvs",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV13subtitleColorSo7UIColorCvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV13subtitleColorSo7UIColorCvM",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV13subtitleColorSo7UIColorCvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "promptBackgroundColor",
+            "printedName": "promptBackgroundColor",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV21promptBackgroundColorSo7UIColorCvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV21promptBackgroundColorSo7UIColorCvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV21promptBackgroundColorSo7UIColorCvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV21promptBackgroundColorSo7UIColorCvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV21promptBackgroundColorSo7UIColorCvs",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV21promptBackgroundColorSo7UIColorCvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV21promptBackgroundColorSo7UIColorCvM",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV21promptBackgroundColorSo7UIColorCvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "promptTextColor",
+            "printedName": "promptTextColor",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV15promptTextColorSo7UIColorCvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15promptTextColorSo7UIColorCvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV15promptTextColorSo7UIColorCvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15promptTextColorSo7UIColorCvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV15promptTextColorSo7UIColorCvs",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15promptTextColorSo7UIColorCvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV15promptTextColorSo7UIColorCvM",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15promptTextColorSo7UIColorCvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "promptBorderColor",
+            "printedName": "promptBorderColor",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV17promptBorderColorSo7UIColorCvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV17promptBorderColorSo7UIColorCvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV17promptBorderColorSo7UIColorCvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV17promptBorderColorSo7UIColorCvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV17promptBorderColorSo7UIColorCvs",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV17promptBorderColorSo7UIColorCvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV17promptBorderColorSo7UIColorCvM",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV17promptBorderColorSo7UIColorCvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "ovalBorderColor",
+            "printedName": "ovalBorderColor",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV15ovalBorderColorSo7UIColorCvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15ovalBorderColorSo7UIColorCvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV15ovalBorderColorSo7UIColorCvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15ovalBorderColorSo7UIColorCvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV15ovalBorderColorSo7UIColorCvs",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15ovalBorderColorSo7UIColorCvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV15ovalBorderColorSo7UIColorCvM",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV15ovalBorderColorSo7UIColorCvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "overlayScrimColor",
+            "printedName": "overlayScrimColor",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV17overlayScrimColorSo7UIColorCvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV17overlayScrimColorSo7UIColorCvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV17overlayScrimColorSo7UIColorCvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV17overlayScrimColorSo7UIColorCvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIColor",
+                    "printedName": "UIKit.UIColor",
+                    "usr": "c:objc(cs)UIColor"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV17overlayScrimColorSo7UIColorCvs",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV17overlayScrimColorSo7UIColorCvs",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV17overlayScrimColorSo7UIColorCvM",
+                "mangledName": "$s16TrueFaceLiveness0aB6ColorsV17overlayScrimColorSo7UIColorCvM",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(primaryColor:backgroundColor:cardBackgroundColor:textColor:subtitleColor:promptBackgroundColor:promptTextColor:promptBorderColor:ovalBorderColor:overlayScrimColor:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceColors",
+                "printedName": "TrueFaceLiveness.TrueFaceColors",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "hasDefaultArg": true,
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "hasDefaultArg": true,
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "hasDefaultArg": true,
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "hasDefaultArg": true,
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "hasDefaultArg": true,
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "hasDefaultArg": true,
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "hasDefaultArg": true,
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "hasDefaultArg": true,
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "hasDefaultArg": true,
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "hasDefaultArg": true,
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:16TrueFaceLiveness0aB6ColorsV12primaryColor010backgroundF0014cardBackgroundF004textF008subtitleF006promptiF00l4TextF00l6BorderF004ovalnF0012overlayScrimF0ACSo7UIColorC_A9Otcfc",
+            "mangledName": "$s16TrueFaceLiveness0aB6ColorsV12primaryColor010backgroundF0014cardBackgroundF004textF008subtitleF006promptiF00l4TextF00l6BorderF004ovalnF0012overlayScrimF0ACSo7UIColorC_A9Otcfc",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:16TrueFaceLiveness0aB6ColorsV",
+        "mangledName": "$s16TrueFaceLiveness0aB6ColorsV",
+        "moduleName": "TrueFaceLiveness",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
           }
         ]
       },
@@ -2888,6 +4266,50 @@
                 "declKind": "Accessor",
                 "usr": "s:16TrueFaceLiveness0aB6ConfigV14backendBaseUrlSSvg",
                 "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14backendBaseUrlSSvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "grpcBaseUrl",
+            "printedName": "grpcBaseUrl",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV11grpcBaseUrlSSvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV11grpcBaseUrlSSvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV11grpcBaseUrlSSvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ConfigV11grpcBaseUrlSSvg",
                 "moduleName": "TrueFaceLiveness",
                 "implicit": true,
                 "accessorKind": "get"
@@ -3071,15 +4493,170 @@
             ]
           },
           {
+            "kind": "Var",
+            "name": "showInstructions",
+            "printedName": "showInstructions",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.Bool?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV16showInstructionsSbSgvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV16showInstructionsSbSgvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.Bool?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Bool",
+                        "printedName": "Swift.Bool",
+                        "usr": "s:Sb"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV16showInstructionsSbSgvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ConfigV16showInstructionsSbSgvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "showPrompt",
+            "printedName": "showPrompt",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV10showPromptSbvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV10showPromptSbvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV10showPromptSbvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ConfigV10showPromptSbvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "colors",
+            "printedName": "colors",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceColors",
+                "printedName": "TrueFaceLiveness.TrueFaceColors",
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV6colorsAA0aB6ColorsVvp",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV6colorsAA0aB6ColorsVvp",
+            "moduleName": "TrueFaceLiveness",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "TrueFaceColors",
+                    "printedName": "TrueFaceLiveness.TrueFaceColors",
+                    "usr": "s:16TrueFaceLiveness0aB6ColorsV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:16TrueFaceLiveness0aB6ConfigV6colorsAA0aB6ColorsVvg",
+                "mangledName": "$s16TrueFaceLiveness0aB6ConfigV6colorsAA0aB6ColorsVvg",
+                "moduleName": "TrueFaceLiveness",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
             "kind": "Constructor",
             "name": "init",
-            "printedName": "init(backendBaseUrl:publicKey:verificationId:clientSecret:challengeCount:)",
+            "printedName": "init(backendBaseUrl:grpcBaseUrl:publicKey:verificationId:clientSecret:challengeCount:showInstructions:showPrompt:colors:)",
             "children": [
               {
                 "kind": "TypeNominal",
                 "name": "TrueFaceConfig",
                 "printedName": "TrueFaceLiveness.TrueFaceConfig",
                 "usr": "s:16TrueFaceLiveness0aB6ConfigV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "hasDefaultArg": true,
+                "usr": "s:SS"
               },
               {
                 "kind": "TypeNominal",
@@ -3112,11 +4689,40 @@
                 "printedName": "Swift.Int",
                 "hasDefaultArg": true,
                 "usr": "s:Si"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.Bool?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "hasDefaultArg": true,
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TrueFaceColors",
+                "printedName": "TrueFaceLiveness.TrueFaceColors",
+                "hasDefaultArg": true,
+                "usr": "s:16TrueFaceLiveness0aB6ColorsV"
               }
             ],
             "declKind": "Constructor",
-            "usr": "s:16TrueFaceLiveness0aB6ConfigV14backendBaseUrl9publicKey14verificationId12clientSecret14challengeCountACSS_S3SSitcfc",
-            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14backendBaseUrl9publicKey14verificationId12clientSecret14challengeCountACSS_S3SSitcfc",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV14backendBaseUrl04grpcfG09publicKey14verificationId12clientSecret14challengeCount16showInstructions0Q6Prompt6colorsACSS_S4SSiSbSgSbAA0aB6ColorsVtcfc",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14backendBaseUrl04grpcfG09publicKey14verificationId12clientSecret14challengeCount16showInstructions0Q6Prompt6colorsACSS_S4SSiSbSgSbAA0aB6ColorsVtcfc",
             "moduleName": "TrueFaceLiveness",
             "declAttributes": [
               "AccessControl"
@@ -3571,203 +5177,182 @@
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 1543,
+      "offset": 1651,
+      "length": 4,
+      "value": "0.20"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1700,
+      "length": 4,
+      "value": "0.70"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1753,
+      "length": 4,
+      "value": "0.20"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 1806,
       "length": 4,
       "value": "0.25"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
-      "kind": "FloatLiteral",
-      "offset": 1592,
-      "length": 4,
-      "value": "0.60"
-    },
-    {
-      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
-      "kind": "FloatLiteral",
-      "offset": 1645,
-      "length": 4,
-      "value": "0.15"
-    },
-    {
-      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
-      "kind": "FloatLiteral",
-      "offset": 1698,
-      "length": 4,
-      "value": "0.18"
+      "kind": "IntegerLiteral",
+      "offset": 1850,
+      "length": 2,
+      "value": "40"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 1742,
+      "offset": 1892,
       "length": 2,
-      "value": "60"
-    },
-    {
-      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
-      "kind": "IntegerLiteral",
-      "offset": 1784,
-      "length": 2,
-      "value": "12"
+      "value": "18"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 1833,
+      "offset": 1941,
       "length": 3,
-      "value": "0.4"
+      "value": "0.2"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 1905,
+      "offset": 2013,
+      "length": 4,
+      "value": "0.20"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "FloatLiteral",
+      "offset": 2052,
       "length": 4,
       "value": "0.35"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 1944,
+      "offset": 2089,
       "length": 4,
-      "value": "0.70"
-    },
-    {
-      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
-      "kind": "FloatLiteral",
-      "offset": 1981,
-      "length": 4,
-      "value": "0.70"
+      "value": "0.35"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2021,
+      "offset": 2129,
       "length": 2,
-      "value": "25"
+      "value": "14"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2061,
+      "offset": 2169,
       "length": 2,
       "value": "10"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2103,
+      "offset": 2211,
       "length": 1,
       "value": "3"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2146,
+      "offset": 2254,
       "length": 1,
       "value": "2"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2193,
+      "offset": 2301,
       "length": 4,
       "value": "0.10"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2245,
+      "offset": 2353,
       "length": 4,
       "value": "0.05"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2304,
+      "offset": 2412,
       "length": 3,
       "value": "0.8"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2359,
+      "offset": 2467,
       "length": 3,
       "value": "3.0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2417,
+      "offset": 2525,
       "length": 3,
       "value": "0.4"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2471,
+      "offset": 2579,
       "length": 3,
       "value": "3.0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2705,
+      "offset": 2813,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "Array",
-      "offset": 2755,
+      "offset": 2863,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2808,
+      "offset": 2916,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2855,
+      "offset": 2963,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2943,
+      "offset": 3051,
       "length": 2,
       "value": "-1"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "BooleanLiteral",
-      "offset": 2974,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
-      "kind": "BooleanLiteral",
-      "offset": 3056,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
-      "kind": "BooleanLiteral",
-      "offset": 3095,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
-      "kind": "BooleanLiteral",
-      "offset": 3130,
+      "offset": 3082,
       "length": 5,
       "value": "false"
     },
@@ -3779,39 +5364,494 @@
       "value": "false"
     },
     {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3203,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3238,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3272,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1136,
+      "length": 2,
+      "value": "79"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1139,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1151,
+      "length": 2,
+      "value": "70"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1154,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1165,
+      "length": 3,
+      "value": "229"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1169,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1181,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1233,
+      "length": 3,
+      "value": "248"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1237,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1249,
+      "length": 3,
+      "value": "250"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1253,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1264,
+      "length": 3,
+      "value": "252"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1268,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1280,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1380,
+      "length": 2,
+      "value": "15"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1383,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1395,
+      "length": 2,
+      "value": "23"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1398,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1409,
+      "length": 2,
+      "value": "42"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1412,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1424,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1474,
+      "length": 3,
+      "value": "100"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1478,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1490,
+      "length": 3,
+      "value": "116"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1494,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1505,
+      "length": 3,
+      "value": "139"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1509,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1521,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1629,
+      "length": 2,
+      "value": "15"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1632,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1644,
+      "length": 2,
+      "value": "23"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1647,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1658,
+      "length": 2,
+      "value": "42"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1661,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1673,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1727,
+      "length": 3,
+      "value": "226"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1731,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1743,
+      "length": 3,
+      "value": "232"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1747,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1758,
+      "length": 3,
+      "value": "240"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1762,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1774,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1826,
+      "length": 2,
+      "value": "79"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1829,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1841,
+      "length": 2,
+      "value": "70"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1844,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1855,
+      "length": 3,
+      "value": "229"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1859,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1871,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1925,
+      "length": 3,
+      "value": "248"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1929,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1941,
+      "length": 3,
+      "value": "250"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1945,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1956,
+      "length": 3,
+      "value": "252"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1960,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 1972,
+      "length": 3,
+      "value": "0.5"
+    },
+    {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "StringLiteral",
-      "offset": 722,
+      "offset": 2880,
       "length": 26,
       "value": "\"https:\/\/api.trueface.dev\""
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 2938,
+      "length": 31,
+      "value": "\"https:\/\/realtime.trueface.dev\""
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "IntegerLiteral",
-      "offset": 837,
+      "offset": 3090,
       "length": 1,
       "value": "3"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3159,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1378,
+      "offset": 3913,
       "length": 20,
       "value": "\"com.trueface.video\""
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1884,
+      "offset": 4534,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 4577,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 4618,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 4809,
+      "length": 2,
+      "value": "-1"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "Array",
-      "offset": 2016,
+      "offset": 4907,
       "length": 2,
       "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 5062,
+      "length": 4,
+      "value": "true"
     }
   ]
 }

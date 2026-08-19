@@ -49,9 +49,20 @@ import com.google.mlkit.vision.face.FaceLandmark
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.security.SecureRandom
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -74,7 +85,20 @@ internal class LivenessConfigParams private constructor(
     val cameraLensDirection: String,
     val recordVideo: Boolean,
     val videoMaxDurationMs: Long,
+    val showInstructions: Boolean?,
+    val backendBaseUrl: String?,
+    val grpcBaseUrl: String?,
+    val publicKey: String?,
+    val verificationId: String?,
+    val clientSecret: String?,
+    val colorsMap: Map<*, *>?
 ) {
+    val hasBackend: Boolean
+        get() = !backendBaseUrl.isNullOrBlank() &&
+                !publicKey.isNullOrBlank() &&
+                !verificationId.isNullOrBlank() &&
+                !clientSecret.isNullOrBlank()
+
     companion object {
         private val DEFAULT_POOL = listOf("blink", "smile", "turnLeft", "turnRight", "nod")
 
@@ -96,6 +120,13 @@ internal class LivenessConfigParams private constructor(
                 cameraLensDirection = map["cameraLensDirection"] as? String ?: "front",
                 recordVideo = map["recordVideo"] as? Boolean ?: false,
                 videoMaxDurationMs = (map["videoMaxDurationMs"] as? Number)?.toLong() ?: 3000L,
+                showInstructions = map["showInstructions"] as? Boolean,
+                backendBaseUrl = (map["backendBaseUrl"] as? String) ?: "https://api.trueface.dev",
+                grpcBaseUrl = (map["grpcBaseUrl"] as? String) ?: "https://realtime.trueface.dev",
+                publicKey = map["publicKey"] as? String,
+                verificationId = map["verificationId"] as? String,
+                clientSecret = map["clientSecret"] as? String,
+                colorsMap = map["colors"] as? Map<*, *>
             )
         }
     }
@@ -288,7 +319,7 @@ internal class LivenessView(
 
         // When recording, source the final still from the analysis stream, so
         // use a higher analysis resolution for acceptable still quality.
-        val targetSize = if (config.recordVideo) Size(1280, 720) else Size(640, 480)
+        val targetSize = Size(640, 480)
         val analysisResolution = ResolutionSelector.Builder()
             .setResolutionStrategy(
                 ResolutionStrategy(
@@ -311,7 +342,7 @@ internal class LivenessView(
                 val recorder = Recorder.Builder()
                     .setQualitySelector(
                         QualitySelector.from(
-                            Quality.HD,
+                            Quality.SD,
                             FallbackStrategy.lowerQualityOrHigherThan(Quality.SD),
                         ),
                     )
@@ -555,7 +586,13 @@ internal class LivenessView(
                             } catch (e: Exception) {
                                 failureMap("unknown", completed, score)
                             }
-                            mainHandler.post { sendResult(map) }
+                            mainHandler.post {
+                                if (config.hasBackend && (map["success"] as? Boolean) == true) {
+                                    performNativeHostedVerification(map, score, completed)
+                                } else {
+                                    sendResult(map)
+                                }
+                            }
                         }
                     } catch (e: Exception) {
                         sendResult(failureMap("unknown", completed, score))
@@ -643,8 +680,57 @@ internal class LivenessView(
             } else {
                 failureMap("unknown", completed, score)
             }
-            mainHandler.post { sendResult(map) }
+            mainHandler.post {
+                if (config.hasBackend && (map["success"] as? Boolean) == true) {
+                    performNativeHostedVerification(map, score, completed)
+                } else {
+                    sendResult(map)
+                }
+            }
         }
+    }
+
+    private fun performNativeHostedVerification(resultMap: Map<String, Any?>, score: Double?, completed: List<String>) {
+        val backendUrl = config.backendBaseUrl?.removeSuffix("/") ?: return
+        val verificationId = config.verificationId ?: return
+        val publicKey = config.publicKey ?: return
+        val clientSecret = config.clientSecret ?: return
+
+        val imageBase64 = resultMap["imageBase64"] as? String
+        val imageBytes = if (imageBase64 != null) Base64.decode(imageBase64, Base64.DEFAULT) else null
+
+        val videoPath = resultMap["videoPath"] as? String
+        val videoFile = if (videoPath != null) File(videoPath) else null
+        val videoBytes = if (videoFile != null && videoFile.exists()) videoFile.readBytes() else null
+
+        dev.trueface.liveness.HostedVerificationClient.performVerification(
+            backendUrl = backendUrl,
+            verificationId = verificationId,
+            publicKey = publicKey,
+            clientSecret = clientSecret,
+            imageBytes = imageBytes,
+            videoBytes = videoBytes,
+            completedChallenges = completed,
+            onDeviceSpoofScore = score,
+            callback = object : dev.trueface.liveness.HostedVerificationClient.VerificationCallback {
+                override fun onProgress(type: String, progress: Double) {
+                    mainHandler.post {
+                        channel.invokeMethod("onEvent", mapOf("type" to type, "progress" to progress))
+                    }
+                }
+
+                override fun onSuccess(verificationStatus: String) {
+                    val finalMap = resultMap.toMutableMap()
+                    finalMap["verificationStatus"] = verificationStatus
+                    finalMap["success"] = (verificationStatus == "approved" || verificationStatus == "completed" || verificationStatus == "processing")
+                    mainHandler.post { sendResult(finalMap) }
+                }
+
+                override fun onError(reason: String, message: String?) {
+                    mainHandler.post { sendResult(failureMap(reason, completed, score)) }
+                }
+            }
+        )
     }
 
     /** Stops recording and deletes the temp file — used on failure/cancel. */

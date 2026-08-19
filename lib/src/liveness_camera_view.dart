@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-import 'liveness_backend_client.dart';
-import 'liveness_challenge.dart';
 import 'liveness_config.dart';
 import 'liveness_event.dart';
 import 'liveness_result.dart';
-import 'liveness_verification_orchestrator.dart';
 
 /// The native camera preview that runs the full liveness flow.
 ///
@@ -52,70 +49,12 @@ const String _viewType = 'com.trueface/trueface_liveness_view';
 class _LivenessCameraViewState extends State<LivenessCameraView> {
   MethodChannel? _channel;
   LivenessController? _controller;
-  LivenessVerificationOrchestrator? _orchestrator;
   bool _resultDelivered = false;
 
-  // Backend session state.
-  bool _sessionReady = false;
-  List<LivenessChallenge>? _challenges;
-  int _videoMaxMs = 3000;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.config.hasBackend) {
-      _initSession();
-    } else {
-      _sessionReady = true;
-    }
-  }
-
-  Future<void> _initSession() async {
-    final client = LivenessBackendClient(
-      baseUrl: widget.config.backendBaseUrl!,
-      publicKey: widget.config.publicKey!,
-      verificationId: widget.config.verificationId!,
-      clientSecret: widget.config.clientSecret!,
-    );
-    try {
-      final session = await client.startSession();
-      if (!mounted) return;
-      setState(() {
-        _challenges = session.challenges;
-        _videoMaxMs = session.videoMaxDurationMs;
-        _sessionReady = true;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      _deliver(
-        LivenessResult(
-          success: false,
-          failureReason: LivenessFailureReason.unknown,
-          verificationStatus: VerificationStatus.failed,
-        ),
-      );
-    } finally {
-      client.close();
-    }
-  }
-
-  Map<String, dynamic> get _creationParams => widget.config.hasBackend
-      ? widget.config.toMap(
-          challengesOverride: _challenges,
-          recordVideoOverride: true,
-          videoMaxDurationMsOverride: _videoMaxMs,
-        )
-      : widget.config.toMap();
+  Map<String, dynamic> get _creationParams => widget.config.toMap();
 
   @override
   Widget build(BuildContext context) {
-    if (!_sessionReady) {
-      return const ColoredBox(
-        color: Color(0xFF000000),
-        child: Center(child: CircularProgressIndicator()),
-      );
-    }
-
     final creationParams = _creationParams;
     const codec = StandardMessageCodec();
 
@@ -176,32 +115,15 @@ class _LivenessCameraViewState extends State<LivenessCameraView> {
         if (_resultDelivered) return;
         _resultDelivered = true;
         final native = LivenessResult.fromMap((call.arguments as Map).cast());
-        // Hosted verification: on local success, upload + poll for the verdict.
-        if (widget.config.hasBackend && native.success) {
-          _orchestrator = LivenessVerificationOrchestrator(
-            config: widget.config,
-            onEvent: (e) => widget.onEvent?.call(e),
-          );
-          final finalResult = await _orchestrator!.run(native);
-          if (mounted) widget.onResult(finalResult);
-        } else {
-          widget.onResult(native);
-        }
+        widget.onResult(native);
     }
     return null;
-  }
-
-  void _deliver(LivenessResult result) {
-    if (_resultDelivered) return;
-    _resultDelivered = true;
-    widget.onResult(result);
   }
 
   @override
   void dispose() {
     _channel?.setMethodCallHandler(null);
     _controller?._detach();
-    _orchestrator?.cancel();
     super.dispose();
   }
 }

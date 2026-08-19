@@ -2,7 +2,7 @@ PODS:
   - Flutter (1.0.0)
   - integration_test (0.0.1):
     - Flutter
-  - trueface_liveness (0.1.0):
+  - trueface_liveness (0.2.4):
     - Flutter
 
 DEPENDENCIES:
@@ -21,7 +21,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
-  trueface_liveness: 34e6770bf40cee90904e804d619d82d4110b098c
+  trueface_liveness: 1cc13e47bc2b599c344c857c1755297b297e4c18
 
 PODFILE CHECKSUM: f9a75ae621711aaedda7c8a9648322a3099cf2d2
 

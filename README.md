@@ -98,7 +98,33 @@ _controller.cancel();
 ```
 
 See [`example/`](example/) for a complete screen with instructions, a progress
-bar, and the result preview.
+ring, hint badges, and error retries.
+
+## Customizing UI Colors
+
+Pass a custom `TrueFaceColors` instance into `LivenessConfig`:
+
+```dart
+LivenessCameraView(
+  config: const LivenessConfig(
+    colors: TrueFaceColors(
+      primaryColor: Color(0xFF10B981),        // Action buttons & active accents
+      backgroundColor: Color(0xFFF0FDF4),     // Main view & card items background
+      cardBackgroundColor: Colors.white,      // Sheet background
+      textColor: Color(0xFF064E3B),           // Primary header & title text
+      subtitleColor: Color(0xFF047857),       // Subtitle & secondary body text
+      promptBackgroundColor: Colors.white,     // Challenge prompt pill background
+      promptTextColor: Color(0xFF064E3B),     // Challenge prompt text color
+      promptBorderColor: Color(0xA7F3D0),   // Prompt pill border color
+      ovalBorderColor: Color(0xFF10B981),     // Oval target border color
+      overlayScrimColor: Color(0x80F0FDF4),   // Camera overlay translucent scrim
+    ),
+  ),
+  onResult: (result) {
+    // Handle result
+  },
+);
+```
 
 ## Configuration
 

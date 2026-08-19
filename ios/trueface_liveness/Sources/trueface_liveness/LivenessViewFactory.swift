@@ -43,6 +43,23 @@ struct LivenessNativeConfig {
   let cameraPosition: AVCaptureDevice.Position
   let recordVideo: Bool
   let videoMaxDurationMs: Int
+  let showInstructions: Bool?
+  let backendBaseUrl: String?
+  let grpcBaseUrl: String?
+  let publicKey: String?
+  let verificationId: String?
+  let clientSecret: String?
+  let colors: TrueFaceColors
+
+  var hasBackend: Bool {
+    guard let b = backendBaseUrl, !b.isEmpty,
+          let p = publicKey, !p.isEmpty,
+          let v = verificationId, !v.isEmpty,
+          let c = clientSecret, !c.isEmpty else {
+      return false
+    }
+    return true
+  }
 
   init(map: [String: Any]) {
     let pool = (map["challengePool"] as? [Any])?
@@ -65,6 +82,37 @@ struct LivenessNativeConfig {
       (map["cameraLensDirection"] as? String) == "back" ? .back : .front
     recordVideo = map["recordVideo"] as? Bool ?? false
     videoMaxDurationMs = map["videoMaxDurationMs"] as? Int ?? 3000
+    showInstructions = map["showInstructions"] as? Bool
+    backendBaseUrl = (map["backendBaseUrl"] as? String) ?? "https://api.trueface.dev"
+    grpcBaseUrl = (map["grpcBaseUrl"] as? String) ?? "https://realtime.trueface.dev"
+    publicKey = map["publicKey"] as? String
+    verificationId = map["verificationId"] as? String
+    clientSecret = map["clientSecret"] as? String
+
+    if let cMap = map["colors"] as? [String: Any] {
+      func parseColor(_ key: String, fallback: UIColor) -> UIColor {
+        guard let argb = (cMap[key] as? NSNumber)?.int64Value else { return fallback }
+        let a = CGFloat((argb >> 24) & 0xFF) / 255.0
+        let r = CGFloat((argb >> 16) & 0xFF) / 255.0
+        let g = CGFloat((argb >> 8) & 0xFF) / 255.0
+        let b = CGFloat(argb & 0xFF) / 255.0
+        return UIColor(red: r, green: g, blue: b, alpha: a)
+      }
+      colors = TrueFaceColors(
+        primaryColor: parseColor("primaryColor", fallback: UIColor(red: 79/255, green: 70/255, blue: 229/255, alpha: 1)),
+        backgroundColor: parseColor("backgroundColor", fallback: UIColor(red: 248/255, green: 250/255, blue: 252/255, alpha: 1)),
+        cardBackgroundColor: parseColor("cardBackgroundColor", fallback: .white),
+        textColor: parseColor("textColor", fallback: UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1)),
+        subtitleColor: parseColor("subtitleColor", fallback: UIColor(red: 100/255, green: 116/255, blue: 139/255, alpha: 1)),
+        promptBackgroundColor: parseColor("promptBackgroundColor", fallback: .white),
+        promptTextColor: parseColor("promptTextColor", fallback: UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1)),
+        promptBorderColor: parseColor("promptBorderColor", fallback: UIColor(red: 226/255, green: 232/255, blue: 240/255, alpha: 1)),
+        ovalBorderColor: parseColor("ovalBorderColor", fallback: UIColor(red: 79/255, green: 70/255, blue: 229/255, alpha: 1)),
+        overlayScrimColor: parseColor("overlayScrimColor", fallback: UIColor(red: 248/255, green: 250/255, blue: 252/255, alpha: 0.5))
+      )
+    } else {
+      colors = TrueFaceColors()
+    }
   }
 
   /// Draws the session's challenge sequence from the pool. If more challenges

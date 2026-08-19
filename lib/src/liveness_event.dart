@@ -25,6 +25,13 @@ sealed class LivenessEvent {
       'hint' => LivenessHintEvent(
         hint: LivenessHint.fromWire(map['code'] as String),
       ),
+      'uploading' => LivenessUploadingEvent(
+        progress: (map['progress'] as num?)?.toDouble(),
+      ),
+      'verifying' => const LivenessVerifyingEvent(),
+      'uploadFailed' => LivenessUploadFailedEvent(
+        map['message'] as String? ?? 'Upload failed',
+      ),
       _ => UnknownLivenessEvent(type, map),
     };
   }

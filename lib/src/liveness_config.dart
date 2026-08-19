@@ -1,4 +1,5 @@
 import 'liveness_challenge.dart';
+import 'liveness_colors.dart';
 
 /// Which camera to use for the liveness session.
 enum CameraLensDirection { front, back }
@@ -18,12 +19,15 @@ class LivenessConfig {
     this.enablePassiveAntiSpoof = true,
     this.spoofScoreThreshold = 0.6,
     this.cameraLensDirection = CameraLensDirection.front,
-    this.backendBaseUrl,
+    this.backendBaseUrl = 'https://api.trueface.dev',
+    this.grpcBaseUrl = 'https://realtime.trueface.dev',
     this.publicKey,
     this.verificationId,
     this.clientSecret,
     this.recordVideo = false,
     this.videoMaxDurationMs = 3000,
+    this.showInstructions,
+    this.colors = const TrueFaceColors(),
   }) : assert(numberOfChallenges > 0),
        assert(imageQuality >= 1 && imageQuality <= 100),
        assert(spoofScoreThreshold >= 0 && spoofScoreThreshold <= 1),
@@ -68,6 +72,9 @@ class LivenessConfig {
   /// and polls for the verdict.
   final String? backendBaseUrl;
 
+  /// Base URL of the gRPC streaming service.
+  final String? grpcBaseUrl;
+
   /// Merchant publishable key (`pk_...`) used for session calls.
   final String? publicKey;
 
@@ -84,6 +91,12 @@ class LivenessConfig {
 
   /// Maximum recorded video duration in milliseconds.
   final int videoMaxDurationMs;
+
+  /// Optional override to control whether pre-session instructions screen is shown.
+  final bool? showInstructions;
+
+  /// Customizable colors for the liveness UI elements.
+  final TrueFaceColors colors;
 
   /// Whether a full hosted-verification session is configured.
   bool get hasBackend =>
@@ -114,6 +127,13 @@ class LivenessConfig {
       'cameraLensDirection': cameraLensDirection.name,
       'recordVideo': recordVideoOverride ?? recordVideo,
       'videoMaxDurationMs': videoMaxDurationMsOverride ?? videoMaxDurationMs,
+      'showInstructions': showInstructions,
+      'backendBaseUrl': backendBaseUrl,
+      'grpcBaseUrl': grpcBaseUrl,
+      'publicKey': publicKey,
+      'verificationId': verificationId,
+      'clientSecret': clientSecret,
+      'colors': colors.toMap(),
     };
   }
 }

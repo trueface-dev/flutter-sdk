@@ -1,4 +1,5 @@
 import AVFoundation
+import CommonCrypto
 import CoreImage
 import Flutter
 import UIKit
@@ -474,10 +475,64 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     if let spoofScore { result["spoofScore"] = spoofScore }
     // Finalize the recording (if any), then attach its path and deliver.
     finalizeRecording { [weak self] path in
+      guard let self = self else { return }
       var out = result
       if let path { out["videoPath"] = path }
-      self?.sendResult(out)
+      if self.config.hasBackend {
+        self.performNativeHostedVerification(resultMap: out, score: spoofScore, completed: self.machine.completed)
+      } else {
+        self.sendResult(out)
+      }
     }
+  }
+
+  private func performNativeHostedVerification(
+    resultMap: [String: Any], score: Double?, completed: [String]
+  ) {
+    guard let backendUrl = config.backendBaseUrl,
+          let verificationId = config.verificationId,
+          let publicKey = config.publicKey,
+          let clientSecret = config.clientSecret else {
+      sendResult(resultMap)
+      return
+    }
+
+    let imageBase64 = resultMap["imageBase64"] as? String ?? ""
+    let imageData = Data(base64Encoded: imageBase64)
+
+    let videoPath = resultMap["videoPath"] as? String
+    let videoData = (videoPath != nil) ? try? Data(contentsOf: URL(fileURLWithPath: videoPath!)) : nil
+
+    TrueFaceLiveness.HostedVerificationClient.performVerification(
+      backendUrl: backendUrl,
+      verificationId: verificationId,
+      publicKey: publicKey,
+      clientSecret: clientSecret,
+      imageData: imageData,
+      videoData: videoData,
+      completedChallenges: completed,
+      onDeviceSpoofScore: score,
+      onProgress: { [weak self] type, progress in
+        self?.sendEvent(["type": type, "progress": progress])
+      },
+      onSuccess: { [weak self] status in
+        guard let self = self else { return }
+        var finalMap = resultMap
+        finalMap["verificationStatus"] = status
+        finalMap["success"] = (status == "approved" || status == "completed" || status == "processing")
+        self.sendResult(finalMap)
+      },
+      onError: { [weak self] reason, message in
+        guard let self = self else { return }
+        var failMap: [String: Any] = [
+          "success": false,
+          "failureReason": reason,
+          "completed": completed
+        ]
+        if let score { failMap["spoofScore"] = score }
+        self.sendResult(failMap)
+      }
+    )
   }
 
   private func finish(failureReason: String, spoofScore: Double? = nil) {
@@ -549,10 +604,17 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     guard let writer = try? AVAssetWriter(outputURL: url, fileType: .mp4) else {
       return false
     }
+    let targetW = width > height ? min(width, 640) : min(width, 480)
+    let targetH = width > height ? min(height, 480) : min(height, 640)
     let settings: [String: Any] = [
       AVVideoCodecKey: AVVideoCodecType.h264,
-      AVVideoWidthKey: width,
-      AVVideoHeightKey: height,
+      AVVideoWidthKey: targetW,
+      AVVideoHeightKey: targetH,
+      AVVideoCompressionPropertiesKey: [
+        AVVideoAverageBitRateKey: 500_000,
+        AVVideoExpectedSourceFrameRateKey: 15,
+        AVVideoMaxKeyFrameIntervalKey: 15
+      ]
     ]
     let input = AVAssetWriterInput(mediaType: .video, outputSettings: settings)
     input.expectsMediaDataInRealTime = true

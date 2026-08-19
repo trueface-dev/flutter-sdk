@@ -45,12 +45,12 @@ class _HomePageState extends State<HomePage> {
     text: 'https://api.trueface.dev',
   );
   final _publicKeyController = TextEditingController(
-    text: 'pk_test_SFJdgYdzDh84SO2jKDwL6qTxQINZCOI6',
+    text: 'pk_test_urCbiez-hIRbSF7my8Qv8OQdvTmFQXCE',
   );
   final _secretKeyController = TextEditingController(
-    text: 'sk_test_FrrvGbScsWuxCsPc_BrRCFlRNXmb4Yfi',
+    text:  'sk_test_vN3N9f78_rdxk8drYfqCAEoo1pb3XdR8',
   );
-
+ 
   final _userIdentifierController = TextEditingController(
     text: 'user_demo_123',
   );
@@ -139,6 +139,7 @@ class _HomePageState extends State<HomePage> {
   }) async {
     final cleanUrl = backendUrl.replaceAll(RegExp(r'/$'), '');
     final uri = Uri.parse('$cleanUrl/v1/verifications');
+
 
     final response = await http
         .post(

@@ -6,6 +6,7 @@ import AVFoundation
 import CommonCrypto
 import CoreGraphics
 import CoreImage
+import CryptoKit
 import Foundation
 import Swift
 import UIKit
@@ -39,6 +40,13 @@ final public class HeuristicAntiSpoofDetector : TrueFaceLiveness.AntiSpoofDetect
   final public func finalScore() -> Swift.Double
   @objc deinit
 }
+@_hasMissingDesignatedInitializers final public class HostedVerificationClient {
+  public typealias ProgressCallback = (Swift.String, Swift.Double) -> Swift.Void
+  public typealias SuccessCallback = (Swift.String) -> Swift.Void
+  public typealias ErrorCallback = (Swift.String, Swift.String?) -> Swift.Void
+  public static func performVerification(backendUrl: Swift.String, verificationId: Swift.String, publicKey: Swift.String, clientSecret: Swift.String, imageData: Foundation.Data?, videoData: Foundation.Data?, completedChallenges: [Swift.String], onDeviceSpoofScore: Swift.Double?, onProgress: @escaping TrueFaceLiveness.HostedVerificationClient.ProgressCallback, onSuccess: @escaping TrueFaceLiveness.HostedVerificationClient.SuccessCallback, onError: @escaping TrueFaceLiveness.HostedVerificationClient.ErrorCallback)
+  @objc deinit
+}
 public struct FaceObservation {
   public let box: CoreFoundation.CGRect
   public let eulerX: CoreFoundation.CGFloat
@@ -46,10 +54,11 @@ public struct FaceObservation {
   public let leftEyeOpen: CoreFoundation.CGFloat?
   public let rightEyeOpen: CoreFoundation.CGFloat?
   public let smiling: CoreFoundation.CGFloat?
+  public let mouthOpen: CoreFoundation.CGFloat?
   public let nose: CoreFoundation.CGPoint?
   public let leftCheek: CoreFoundation.CGPoint?
   public let rightCheek: CoreFoundation.CGPoint?
-  public init(box: CoreFoundation.CGRect, eulerX: CoreFoundation.CGFloat, eulerY: CoreFoundation.CGFloat, leftEyeOpen: CoreFoundation.CGFloat?, rightEyeOpen: CoreFoundation.CGFloat?, smiling: CoreFoundation.CGFloat?, nose: CoreFoundation.CGPoint?, leftCheek: CoreFoundation.CGPoint?, rightCheek: CoreFoundation.CGPoint?)
+  public init(box: CoreFoundation.CGRect, eulerX: CoreFoundation.CGFloat, eulerY: CoreFoundation.CGFloat, leftEyeOpen: CoreFoundation.CGFloat?, rightEyeOpen: CoreFoundation.CGFloat?, smiling: CoreFoundation.CGFloat?, mouthOpen: CoreFoundation.CGFloat? = nil, nose: CoreFoundation.CGPoint?, leftCheek: CoreFoundation.CGPoint?, rightCheek: CoreFoundation.CGPoint?)
 }
 public struct FrameObservation {
   public let timestamp: Foundation.TimeInterval
@@ -69,6 +78,7 @@ public enum Challenge : Swift.String, Swift.CaseIterable {
   case turnLeft
   case turnRight
   case nod
+  case openMouth
   public init?(rawValue: Swift.String)
   public typealias AllCases = [TrueFaceLiveness.Challenge]
   public typealias RawValue = Swift.String
@@ -98,13 +108,33 @@ public protocol TrueFaceLivenessDelegate : AnyObject {
   func livenessViewController(_ vc: TrueFaceLiveness.TrueFaceLivenessViewController, didCompleteWithResult result: [Swift.String : Any])
   func livenessViewController(_ vc: TrueFaceLiveness.TrueFaceLivenessViewController, didFailWithError error: any Swift.Error)
 }
+extension TrueFaceLiveness.TrueFaceLivenessDelegate {
+  public func livenessViewController(_ vc: TrueFaceLiveness.TrueFaceLivenessViewController, didUpdateEvent event: [Swift.String : Any])
+}
+public struct TrueFaceColors {
+  public var primaryColor: UIKit.UIColor
+  public var backgroundColor: UIKit.UIColor
+  public var cardBackgroundColor: UIKit.UIColor
+  public var textColor: UIKit.UIColor
+  public var subtitleColor: UIKit.UIColor
+  public var promptBackgroundColor: UIKit.UIColor
+  public var promptTextColor: UIKit.UIColor
+  public var promptBorderColor: UIKit.UIColor
+  public var ovalBorderColor: UIKit.UIColor
+  public var overlayScrimColor: UIKit.UIColor
+  public init(primaryColor: UIKit.UIColor = UIColor(red: 79/255, green: 70/255, blue: 229/255, alpha: 1), backgroundColor: UIKit.UIColor = UIColor(red: 248/255, green: 250/255, blue: 252/255, alpha: 1), cardBackgroundColor: UIKit.UIColor = UIColor.white, textColor: UIKit.UIColor = UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1), subtitleColor: UIKit.UIColor = UIColor(red: 100/255, green: 116/255, blue: 139/255, alpha: 1), promptBackgroundColor: UIKit.UIColor = UIColor.white, promptTextColor: UIKit.UIColor = UIColor(red: 15/255, green: 23/255, blue: 42/255, alpha: 1), promptBorderColor: UIKit.UIColor = UIColor(red: 226/255, green: 232/255, blue: 240/255, alpha: 1), ovalBorderColor: UIKit.UIColor = UIColor(red: 79/255, green: 70/255, blue: 229/255, alpha: 1), overlayScrimColor: UIKit.UIColor = UIColor(red: 248/255, green: 250/255, blue: 252/255, alpha: 0.5))
+}
 public struct TrueFaceConfig {
   public let backendBaseUrl: Swift.String
+  public let grpcBaseUrl: Swift.String
   public let publicKey: Swift.String
   public let verificationId: Swift.String
   public let clientSecret: Swift.String
   public let challengeCount: Swift.Int
-  public init(backendBaseUrl: Swift.String = "https://api.trueface.dev", publicKey: Swift.String, verificationId: Swift.String, clientSecret: Swift.String, challengeCount: Swift.Int = 3)
+  public let showInstructions: Swift.Bool?
+  public let showPrompt: Swift.Bool
+  public let colors: TrueFaceLiveness.TrueFaceColors
+  public init(backendBaseUrl: Swift.String = "https://api.trueface.dev", grpcBaseUrl: Swift.String = "https://realtime.trueface.dev", publicKey: Swift.String, verificationId: Swift.String, clientSecret: Swift.String, challengeCount: Swift.Int = 3, showInstructions: Swift.Bool? = nil, showPrompt: Swift.Bool = true, colors: TrueFaceLiveness.TrueFaceColors = TrueFaceColors())
 }
 @objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class TrueFaceLivenessViewController : UIKit.UIViewController, AVFoundation.AVCaptureVideoDataOutputSampleBufferDelegate {
   @_Concurrency.MainActor @preconcurrency weak final public var delegate: (any TrueFaceLiveness.TrueFaceLivenessDelegate)?
