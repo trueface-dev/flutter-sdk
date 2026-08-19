@@ -1,3 +1,10 @@
+## 0.2.6
+
+* **Custom Color Themes**: Added `TrueFaceColors` for configuring UI colors (`primaryColor`, `backgroundColor`, `textColor`, `accentColor`, `cardBackgroundColor`) natively on both iOS and Android.
+* **Upload Progress & Events**: Exposed `LivenessUploadingEvent` (0–100% upload progress) and `LivenessVerifyingEvent` in `LivenessEvent.fromMap` for real-time loading UI overlays.
+* **Video Quality & Bitrate Optimization**: Optimized video recording resolution to SD (480p) and capped bitrate to 500 kbps, significantly reducing uploaded MP4 file sizes (~300–400 KB) and accelerating uploads.
+* **SDK Version Alignment**: Updated underlying native dependencies to `dev.trueface:trueface-liveness:0.2.6` on Android and `0.2.6` on iOS.
+
 ## 0.1.0
 
 * Initial release of the TrueFace Flutter liveness SDK.

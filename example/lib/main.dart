@@ -277,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(height: 12),
                         ],
                         DropdownButtonFormField<int>(
-                          value: _challengeCount,
+                          initialValue: _challengeCount,
                           decoration: const InputDecoration(
                             labelText: 'Number of active challenges',
                             prefixIcon: Icon(Icons.psychology),

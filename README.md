@@ -41,13 +41,13 @@ Add the plugin to your Flutter application:
 
 ```yaml
 dependencies:
-  trueface_liveness: ^0.1.0
+  trueface_liveness: ^0.2.6
 ```
 
 Flutter 3.44 and later resolves the iOS implementation with Swift Package
 Manager. The plugin depends on the public
 [`trueface-dev/ios-artifact`](https://github.com/trueface-dev/ios-artifact)
-package from version `1.0.1`, which distributes the native SDK as a binary
+package from version `0.2.6`, which distributes the native SDK as a binary
 XCFramework. CocoaPods remains supported for Flutter projects that have not yet
 migrated to Swift Package Manager.
 
@@ -67,17 +67,29 @@ LivenessCameraView(
     numberOfChallenges: 3,
     enablePassiveAntiSpoof: true,
     spoofScoreThreshold: 0.6,
+    // Hosted verification configuration:
+    backendBaseUrl: 'https://api.trueface.dev',
+    publicKey: 'pk_test_...',
+    verificationId: 'ca93f062-7c46-43b1-be08-5136fc02e83b',
+    clientSecret: 'vs_4f4PZPic2lkqlY8UEgFcQHLdrMdaY3VM',
   ),
   onEvent: (event) {
-    // Drive your UI: instructions, hints, progress.
-    if (event is ChallengeStartedEvent) {
-      print(event.challenge.instruction);
+    // Drive your UI: instructions, hints, progress, uploading state
+    switch (event) {
+      case ChallengeStartedEvent(:final challenge):
+        print(challenge.instruction);
+      case LivenessUploadingEvent(:final progress):
+        print('Uploading: ${(progress ?? 0) * 100}%');
+      case LivenessVerifyingEvent():
+        print('Verifying identity...');
+      default:
+        break;
     }
   },
   onResult: (result) {
     if (result.success) {
       final jpeg = result.image!;   // Uint8List — the captured face
-      // upload / display / verify jpeg
+      print('Liveness approved: ${result.verificationStatus}');
     } else {
       print('Failed: ${result.failureReason}');
     }
@@ -102,7 +114,7 @@ ring, hint badges, and error retries.
 
 ## Customizing UI Colors
 
-Pass a custom `TrueFaceColors` instance into `LivenessConfig`:
+Pass a custom `TrueFaceColors` instance into `LivenessConfig` to style native iOS and Android UI elements:
 
 ```dart
 LivenessCameraView(
@@ -113,9 +125,9 @@ LivenessCameraView(
       cardBackgroundColor: Colors.white,      // Sheet background
       textColor: Color(0xFF064E3B),           // Primary header & title text
       subtitleColor: Color(0xFF047857),       // Subtitle & secondary body text
-      promptBackgroundColor: Colors.white,     // Challenge prompt pill background
+      promptBackgroundColor: Colors.white,    // Challenge prompt pill background
       promptTextColor: Color(0xFF064E3B),     // Challenge prompt text color
-      promptBorderColor: Color(0xA7F3D0),   // Prompt pill border color
+      promptBorderColor: Color(0xFFA7F3D0),   // Prompt pill border color
       ovalBorderColor: Color(0xFF10B981),     // Oval target border color
       overlayScrimColor: Color(0x80F0FDF4),   // Camera overlay translucent scrim
     ),
@@ -128,6 +140,22 @@ LivenessCameraView(
 
 ## Configuration
 
-`LivenessConfig` fields: `challengePool`, `numberOfChallenges`,
-`randomizeOrder`, `challengeTimeout`, `imageQuality`, `enablePassiveAntiSpoof`,
-`spoofScoreThreshold`, `cameraLensDirection`.
+`LivenessConfig` options:
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `challengePool` | `List<LivenessChallenge>` | `values` | Available challenge pool (blink, smile, turnLeft, turnRight, nod). |
+| `numberOfChallenges` | `int` | `3` | Number of challenges presented to the user. |
+| `randomizeOrder` | `bool` | `true` | Randomize challenge sequence per session. |
+| `challengeTimeout` | `Duration` | `12s` | Time budget per challenge. |
+| `imageQuality` | `int` | `90` | JPEG compression quality (1–100) of captured still. |
+| `enablePassiveAntiSpoof` | `bool` | `true` | Enable passive motion/texture anti-spoof checks. |
+| `spoofScoreThreshold` | `double` | `0.6` | Minimum realness score threshold (0.0 – 1.0). |
+| `cameraLensDirection` | `CameraLensDirection` | `front` | Front or back camera selection. |
+| `backendBaseUrl` | `String?` | `'https://api.trueface.dev'` | Base URL of hosted verification backend. |
+| `publicKey` | `String?` | `null` | Merchant publishable key (`pk_...`). |
+| `verificationId` | `String?` | `null` | Session ID returned from server session creation. |
+| `clientSecret` | `String?` | `null` | Client secret (`vs_...`) returned alongside verification ID. |
+| `recordVideo` | `bool` | `false` | Enable video recording during challenges (auto-enabled for backend). |
+| `showInstructions` | `bool?` | `null` | Controls pre-session instruction card visibility. |
+| `colors` | `TrueFaceColors` | `TrueFaceColors()` | Full color theme override for native views. |
