@@ -1,3 +1,8 @@
+## 0.2.7
+
+* **iOS Framework Fix**: Updated the underlying `TrueFaceLiveness` iOS framework dependency to `v0.2.7`, which restores the missing `Info.plist` inside `TrueFaceLiveness.framework` to prevent compiler and bundling errors on iOS devices and simulators.
+* **SPM & CocoaPods Target Alignment**: Refactored the internal podspec and SwiftPM `Package.swift` targets to download and resolve `v0.2.7` of the public iOS binary distribution.
+
 ## 0.2.6
 
 * **Custom Color Themes**: Added `TrueFaceColors` for configuring UI colors (`primaryColor`, `backgroundColor`, `textColor`, `accentColor`, `cardBackgroundColor`) natively on both iOS and Android.
