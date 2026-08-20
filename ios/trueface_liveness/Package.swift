@@ -17,7 +17,7 @@ let package = Package(
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
         .package(
             url: "https://github.com/trueface-dev/ios-artifact.git",
-            from: "0.2.6"
+            from: "0.2.7"
         )
     ],
     targets: [
