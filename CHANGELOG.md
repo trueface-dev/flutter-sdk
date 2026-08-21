@@ -1,3 +1,8 @@
+## 0.2.8
+
+* **Open-Eyes Upload Enforcement**: Implemented logic to ensure that the uploaded face frame has the user's eyes open (alert check). The system now tracks and scores the frame with the widest open eyes as a baseline fallback instead of blindly uploading the final frame of the camera feed (which could catch the user mid-blink or looking away).
+* **Native Dependency Upgrade**: Upgraded native underlying `TrueFaceLiveness` dependencies to version `v0.2.8` on iOS and updated build configurations on Android.
+
 ## 0.2.7
 
 * **iOS Framework Fix**: Updated the underlying `TrueFaceLiveness` iOS framework dependency to `v0.2.7`, which restores the missing `Info.plist` inside `TrueFaceLiveness.framework` to prevent compiler and bundling errors on iOS devices and simulators.

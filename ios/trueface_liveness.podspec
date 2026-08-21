@@ -25,7 +25,7 @@ passive anti-spoofing) exposed to Flutter as a platform view.
     if [ -f ../../ios-sdk/build/TrueFaceLiveness.xcframework.zip ]; then
       cp ../../ios-sdk/build/TrueFaceLiveness.xcframework.zip .
     else
-      curl -L -o TrueFaceLiveness.xcframework.zip https://github.com/trueface-dev/ios-artifact/releases/download/v0.2.7/TrueFaceLiveness.xcframework.zip
+      curl -L -o TrueFaceLiveness.xcframework.zip https://github.com/trueface-dev/ios-artifact/releases/download/v0.2.8/TrueFaceLiveness.xcframework.zip
     fi
     unzip -o TrueFaceLiveness.xcframework.zip
     rm TrueFaceLiveness.xcframework.zip
