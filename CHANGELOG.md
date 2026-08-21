@@ -1,3 +1,8 @@
+## 0.2.9
+
+* **Attentive-Only Video Recording**: Refactored the native recording sessions on both iOS and Android to only begin capturing/storing video frames once the user has become attentive and the first liveness challenge has officially started.
+* **Native Dependency Upgrade**: Upgraded native underlying `TrueFaceLiveness` dependencies to version `v0.2.9` on iOS and `0.2.8` on Android.
+
 ## 0.2.8
 
 * **Open-Eyes Upload Enforcement**: Implemented logic to ensure that the uploaded face frame has the user's eyes open (alert check). The system now tracks and scores the frame with the widest open eyes as a baseline fallback instead of blindly uploading the final frame of the camera feed (which could catch the user mid-blink or looking away).
