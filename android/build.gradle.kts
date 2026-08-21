@@ -91,7 +91,7 @@ dependencies {
     implementation("com.google.mlkit:face-detection:16.1.7")
 
     // Standalone TrueFace Android Liveness SDK
-    implementation("dev.trueface:trueface-liveness:0.2.8")
+    implementation("dev.trueface:trueface-liveness:0.2.9")
 
     // OkHttp for networking
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
