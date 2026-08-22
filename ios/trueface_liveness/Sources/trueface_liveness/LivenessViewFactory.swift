@@ -45,7 +45,6 @@ struct LivenessNativeConfig {
   let videoMaxDurationMs: Int
   let showInstructions: Bool?
   let backendBaseUrl: String?
-  let grpcBaseUrl: String?
   let publicKey: String?
   let verificationId: String?
   let clientSecret: String?
@@ -84,7 +83,6 @@ struct LivenessNativeConfig {
     videoMaxDurationMs = map["videoMaxDurationMs"] as? Int ?? 3000
     showInstructions = map["showInstructions"] as? Bool
     backendBaseUrl = (map["backendBaseUrl"] as? String) ?? "https://api.trueface.dev"
-    grpcBaseUrl = (map["grpcBaseUrl"] as? String) ?? "https://realtime.trueface.dev"
     publicKey = map["publicKey"] as? String
     verificationId = map["verificationId"] as? String
     clientSecret = map["clientSecret"] as? String

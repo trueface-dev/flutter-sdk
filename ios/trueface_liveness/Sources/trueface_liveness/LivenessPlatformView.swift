@@ -716,14 +716,20 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     // Luma: 16x16 grid over the face box.
     let grid = 16
     var lumaSum: CGFloat = 0
+    var saturatedCount = 0
     for gy in 0..<grid {
       for gx in 0..<grid {
         let x = Int(box.minX + box.width * (CGFloat(gx) + 0.5) / CGFloat(grid))
         let y = Int(box.minY + box.height * (CGFloat(gy) + 0.5) / CGFloat(grid))
-        lumaSum += gray(x, y)
+        let g = gray(x, y)
+        if g >= 250 { saturatedCount += 1 }
+        lumaSum += g
       }
     }
-    let luma = lumaSum / CGFloat(grid * grid)
+    let totalSamples = CGFloat(grid * grid)
+    let rawLuma = lumaSum / totalSamples
+    // If >25% of facial pixels are saturated, report overexposure (>230)
+    let luma = (CGFloat(saturatedCount) / totalSamples > 0.25) ? 245.0 : rawLuma
 
     // Sharpness: mean |Laplacian| over a dense 32x32 patch at the box center.
     let patch = 32

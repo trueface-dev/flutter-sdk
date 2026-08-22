@@ -97,11 +97,12 @@ enum LivenessHint {
   centerFace,
   holdStill,
   faceTooDark,
+  faceTooBright,
   multipleFaces,
   lookStraight;
 
   static LivenessHint fromWire(String value) =>
-      LivenessHint.values.firstWhere((h) => h.name == value);
+      LivenessHint.values.firstWhere((h) => h.name == value, orElse: () => LivenessHint.holdStill);
 
   String get message => switch (this) {
     LivenessHint.moveCloser => 'Move a little closer',
@@ -109,6 +110,7 @@ enum LivenessHint {
     LivenessHint.centerFace => 'Center your face in the frame',
     LivenessHint.holdStill => 'Hold still',
     LivenessHint.faceTooDark => 'Find better lighting',
+    LivenessHint.faceTooBright => 'Reduce direct glare or backlight',
     LivenessHint.multipleFaces => 'Only one face should be visible',
     LivenessHint.lookStraight => 'Look straight at the camera',
   };

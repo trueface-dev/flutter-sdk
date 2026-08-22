@@ -20,7 +20,6 @@ class LivenessConfig {
     this.spoofScoreThreshold = 0.6,
     this.cameraLensDirection = CameraLensDirection.front,
     this.backendBaseUrl = 'https://api.trueface.dev',
-    this.grpcBaseUrl = 'https://realtime.trueface.dev',
     this.publicKey,
     this.verificationId,
     this.clientSecret,
@@ -71,9 +70,6 @@ class LivenessConfig {
   /// challenge sequence from the backend, records a video, uploads the media
   /// and polls for the verdict.
   final String? backendBaseUrl;
-
-  /// Base URL of the gRPC streaming service.
-  final String? grpcBaseUrl;
 
   /// Merchant publishable key (`pk_...`) used for session calls.
   final String? publicKey;
@@ -129,7 +125,6 @@ class LivenessConfig {
       'videoMaxDurationMs': videoMaxDurationMsOverride ?? videoMaxDurationMs,
       'showInstructions': showInstructions,
       'backendBaseUrl': backendBaseUrl,
-      'grpcBaseUrl': grpcBaseUrl,
       'publicKey': publicKey,
       'verificationId': verificationId,
       'clientSecret': clientSecret,

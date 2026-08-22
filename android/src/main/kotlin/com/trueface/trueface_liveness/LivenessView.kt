@@ -87,7 +87,6 @@ internal class LivenessConfigParams private constructor(
     val videoMaxDurationMs: Long,
     val showInstructions: Boolean?,
     val backendBaseUrl: String?,
-    val grpcBaseUrl: String?,
     val publicKey: String?,
     val verificationId: String?,
     val clientSecret: String?,
@@ -122,7 +121,6 @@ internal class LivenessConfigParams private constructor(
                 videoMaxDurationMs = (map["videoMaxDurationMs"] as? Number)?.toLong() ?: 3000L,
                 showInstructions = map["showInstructions"] as? Boolean,
                 backendBaseUrl = (map["backendBaseUrl"] as? String) ?: "https://api.trueface.dev",
-                grpcBaseUrl = (map["grpcBaseUrl"] as? String) ?: "https://realtime.trueface.dev",
                 publicKey = map["publicKey"] as? String,
                 verificationId = map["verificationId"] as? String,
                 clientSecret = map["clientSecret"] as? String,
@@ -473,9 +471,9 @@ internal class LivenessView(
         session?.onFrame(obs)
     }
 
-    /** Mean luminance (0-255) of the central half of the frame's Y plane. */
+    /** Mean luminance (0-255) of the central half of the frame's Y plane with glare saturation detection. */
     private fun computeMeanLuma(proxy: ImageProxy): Double {
-        val plane = proxy.planes.getOrNull(0) ?: return 255.0
+        val plane = proxy.planes.getOrNull(0) ?: return 120.0
         val buffer = plane.buffer
         val rowStride = plane.rowStride
         val pixelStride = plane.pixelStride
@@ -485,20 +483,26 @@ internal class LivenessView(
         val y1 = proxy.height * 3 / 4
         var sum = 0L
         var count = 0
+        var saturatedCount = 0
         var y = y0
         while (y < y1) {
             var x = x0
             while (x < x1) {
                 val index = y * rowStride + x * pixelStride
                 if (index < buffer.limit()) {
-                    sum += buffer.get(index).toInt() and 0xFF
+                    val luma = buffer.get(index).toInt() and 0xFF
+                    sum += luma
+                    if (luma >= 250) saturatedCount++
                     count++
                 }
                 x += 8
             }
             y += 8
         }
-        return if (count == 0) 255.0 else sum.toDouble() / count
+        if (count == 0) return 120.0
+        // Glare / Overexposure Gating: If >25% of facial pixels are saturated, report 245 to trigger faceTooBright
+        if (saturatedCount.toDouble() / count > 0.25) return 245.0
+        return sum.toDouble() / count
     }
 
     /** 64x64 nearest-neighbor luma crop of the central half of the frame. */
