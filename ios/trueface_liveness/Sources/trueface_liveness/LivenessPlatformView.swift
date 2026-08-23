@@ -508,6 +508,54 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
         return
       }
     }
+
+    if !config.flashColors.isEmpty {
+      DispatchQueue.main.async {
+        self.runFlashChallenge {
+          self.videoQueue.async {
+            self.finalizeAndDeliver(spoofScore: spoofScore)
+          }
+        }
+      }
+    } else {
+      finalizeAndDeliver(spoofScore: spoofScore)
+    }
+  }
+
+  private func runFlashChallenge(completion: @escaping () -> Void) {
+    sendEvent(["type": "instruction", "instruction": "Hold steady — analyzing reflection..."])
+    let overlay = UIView(frame: previewView.bounds)
+    overlay.backgroundColor = .clear
+    overlay.isUserInteractionEnabled = false
+    previewView.addSubview(overlay)
+
+    executeFlashStep(index: 0, overlay: overlay, completion: completion)
+  }
+
+  private func executeFlashStep(index: Int, overlay: UIView, completion: @escaping () -> Void) {
+    guard index < config.flashColors.count else {
+      UIView.animate(withDuration: 0.12, animations: {
+        overlay.backgroundColor = .clear
+      }) { _ in
+        overlay.removeFromSuperview()
+        completion()
+      }
+      return
+    }
+
+    let color = config.flashColors[index]
+    let duration = Double(config.flashDurationMs) / 1000.0
+
+    UIView.animate(withDuration: 0.08, animations: {
+      overlay.backgroundColor = color.withAlphaComponent(0.40)
+    }) { _ in
+      DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
+        self?.executeFlashStep(index: index + 1, overlay: overlay, completion: completion)
+      }
+    }
+  }
+
+  private func finalizeAndDeliver(spoofScore: Double?) {
     guard
       let pixelBuffer = bestAttentivePixelBuffer ?? bestEyesOpenPixelBuffer ?? lastFacePixelBuffer,
       let faceBox = bestAttentiveFaceBox ?? bestEyesOpenFaceBox ?? lastFaceBox,

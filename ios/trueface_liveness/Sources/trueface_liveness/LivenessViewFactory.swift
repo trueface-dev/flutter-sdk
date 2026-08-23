@@ -44,6 +44,8 @@ struct LivenessNativeConfig {
   let recordVideo: Bool
   let videoMaxDurationMs: Int
   let showInstructions: Bool?
+  let flashColors: [UIColor]
+  let flashDurationMs: Int
   let backendBaseUrl: String?
   let publicKey: String?
   let verificationId: String?
@@ -82,6 +84,21 @@ struct LivenessNativeConfig {
     recordVideo = map["recordVideo"] as? Bool ?? false
     videoMaxDurationMs = map["videoMaxDurationMs"] as? Int ?? 3000
     showInstructions = map["showInstructions"] as? Bool
+    let fHexes = (map["flashColors"] as? [String]) ?? []
+    flashColors = fHexes.compactMap { hex -> UIColor? in
+      var cString: String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+      if cString.hasPrefix("#") { cString.remove(at: cString.startIndex) }
+      guard cString.count == 6 else { return nil }
+      var rgbValue: UInt64 = 0
+      Scanner(string: cString).scanHexInt64(&rgbValue)
+      return UIColor(
+        red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+        green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+        blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+        alpha: 1.0
+      )
+    }
+    flashDurationMs = map["flashDurationMs"] as? Int ?? 150
     backendBaseUrl = (map["backendBaseUrl"] as? String) ?? "https://api.trueface.dev"
     publicKey = map["publicKey"] as? String
     verificationId = map["verificationId"] as? String

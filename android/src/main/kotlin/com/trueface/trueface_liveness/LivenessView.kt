@@ -86,6 +86,8 @@ internal class LivenessConfigParams private constructor(
     val recordVideo: Boolean,
     val videoMaxDurationMs: Long,
     val showInstructions: Boolean?,
+    val flashColors: List<String>,
+    val flashDurationMs: Long,
     val backendBaseUrl: String?,
     val publicKey: String?,
     val verificationId: String?,
@@ -120,6 +122,8 @@ internal class LivenessConfigParams private constructor(
                 recordVideo = map["recordVideo"] as? Boolean ?: false,
                 videoMaxDurationMs = (map["videoMaxDurationMs"] as? Number)?.toLong() ?: 3000L,
                 showInstructions = map["showInstructions"] as? Boolean,
+                flashColors = (map["flashColors"] as? List<*>)?.filterIsInstance<String>().orEmpty(),
+                flashDurationMs = (map["flashDurationMs"] as? Number)?.toLong() ?: 150L,
                 backendBaseUrl = (map["backendBaseUrl"] as? String) ?: "https://api.trueface.dev",
                 publicKey = map["publicKey"] as? String,
                 verificationId = map["verificationId"] as? String,
@@ -599,7 +603,6 @@ internal class LivenessView(
 
     override fun onChallengesPassed(completed: List<String>) {
         if (disposed || resultSent) return
-        onSessionEvent(mapOf("type" to "hint", "code" to "holdStill"))
         val score: Double? =
             if (config.enablePassiveAntiSpoof) antiSpoof.computeScore() else null
         if (score != null && score < config.spoofScoreThreshold) {
@@ -614,7 +617,58 @@ internal class LivenessView(
             )
             return
         }
-        captureAndFinish(score, completed)
+
+        if (config.flashColors.isNotEmpty()) {
+            mainHandler.post {
+                runFlashChallenge {
+                    captureAndFinish(score, completed)
+                }
+            }
+        } else {
+            captureAndFinish(score, completed)
+        }
+    }
+
+    private fun runFlashChallenge(onComplete: () -> Unit) {
+        val colors = config.flashColors.mapNotNull { hex ->
+            try { Color.parseColor(hex) } catch (_: Exception) { null }
+        }
+        if (colors.isEmpty()) {
+            onComplete()
+            return
+        }
+
+        channel.invokeMethod("onEvent", mapOf("type" to "instruction", "instruction" to "Hold steady — analyzing reflection..."))
+
+        val flashOverlay = View(appContext).apply {
+            setBackgroundColor(Color.TRANSPARENT)
+            layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        }
+        rootView.addView(flashOverlay)
+
+        fun finishFlash() {
+            try {
+                rootView.removeView(flashOverlay)
+            } catch (_: Exception) {}
+            onComplete()
+        }
+
+        fun flashStep(index: Int) {
+            if (index >= colors.size) {
+                finishFlash()
+                return
+            }
+
+            val color = colors[index]
+            val semiTransparent = Color.argb(105, Color.red(color), Color.green(color), Color.blue(color))
+            flashOverlay.setBackgroundColor(semiTransparent)
+
+            mainHandler.postDelayed({
+                flashStep(index + 1)
+            }, config.flashDurationMs)
+        }
+
+        flashStep(0)
     }
 
     override fun onSessionFailed(reason: String, completed: List<String>) {

@@ -26,11 +26,14 @@ class LivenessConfig {
     this.recordVideo = false,
     this.videoMaxDurationMs = 3000,
     this.showInstructions,
+    this.flashColors,
+    this.flashDurationMs = 150,
     this.colors = const TrueFaceColors(),
   }) : assert(numberOfChallenges > 0),
        assert(imageQuality >= 1 && imageQuality <= 100),
        assert(spoofScoreThreshold >= 0 && spoofScoreThreshold <= 1),
-       assert(videoMaxDurationMs > 0);
+       assert(videoMaxDurationMs > 0),
+       assert(flashDurationMs > 0);
 
   /// The pool of challenges to draw from.
   final List<LivenessChallenge> challengePool;
@@ -91,6 +94,13 @@ class LivenessConfig {
   /// Optional override to control whether pre-session instructions screen is shown.
   final bool? showInstructions;
 
+  /// Optional sequence of hex color codes (e.g. `["#00F0FF", "#FF0055"]`) for
+  /// active screen flash spectral reflection challenge.
+  final List<String>? flashColors;
+
+  /// Duration of each color flash step in milliseconds (default 150ms).
+  final int flashDurationMs;
+
   /// Customizable colors for the liveness UI elements.
   final TrueFaceColors colors;
 
@@ -108,6 +118,8 @@ class LivenessConfig {
     List<LivenessChallenge>? challengesOverride,
     bool? recordVideoOverride,
     int? videoMaxDurationMsOverride,
+    List<String>? flashColorsOverride,
+    int? flashDurationMsOverride,
   }) {
     final challenges = challengesOverride ?? challengePool;
     return {
@@ -124,6 +136,8 @@ class LivenessConfig {
       'recordVideo': recordVideoOverride ?? recordVideo,
       'videoMaxDurationMs': videoMaxDurationMsOverride ?? videoMaxDurationMs,
       'showInstructions': showInstructions,
+      'flashColors': flashColorsOverride ?? flashColors,
+      'flashDurationMs': flashDurationMsOverride ?? flashDurationMs,
       'backendBaseUrl': backendBaseUrl,
       'publicKey': publicKey,
       'verificationId': verificationId,
