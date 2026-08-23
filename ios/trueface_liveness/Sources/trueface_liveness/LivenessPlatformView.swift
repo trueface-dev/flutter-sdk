@@ -935,23 +935,14 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     return (luma, sharpness)
   }
 
-  /// Crops generously around the face box, encodes JPEG at the configured
-  /// quality. `faceBox` is top-left origin; CoreImage is bottom-left origin,
-  /// hence the y-flip. Runs on `videoQueue`.
+  /// Encodes the full upright selfie frame as JPEG at the configured quality.
+  /// Runs on `videoQueue`.
   private func encodeFaceCrop(
     pixelBuffer: CVPixelBuffer, faceBox: CGRect
   ) -> (data: Data, width: Int, height: Int)? {
-    let width = CGFloat(CVPixelBufferGetWidth(pixelBuffer))
-    let height = CGFloat(CVPixelBufferGetHeight(pixelBuffer))
-    var crop = faceBox.insetBy(dx: -faceBox.width * 0.35, dy: -faceBox.height * 0.45)
-    crop = crop.intersection(CGRect(x: 0, y: 0, width: width, height: height))
-    guard crop.width > 16, crop.height > 16 else { return nil }
-    let ciCrop = CGRect(
-      x: crop.minX, y: height - crop.maxY, width: crop.width, height: crop.height)
-
     let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
     let context = CIContext()
-    guard let cgImage = context.createCGImage(ciImage, from: ciCrop) else { return nil }
+    guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return nil }
     let image = UIImage(cgImage: cgImage)
     let quality = CGFloat(config.imageQuality) / 100.0
     guard let data = image.jpegData(compressionQuality: quality) else { return nil }

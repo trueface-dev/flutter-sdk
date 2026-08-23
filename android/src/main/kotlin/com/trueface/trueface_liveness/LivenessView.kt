@@ -837,42 +837,17 @@ internal class LivenessView(
             val matrix = Matrix().apply { postRotate(rotationDegrees.toFloat()) }
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
         }
-        val cropped = cropAroundFace(bitmap)
         val out = ByteArrayOutputStream()
-        cropped.compress(Bitmap.CompressFormat.JPEG, config.imageQuality, out)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, config.imageQuality, out)
         val base64 = Base64.encodeToString(out.toByteArray(), Base64.NO_WRAP)
         return mapOf(
             "success" to true,
             "imageBase64" to base64,
-            "imageWidth" to cropped.width,
-            "imageHeight" to cropped.height,
+            "imageWidth" to bitmap.width,
+            "imageHeight" to bitmap.height,
             "spoofScore" to score,
             "completed" to completed,
         )
-    }
-
-    /**
-     * Crops the upright capture around the last analysis-frame face box,
-     * expanded to twice the face size (a "generous" crop per the contract).
-     * Falls back to the full frame when the mapping is unavailable.
-     */
-    private fun cropAroundFace(bitmap: Bitmap): Bitmap {
-        val box = lastFaceBox ?: return bitmap
-        val frameW = lastFrameWidth
-        val frameH = lastFrameHeight
-        if (frameW <= 0 || frameH <= 0) return bitmap
-        val scaleX = bitmap.width.toDouble() / frameW
-        val scaleY = bitmap.height.toDouble() / frameH
-        val centerX = box.exactCenterX() * scaleX
-        val centerY = box.exactCenterY() * scaleY
-        val halfW = box.width() * scaleX // crop width = 2x face width
-        val halfH = box.height() * scaleY // crop height = 2x face height
-        val left = max(0.0, centerX - halfW).roundToInt()
-        val top = max(0.0, centerY - halfH).roundToInt()
-        val right = min(bitmap.width.toDouble(), centerX + halfW).roundToInt()
-        val bottom = min(bitmap.height.toDouble(), centerY + halfH).roundToInt()
-        if (right - left < 32 || bottom - top < 32) return bitmap
-        return Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top)
     }
 
     /**
