@@ -4,7 +4,7 @@
 * **Face Luminance Sampling & Threshold**:
   * Implemented rotation-invariant $16 \times 16$ normalized grid sampling to measure luminance directly across the detected face bounding box on Android.
   * Raised minimum face luminance threshold to `85.0` to reliably detect dim/low-light environments matching iOS behavior.
-  * Paused challenge progression and excluded candidate selfie frame storage while lighting is insufficient, preventing dark/noisy captures from triggering backend spoof rejections.
+  * Paused challenge progression and excluded candidate selfie frame storage while lighting is insufficient, preventing dark/noisy captures from triggering spoof rejections.
 
 ## 0.3.1
 
