@@ -1,4 +1,23 @@
 
+## 0.3.1
+
+* **Attentive & Centered Selfie Selection**:
+  * Added face centering constraints ($\le 18\%$ horizontal, $\le 20\%$ vertical offset from frame center) with centering score bonus.
+  * Heavily prioritized direct frontal camera gaze ($|\text{yaw}| \le 10^\circ, |\text{pitch}| \le 10^\circ$) and sharp in-focus frames.
+  * Enforced strict verified open-eyes threshold ($\ge 0.75$ on Android, $\ge 0.22$ EAR on iOS) eliminating false defaults and closed-eye captures.
+  * Added post-challenge photo alignment fallback ($1.8\text{s}$ timeout) prompting `"Look straight at the camera and hold still"` to ensure high-quality selfie acquisition if challenges completed while turned.
+* **Aspect Ratio Preservation**:
+  * Fixed iOS `AVAssetWriter` video encoder dimensions to dynamically downscale maintaining the exact $9:16$ portrait camera aspect ratio, preventing squished/stretched video uploads.
+  * Synchronized `AVCaptureVideoPreviewLayer` bounds with Flutter platform view layout in `CameraPreviewView.layoutSubviews()`.
+  * Preserved full-frame upright selfie image without head clipping.
+* **Lighting & Warmup Gating**:
+  * Added camera warmup threshold ($\ge 8$ frames) to prevent premature `"Too dark"` prompts while camera hardware auto-exposure stabilizes.
+  * Fixed ambient luma fallback and ensured direct environmental hint dispatching on Android and iOS platform views.
+* **Life-Cycle & Event Coverage**:
+  * Added `LivenessInstructionEvent` for real-time instruction display (e.g. during spectral color flash analysis).
+  * Expanded `LivenessFailureReason` and `VerificationStatus` enums with human-readable descriptions and full wire parsing.
+  * Prevented general framing events (`FaceDetectedEvent`, `FaceLostEvent`) from overwriting active challenge instructions in the UI.
+
 ## 0.3.0
 * **Open Mouth Challenge Implementation**: Enabled ML Kit contour and landmark detection (`CONTOUR_MODE_ALL` and inner/outer lip ratio analysis) to accurately detect and satisfy the `openMouth` challenge on Android and iOS.
 * **Native SDK Upgrades**: Upgraded underlying native dependencies to `dev.trueface:trueface-liveness:0.3.1` on Android and `0.3.1` on iOS.
