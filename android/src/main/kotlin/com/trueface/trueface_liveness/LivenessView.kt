@@ -501,7 +501,7 @@ internal class LivenessView(
         }
         val frameWidth = if (rotation == 90 || rotation == 270) proxy.height else proxy.width
         val frameHeight = if (rotation == 90 || rotation == 270) proxy.width else proxy.height
-        val meanLuma = computeMeanLuma(proxy)
+        val meanLuma = computeMeanLuma(proxy, lastFaceBox, rotation)
         val lumaCrop =
             if (frameCounter++ % TEXTURE_SAMPLE_EVERY == 0) grabLumaCrop(proxy) else null
         val now = SystemClock.elapsedRealtime()
@@ -633,14 +633,19 @@ internal class LivenessView(
         if (config.enablePassiveAntiSpoof) antiSpoof.onObservation(obs, lumaCrop)
 
         val now = SystemClock.elapsedRealtime()
+        val isTooDark = frameCounter >= 8 && meanLuma < 65.0
         if (frameCounter >= 8) {
-            if (meanLuma < 55.0 && now - lastLightingHintAt > 800) {
+            if (isTooDark && now - lastLightingHintAt > 800) {
                 lastLightingHintAt = now
                 onSessionEvent(mapOf("type" to "hint", "code" to "faceTooDark"))
             } else if (meanLuma > 230.0 && now - lastLightingHintAt > 800) {
                 lastLightingHintAt = now
                 onSessionEvent(mapOf("type" to "hint", "code" to "faceTooBright"))
             }
+        }
+
+        if (isTooDark) {
+            return
         }
 
         if (awaitingAttentiveFrame) {
@@ -658,18 +663,32 @@ internal class LivenessView(
         session?.onFrame(obs)
     }
 
-    /** Mean luminance (0-255) of the central half of the frame's Y plane with glare saturation detection. */
-    private fun computeMeanLuma(proxy: ImageProxy): Double {
+    /** Mean luminance (0-255) of the facial region (or central frame) with glare saturation detection. */
+    private fun computeMeanLuma(proxy: ImageProxy, faceBox: Rect? = null, rotation: Int = 0): Double {
         val plane = proxy.planes.getOrNull(0) ?: return 0.0
         val buffer = plane.buffer
         val rowStride = plane.rowStride
         val pixelStride = plane.pixelStride
         val w = proxy.width
         val h = proxy.height
-        val x0 = w / 4
-        val x1 = (3 * w) / 4
-        val y0 = h / 4
-        val y1 = (3 * h) / 4
+
+        val (x0, x1, y0, y1) = if (faceBox != null && !faceBox.isEmpty) {
+            if (rotation == 90 || rotation == 270) {
+                val fx0 = ((faceBox.top.toDouble() / maxOf(1, proxy.height)) * w).toInt().coerceIn(0, w - 1)
+                val fx1 = ((faceBox.bottom.toDouble() / maxOf(1, proxy.height)) * w).toInt().coerceIn(fx0 + 1, w)
+                val fy0 = ((faceBox.left.toDouble() / maxOf(1, proxy.width)) * h).toInt().coerceIn(0, h - 1)
+                val fy1 = ((faceBox.right.toDouble() / maxOf(1, proxy.width)) * h).toInt().coerceIn(fy0 + 1, h)
+                arrayOf(fx0, fx1, fy0, fy1)
+            } else {
+                val fx0 = faceBox.left.coerceIn(0, w - 1)
+                val fx1 = faceBox.right.coerceIn(fx0 + 1, w)
+                val fy0 = faceBox.top.coerceIn(0, h - 1)
+                val fy1 = faceBox.bottom.coerceIn(fy0 + 1, h)
+                arrayOf(fx0, fx1, fy0, fy1)
+            }
+        } else {
+            arrayOf(w / 4, (3 * w) / 4, h / 4, (3 * h) / 4)
+        }
 
         var sum = 0L
         var count = 0
