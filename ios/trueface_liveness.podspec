@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'trueface_liveness'
-  s.version          = '0.3.1'
+  s.version          = '0.3.2'
   s.summary          = 'Active + passive liveness detection for Flutter.'
   s.description      = <<-DESC
 AVFoundation + Apple Vision based liveness detection (challenge/response and
