@@ -395,6 +395,9 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
           sharpness: stats?.sharpness ?? 0,
           isTurnChallenge: current == .turnLeft || current == .turnRight
         ))
+    } else {
+      let centerBox = CGRect(x: size.width * 0.25, y: size.height * 0.25, width: size.width * 0.50, height: size.height * 0.50)
+      luminance = grayStats(pixelBuffer: pixelBuffer, faceBox: centerBox)?.luma
     }
 
     let effects = machine.process(

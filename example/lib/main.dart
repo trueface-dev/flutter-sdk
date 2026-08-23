@@ -105,6 +105,7 @@ class _HomePageState extends State<HomePage> {
           verificationId: sessionData['id']!,
           clientSecret: sessionData['clientSecret']!,
           recordVideo: true,
+          enablePassiveAntiSpoof: false
         );
       } else {
         // Local on-device mode
