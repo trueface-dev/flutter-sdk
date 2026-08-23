@@ -365,16 +365,17 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       let stats = grayStats(pixelBuffer: pixelBuffer, faceBox: face.box)
       luminance = stats?.luma
 
-      let leftOpen = face.leftEyeOpen ?? 0.8
-      let rightOpen = face.rightEyeOpen ?? 0.8
+      let leftOpen = face.leftEyeOpen ?? 0
+      let rightOpen = face.rightEyeOpen ?? 0
       let absY = abs(face.eulerY)
       let absX = abs(face.eulerX)
 
       if let encoded = encodeFaceCrop(pixelBuffer: pixelBuffer, faceBox: face.box) {
         lastCapturedJPEG = encoded
 
+        let minEye = min(leftOpen, rightOpen)
         let eyesScore = leftOpen + rightOpen
-        if eyesScore > bestEyesOpenScore {
+        if minEye >= 0.20 && eyesScore > bestEyesOpenScore {
           bestEyesOpenScore = eyesScore
           bestEyesOpenJPEG = encoded
         }

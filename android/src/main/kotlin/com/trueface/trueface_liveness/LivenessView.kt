@@ -540,8 +540,8 @@ internal class LivenessView(
             lastFrameWidth = frameWidth
             lastFrameHeight = frameHeight
 
-            val leftEyeOpen = face.leftEyeOpenProbability ?: 0.8f
-            val rightEyeOpen = face.rightEyeOpenProbability ?: 0.8f
+            val leftEyeOpen = face.leftEyeOpenProbability ?: 0f
+            val rightEyeOpen = face.rightEyeOpenProbability ?: 0f
             val absY = kotlin.math.abs(face.headEulerAngleY)
             val absX = kotlin.math.abs(face.headEulerAngleX)
 
@@ -556,8 +556,8 @@ internal class LivenessView(
                 val centeringScore = ((1f - (deltaX / 0.18f)).coerceAtLeast(0f) + (1f - (deltaY / 0.20f)).coerceAtLeast(0f)) * 10f
 
                 val minEye = minOf(leftEyeOpen, rightEyeOpen)
-                // Evaluate face attentiveness (both eyes open >= 0.70, head frontal <= 10 deg, centered)
-                if (minEye >= 0.70f && absY <= 10f && absX <= 10f && isCentered) {
+                // Evaluate face attentiveness (both eyes verified open >= 0.75, head frontal <= 10 deg, centered)
+                if (minEye >= 0.75f && absY <= 10f && absX <= 10f && isCentered) {
                     val frontalScore = (10f - absY).coerceAtLeast(0f) + (10f - absX).coerceAtLeast(0f)
                     val score = (leftEyeOpen + rightEyeOpen) * 10f + frontalScore + centeringScore
                     if (score > bestAttentiveScore) {
@@ -568,7 +568,7 @@ internal class LivenessView(
                 }
 
                 val eyesScore = leftEyeOpen + rightEyeOpen
-                if (eyesScore > bestEyesOpenScore) {
+                if (minEye >= 0.50f && eyesScore > bestEyesOpenScore) {
                     bestEyesOpenScore = eyesScore
                     bestEyesOpenJpeg = frameJpeg
                     bestEyesOpenRotation = frameRotation
