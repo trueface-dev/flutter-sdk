@@ -12,6 +12,11 @@ private final class CameraPreviewView: UIView {
   var previewLayer: AVCaptureVideoPreviewLayer {
     layer as! AVCaptureVideoPreviewLayer
   }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    previewLayer.frame = bounds
+  }
 }
 
 /// The platform view driving one liveness session.
@@ -825,14 +830,16 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     guard let writer = try? AVAssetWriter(outputURL: url, fileType: .mp4) else {
       return false
     }
-    let targetW = width > height ? min(width, 640) : min(width, 480)
-    let targetH = width > height ? min(height, 480) : min(height, 640)
+    let maxDim: CGFloat = 640
+    let scale = min(1.0, maxDim / CGFloat(max(width, height)))
+    let targetW = Int((CGFloat(width) * scale).rounded()) & ~1
+    let targetH = Int((CGFloat(height) * scale).rounded()) & ~1
     let settings: [String: Any] = [
       AVVideoCodecKey: AVVideoCodecType.h264,
       AVVideoWidthKey: targetW,
       AVVideoHeightKey: targetH,
       AVVideoCompressionPropertiesKey: [
-        AVVideoAverageBitRateKey: 500_000,
+        AVVideoAverageBitRateKey: 600_000,
         AVVideoExpectedSourceFrameRateKey: 15,
         AVVideoMaxKeyFrameIntervalKey: 15
       ]

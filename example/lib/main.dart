@@ -404,12 +404,19 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const SizedBox(height: 16),
                           if (result.success && result.image != null) ...[
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.memory(
-                                result.image!,
-                                height: 200,
-                                fit: BoxFit.cover,
+                            Container(
+                              height: 200,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.black12,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.memory(
+                                  result.image!,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 16),
