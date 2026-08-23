@@ -91,6 +91,9 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   private var dynamicFlashColors: [UIColor] = []
   private var dynamicFlashDurationMs: Int = 200
   private var lastLightingHintAt: TimeInterval = 0
+  private var awaitingAttentiveFrame = false
+  private var awaitingAttentiveDeadline: TimeInterval = 0
+  private var cachedSpoofScore: Double?
 
   init(
     frame: CGRect,
@@ -371,12 +374,17 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
           bestEyesOpenJPEG = encoded
         }
 
+        let deltaX = abs(face.box.midX - size.width * 0.5) / size.width
+        let deltaY = abs(face.box.midY - size.height * 0.5) / size.height
+        let isCentered = deltaX <= 0.18 && deltaY <= 0.20
+        let centeringScore = (max(0, 1.0 - (deltaX / 0.18)) + max(0, 1.0 - (deltaY / 0.20))) * 10.0
+
         let minEye = min(leftOpen, rightOpen)
         let sharpness = stats?.sharpness ?? 0
-        // Evaluate face attentiveness: both eyes open, strictly frontal (<= 10 deg), sharp focus
-        if minEye >= 0.22 && absY <= 10 && absX <= 10 {
+        // Evaluate face attentiveness: both eyes open, strictly frontal (<= 10 deg), centered, sharp focus
+        if minEye >= 0.22 && absY <= 10 && absX <= 10 && isCentered {
           let frontalScore = max(0, 10.0 - absY) + max(0, 10.0 - absX)
-          let score = (eyesScore * 10.0) + frontalScore + (min(sharpness, 30.0) / 3.0)
+          let score = (eyesScore * 10.0) + frontalScore + centeringScore + (min(sharpness, 30.0) / 3.0)
           if score > bestAttentiveScore {
             bestAttentiveScore = score
             bestAttentiveJPEG = encoded
@@ -409,6 +417,14 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
         lastLightingHintAt = now
         sendEvent(["type": "hint", "code": "faceTooBright"])
       }
+    }
+
+    if awaitingAttentiveFrame {
+      if bestAttentiveJPEG != nil || now >= awaitingAttentiveDeadline {
+        awaitingAttentiveFrame = false
+        proceedToFlashAndFinalize(spoofScore: cachedSpoofScore)
+      }
+      return
     }
 
     let effects = machine.process(
@@ -592,6 +608,18 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       }
     }
 
+    if bestAttentiveJPEG == nil {
+      awaitingAttentiveFrame = true
+      awaitingAttentiveDeadline = CACurrentMediaTime() + 1.8
+      cachedSpoofScore = spoofScore
+      sendEvent(["type": "instruction", "instruction": "Look straight at the camera and hold still"])
+      return
+    }
+
+    proceedToFlashAndFinalize(spoofScore: spoofScore)
+  }
+
+  private func proceedToFlashAndFinalize(spoofScore: Double?) {
     let activeColors = !config.flashColors.isEmpty ? config.flashColors : dynamicFlashColors
     let activeDuration = !config.flashColors.isEmpty ? config.flashDurationMs : dynamicFlashDurationMs
 
@@ -746,6 +774,9 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     bestAttentiveScore = -1
     bestEyesOpenJPEG = nil
     bestEyesOpenScore = -1
+    awaitingAttentiveFrame = false
+    awaitingAttentiveDeadline = 0
+    cachedSpoofScore = nil
     resultDelivered = false
     discardRecording()
     resetRecordingState()

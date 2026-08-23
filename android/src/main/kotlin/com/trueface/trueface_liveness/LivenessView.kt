@@ -207,6 +207,10 @@ internal class LivenessView(
     private var dynamicFlashColors: List<String> = emptyList()
     private var dynamicFlashDurationMs: Long = 200L
     private var lastLightingHintAt: Long = 0L
+    @Volatile private var awaitingAttentiveFrame = false
+    @Volatile private var awaitingAttentiveDeadline = 0L
+    @Volatile private var pendingPassedScore: Double? = null
+    @Volatile private var pendingPassedCompleted: List<String>? = null
 
     override val lifecycle: Lifecycle
         get() = lifecycleRegistry
@@ -347,6 +351,10 @@ internal class LivenessView(
         bestEyesOpenJpeg = null
         bestEyesOpenScore = -1f
         lastFrameJpeg = null
+        awaitingAttentiveFrame = false
+        awaitingAttentiveDeadline = 0L
+        pendingPassedScore = null
+        pendingPassedCompleted = null
         session = ChallengeSession(buildChallengeList(), config.challengeTimeoutMs, this)
     }
 
@@ -541,11 +549,17 @@ internal class LivenessView(
                 lastFrameJpeg = frameJpeg
                 lastFrameJpegRotation = frameRotation
 
+                val box = face.boundingBox
+                val deltaX = kotlin.math.abs(box.centerX().toFloat() - frameWidth * 0.5f) / frameWidth
+                val deltaY = kotlin.math.abs(box.centerY().toFloat() - frameHeight * 0.5f) / frameHeight
+                val isCentered = deltaX <= 0.18f && deltaY <= 0.20f
+                val centeringScore = ((1f - (deltaX / 0.18f)).coerceAtLeast(0f) + (1f - (deltaY / 0.20f)).coerceAtLeast(0f)) * 10f
+
                 val minEye = minOf(leftEyeOpen, rightEyeOpen)
-                // Evaluate face attentiveness (both eyes open >= 0.70, head frontal <= 10 deg)
-                if (minEye >= 0.70f && absY <= 10f && absX <= 10f) {
+                // Evaluate face attentiveness (both eyes open >= 0.70, head frontal <= 10 deg, centered)
+                if (minEye >= 0.70f && absY <= 10f && absX <= 10f && isCentered) {
                     val frontalScore = (10f - absY).coerceAtLeast(0f) + (10f - absX).coerceAtLeast(0f)
-                    val score = (leftEyeOpen + rightEyeOpen) * 10f + frontalScore
+                    val score = (leftEyeOpen + rightEyeOpen) * 10f + frontalScore + centeringScore
                     if (score > bestAttentiveScore) {
                         bestAttentiveScore = score
                         bestAttentiveJpeg = frameJpeg
@@ -624,6 +638,18 @@ internal class LivenessView(
         } else if (meanLuma > 230.0 && now - lastLightingHintAt > 800) {
             lastLightingHintAt = now
             onSessionEvent(mapOf("type" to "hint", "code" to "faceTooBright"))
+        }
+
+        if (awaitingAttentiveFrame) {
+            if (bestAttentiveJpeg != null || now >= awaitingAttentiveDeadline) {
+                awaitingAttentiveFrame = false
+                val score = pendingPassedScore
+                val completed = pendingPassedCompleted ?: emptyList()
+                mainHandler.post {
+                    proceedToFlashAndFinish(score, completed)
+                }
+            }
+            return
         }
 
         session?.onFrame(obs)
@@ -722,14 +748,27 @@ internal class LivenessView(
                 return@post
             }
 
-            val colorsToFlash = activeFlashColors
-            if (colorsToFlash.isNotEmpty()) {
-                runFlashChallenge(colorsToFlash, activeFlashDurationMs) {
-                    captureAndFinish(score, completed)
-                }
-            } else {
+            if (bestAttentiveJpeg == null) {
+                awaitingAttentiveFrame = true
+                awaitingAttentiveDeadline = SystemClock.elapsedRealtime() + 1800L
+                pendingPassedScore = score
+                pendingPassedCompleted = completed
+                channel.invokeMethod("onEvent", mapOf("type" to "instruction", "instruction" to "Look straight at the camera and hold still"))
+                return@post
+            }
+
+            proceedToFlashAndFinish(score, completed)
+        }
+    }
+
+    private fun proceedToFlashAndFinish(score: Double?, completed: List<String>) {
+        val colorsToFlash = activeFlashColors
+        if (colorsToFlash.isNotEmpty()) {
+            runFlashChallenge(colorsToFlash, activeFlashDurationMs) {
                 captureAndFinish(score, completed)
             }
+        } else {
+            captureAndFinish(score, completed)
         }
     }
 
