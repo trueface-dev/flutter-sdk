@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.ImageFormat
 import android.graphics.Matrix
 import android.graphics.PointF
@@ -16,6 +17,7 @@ import android.os.SystemClock
 import android.util.Base64
 import android.util.Size
 import android.view.View
+import android.widget.FrameLayout
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
@@ -640,15 +642,15 @@ internal class LivenessView(
 
         channel.invokeMethod("onEvent", mapOf("type" to "instruction", "instruction" to "Hold steady — analyzing reflection..."))
 
-        val flashOverlay = View(appContext).apply {
+        val flashOverlay = View(previewView.context).apply {
             setBackgroundColor(Color.TRANSPARENT)
             layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
         }
-        rootView.addView(flashOverlay)
+        previewView.addView(flashOverlay)
 
         fun finishFlash() {
             try {
-                rootView.removeView(flashOverlay)
+                previewView.removeView(flashOverlay)
             } catch (_: Exception) {}
             onComplete()
         }
