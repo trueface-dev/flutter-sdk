@@ -25,6 +25,9 @@ sealed class LivenessEvent {
       'hint' => LivenessHintEvent(
         hint: LivenessHint.fromWire(map['code'] as String),
       ),
+      'instruction' => LivenessInstructionEvent(
+        instruction: map['instruction'] as String? ?? 'Hold steady…',
+      ),
       'uploading' => LivenessUploadingEvent(
         progress: (map['progress'] as num?)?.toDouble(),
       ),
@@ -35,6 +38,12 @@ sealed class LivenessEvent {
       _ => UnknownLivenessEvent(type, map),
     };
   }
+}
+
+/// Emitted when an instruction prompt should be displayed (e.g. during spectral flash).
+class LivenessInstructionEvent extends LivenessEvent {
+  const LivenessInstructionEvent({required this.instruction});
+  final String instruction;
 }
 
 /// Emitted (by the Dart layer, not native) while uploading the captured media

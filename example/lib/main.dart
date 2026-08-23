@@ -416,7 +416,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                           _buildDetailRow(
                             'Verification Status',
-                            result.verificationStatus?.name ?? 'n/a',
+                            result.verificationStatus?.label ?? (result.success ? 'Success' : 'Failed'),
                           ),
                           if (result.spoofScore != null)
                             _buildDetailRow(
@@ -426,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                           if (result.failureReason != null)
                             _buildDetailRow(
                               'Failure Reason',
-                              result.failureReason!.name,
+                              '${result.failureReason!.description} (${result.failureReason!.name})',
                             ),
                           if (result.imageUrl != null)
                             _buildDetailRow('Image Key', result.imageUrl!),
@@ -572,6 +572,8 @@ class _LivenessScreenState extends State<LivenessScreen> {
           _instruction = 'Great!';
         case LivenessHintEvent(:final hint):
           _instruction = hint.message;
+        case LivenessInstructionEvent(:final instruction):
+          _instruction = instruction;
         case FaceLostEvent():
           if (!_instruction.contains('dark') && !_instruction.contains('glare') && !_instruction.contains('lighting')) {
             _instruction = 'Keep your face in view';

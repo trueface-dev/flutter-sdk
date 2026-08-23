@@ -17,24 +17,54 @@ enum LivenessFailureReason {
   /// The face was lost for too long to continue.
   faceLost,
 
+  /// More than one face was detected in the frame.
+  multipleFaces,
+
+  /// The environment is too dark for reliable detection.
+  tooDark,
+
   /// Camera or permission failure.
   cameraError,
+
+  /// Camera permission was denied.
+  permissionDenied,
+
+  /// Network or server connection failed.
+  networkError,
 
   /// An unexpected native error.
   unknown;
 
-  static LivenessFailureReason fromWire(String value) =>
-      LivenessFailureReason.values.firstWhere(
-        (r) => r.name == value,
-        orElse: () => LivenessFailureReason.unknown,
-      );
+  static LivenessFailureReason fromWire(String value) => switch (value) {
+    'faceTooDark' => LivenessFailureReason.tooDark,
+    _ => LivenessFailureReason.values.firstWhere(
+      (r) => r.name == value,
+      orElse: () => LivenessFailureReason.unknown,
+    ),
+  };
+
+  String get description => switch (this) {
+    LivenessFailureReason.timeout => 'Challenge timed out',
+    LivenessFailureReason.spoofDetected => 'Potential spoofing detected',
+    LivenessFailureReason.cancelled => 'Session was cancelled',
+    LivenessFailureReason.faceLost => 'Face was lost during verification',
+    LivenessFailureReason.multipleFaces => 'Multiple faces detected',
+    LivenessFailureReason.tooDark => 'Environment is too dark',
+    LivenessFailureReason.cameraError => 'Camera error occurred',
+    LivenessFailureReason.permissionDenied => 'Camera permission denied',
+    LivenessFailureReason.networkError => 'Network connection error',
+    LivenessFailureReason.unknown => 'Verification failed',
+  };
 }
 
 /// The backend verdict for a hosted verification.
 enum VerificationStatus {
   approved,
   rejected,
+  completed,
+  processing,
   failed,
+  review,
   pending;
 
   static VerificationStatus fromWire(String value) =>
@@ -42,6 +72,16 @@ enum VerificationStatus {
         (s) => s.name == value,
         orElse: () => VerificationStatus.pending,
       );
+
+  String get label => switch (this) {
+    VerificationStatus.approved => 'Approved',
+    VerificationStatus.rejected => 'Rejected',
+    VerificationStatus.completed => 'Completed',
+    VerificationStatus.processing => 'Processing',
+    VerificationStatus.failed => 'Failed',
+    VerificationStatus.review => 'Under Review',
+    VerificationStatus.pending => 'Pending',
+  };
 }
 
 /// The terminal outcome of a liveness session.
@@ -92,8 +132,9 @@ class LivenessResult {
 
   factory LivenessResult.fromMap(Map<dynamic, dynamic> map) {
     final base64Image = map['imageBase64'] as String?;
+    final statusStr = map['verificationStatus'] as String?;
     return LivenessResult(
-      success: map['success'] as bool,
+      success: map['success'] as bool? ?? false,
       image: base64Image != null ? base64Decode(base64Image) : null,
       imageWidth: map['imageWidth'] as int?,
       imageHeight: map['imageHeight'] as int?,
@@ -105,6 +146,9 @@ class LivenessResult {
           .map((c) => LivenessChallenge.fromWire(c as String))
           .toList(),
       videoPath: map['videoPath'] as String?,
+      verificationStatus: statusStr != null ? VerificationStatus.fromWire(statusStr) : null,
+      imageUrl: map['imageUrl'] as String?,
+      videoUrl: map['videoUrl'] as String?,
     );
   }
 
