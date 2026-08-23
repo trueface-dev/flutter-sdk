@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'trueface_liveness'
-  s.version          = '0.3.0'
+  s.version          = '0.3.1'
   s.summary          = 'Active + passive liveness detection for Flutter.'
   s.description      = <<-DESC
 AVFoundation + Apple Vision based liveness detection (challenge/response and
@@ -25,7 +25,7 @@ passive anti-spoofing) exposed to Flutter as a platform view.
     if [ -f ../../ios-sdk/build/TrueFaceLiveness.xcframework.zip ]; then
       cp ../../ios-sdk/build/TrueFaceLiveness.xcframework.zip .
     else
-      curl -L -o TrueFaceLiveness.xcframework.zip https://github.com/trueface-dev/ios-artifact/releases/download/v0.3.0/TrueFaceLiveness.xcframework.zip
+      curl -L -o TrueFaceLiveness.xcframework.zip https://github.com/trueface-dev/ios-artifact/releases/download/v0.3.1/TrueFaceLiveness.xcframework.zip
     fi
     unzip -o TrueFaceLiveness.xcframework.zip
     rm TrueFaceLiveness.xcframework.zip

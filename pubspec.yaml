@@ -1,6 +1,6 @@
 name: trueface_liveness
 description: "Camera-based face liveness detection with Google MediaPipe 3D face landmarker, randomized active challenges, and passive anti-spoofing."
-version: 0.3.0
+version: 0.3.1
 homepage: https://trueface.dev
 repository: https://github.com/trueface-dev/flutter-sdk
 

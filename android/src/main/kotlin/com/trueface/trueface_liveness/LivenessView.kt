@@ -299,6 +299,7 @@ internal class LivenessView(
             .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
             .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
             .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+            .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL)
             .setMinFaceSize(0.15f)
             .enableTracking()
             .build()
@@ -449,6 +450,31 @@ internal class LivenessView(
             )) {
                 face.getLandmark(type)?.let { landmarks[type] = it.position }
             }
+
+            var mouthOpenScore: Float? = null
+            val upperLip = face.getContour(com.google.mlkit.vision.face.FaceContour.UPPER_LIP_BOTTOM)?.points
+            val lowerLip = face.getContour(com.google.mlkit.vision.face.FaceContour.LOWER_LIP_TOP)?.points
+            val mouthLeft = face.getLandmark(FaceLandmark.MOUTH_LEFT)?.position
+            val mouthRight = face.getLandmark(FaceLandmark.MOUTH_RIGHT)?.position
+            val mouthBottom = face.getLandmark(FaceLandmark.MOUTH_BOTTOM)?.position
+            val noseBase = face.getLandmark(FaceLandmark.NOSE_BASE)?.position
+
+            if (!upperLip.isNullOrEmpty() && !lowerLip.isNullOrEmpty()) {
+                val topP = upperLip[upperLip.size / 2]
+                val botP = lowerLip[lowerLip.size / 2]
+                val innerH = kotlin.math.hypot((botP.x - topP.x).toDouble(), (botP.y - topP.y).toDouble()).toFloat()
+                val mouthW = if (mouthLeft != null && mouthRight != null) {
+                    kotlin.math.hypot((mouthRight.x - mouthLeft.x).toDouble(), (mouthRight.y - mouthLeft.y).toDouble()).toFloat()
+                } else {
+                    face.boundingBox.width().toFloat() * 0.4f
+                }
+                mouthOpenScore = if (mouthW > 0) (innerH / mouthW) else 0f
+            } else if (mouthBottom != null && noseBase != null) {
+                val mouthDist = kotlin.math.hypot((mouthBottom.x - noseBase.x).toDouble(), (mouthBottom.y - noseBase.y).toDouble()).toFloat()
+                val faceH = face.boundingBox.height().toFloat().coerceAtLeast(1f)
+                mouthOpenScore = (mouthDist / faceH).coerceAtLeast(0f)
+            }
+
             FaceObservation(
                 timestampMs = timestampMs,
                 frameWidth = frameWidth,
@@ -462,6 +488,7 @@ internal class LivenessView(
                 leftEyeOpenProb = face.leftEyeOpenProbability,
                 rightEyeOpenProb = face.rightEyeOpenProbability,
                 smileProb = face.smilingProbability,
+                mouthOpenProb = mouthOpenScore,
                 landmarks = landmarks,
             )
         } else {
