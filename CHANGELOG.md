@@ -1,9 +1,7 @@
-## 0.3.1
-
-* **Open Mouth Challenge Implementation**: Enabled ML Kit contour and landmark detection (`CONTOUR_MODE_ALL` and inner/outer lip ratio analysis) to accurately detect and satisfy the `openMouth` challenge on Android and iOS.
-* **Native SDK Upgrades**: Upgraded underlying native dependencies to `dev.trueface:trueface-liveness:0.3.1` on Android and `0.3.1` on iOS.
 
 ## 0.3.0
+* **Open Mouth Challenge Implementation**: Enabled ML Kit contour and landmark detection (`CONTOUR_MODE_ALL` and inner/outer lip ratio analysis) to accurately detect and satisfy the `openMouth` challenge on Android and iOS.
+* **Native SDK Upgrades**: Upgraded underlying native dependencies to `dev.trueface:trueface-liveness:0.3.1` on Android and `0.3.1` on iOS.
 
 * **Dynamic Luminance & Gating Checks**: Integrated dynamic camera frame luminance (luma) calculation to detect low-light/dark room environments as well as excessive glare/overexposure, preventing challenges from running until lighting conditions are optimal.
 * **Native SDK Upgrades**: Upgraded underlying native dependencies to `dev.trueface:trueface-liveness:0.3.0` on Android and `v0.3.0` on iOS.
