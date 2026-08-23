@@ -853,7 +853,7 @@
           {
             "kind": "Function",
             "name": "performVerification",
-            "printedName": "performVerification(backendUrl:verificationId:publicKey:clientSecret:imageData:videoData:completedChallenges:onDeviceSpoofScore:onProgress:onSuccess:onError:)",
+            "printedName": "performVerification(backendUrl:verificationId:publicKey:clientSecret:imageData:videoData:completedChallenges:onDeviceSpoofScore:flashExecuted:onProgress:onSuccess:onError:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -938,7 +938,15 @@
                     "usr": "s:Sd"
                   }
                 ],
+                "hasDefaultArg": true,
                 "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "hasDefaultArg": true,
+                "usr": "s:Sb"
               },
               {
                 "kind": "TypeFunc",
@@ -1030,8 +1038,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:16TrueFaceLiveness24HostedVerificationClientC07performE010backendUrl14verificationId9publicKey12clientSecret9imageData05videoQ019completedChallenges18onDeviceSpoofScore0U8Progress0U7Success0U5ErrorySS_S3S10Foundation0Q0VSgASSaySSGSdSgySS_SdtcySScySS_SSSgtctFZ",
-            "mangledName": "$s16TrueFaceLiveness24HostedVerificationClientC07performE010backendUrl14verificationId9publicKey12clientSecret9imageData05videoQ019completedChallenges18onDeviceSpoofScore0U8Progress0U7Success0U5ErrorySS_S3S10Foundation0Q0VSgASSaySSGSdSgySS_SdtcySScySS_SSSgtctFZ",
+            "usr": "s:16TrueFaceLiveness24HostedVerificationClientC07performE010backendUrl14verificationId9publicKey12clientSecret9imageData05videoQ019completedChallenges18onDeviceSpoofScore13flashExecuted0U8Progress0U7Success0U5ErrorySS_S3S10Foundation0Q0VSgATSaySSGSdSgSbySS_SdtcySScySS_SSSgtctFZ",
+            "mangledName": "$s16TrueFaceLiveness24HostedVerificationClientC07performE010backendUrl14verificationId9publicKey12clientSecret9imageData05videoQ019completedChallenges18onDeviceSpoofScore13flashExecuted0U8Progress0U7Success0U5ErrorySS_S3S10Foundation0Q0VSgATSaySSGSdSgSbySS_SdtcySScySS_SSSgtctFZ",
             "moduleName": "TrueFaceLiveness",
             "static": true,
             "declAttributes": [
@@ -4274,50 +4282,6 @@
           },
           {
             "kind": "Var",
-            "name": "grpcBaseUrl",
-            "printedName": "grpcBaseUrl",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:16TrueFaceLiveness0aB6ConfigV11grpcBaseUrlSSvp",
-            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV11grpcBaseUrlSSvp",
-            "moduleName": "TrueFaceLiveness",
-            "declAttributes": [
-              "HasStorage",
-              "AccessControl"
-            ],
-            "isLet": true,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:16TrueFaceLiveness0aB6ConfigV11grpcBaseUrlSSvg",
-                "mangledName": "$s16TrueFaceLiveness0aB6ConfigV11grpcBaseUrlSSvg",
-                "moduleName": "TrueFaceLiveness",
-                "implicit": true,
-                "accessorKind": "get"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
             "name": "publicKey",
             "printedName": "publicKey",
             "children": [
@@ -4643,20 +4607,13 @@
           {
             "kind": "Constructor",
             "name": "init",
-            "printedName": "init(backendBaseUrl:grpcBaseUrl:publicKey:verificationId:clientSecret:challengeCount:showInstructions:showPrompt:colors:)",
+            "printedName": "init(backendBaseUrl:publicKey:verificationId:clientSecret:challengeCount:showInstructions:showPrompt:colors:)",
             "children": [
               {
                 "kind": "TypeNominal",
                 "name": "TrueFaceConfig",
                 "printedName": "TrueFaceLiveness.TrueFaceConfig",
                 "usr": "s:16TrueFaceLiveness0aB6ConfigV"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "hasDefaultArg": true,
-                "usr": "s:SS"
               },
               {
                 "kind": "TypeNominal",
@@ -4721,8 +4678,8 @@
               }
             ],
             "declKind": "Constructor",
-            "usr": "s:16TrueFaceLiveness0aB6ConfigV14backendBaseUrl04grpcfG09publicKey14verificationId12clientSecret14challengeCount16showInstructions0Q6Prompt6colorsACSS_S4SSiSbSgSbAA0aB6ColorsVtcfc",
-            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14backendBaseUrl04grpcfG09publicKey14verificationId12clientSecret14challengeCount16showInstructions0Q6Prompt6colorsACSS_S4SSiSbSgSbAA0aB6ColorsVtcfc",
+            "usr": "s:16TrueFaceLiveness0aB6ConfigV14backendBaseUrl9publicKey14verificationId12clientSecret14challengeCount16showInstructions0P6Prompt6colorsACSS_S3SSiSbSgSbAA0aB6ColorsVtcfc",
+            "mangledName": "$s16TrueFaceLiveness0aB6ConfigV14backendBaseUrl9publicKey14verificationId12clientSecret14challengeCount16showInstructions0P6Prompt6colorsACSS_S3SSiSbSgSbAA0aB6ColorsVtcfc",
             "moduleName": "TrueFaceLiveness",
             "declAttributes": [
               "AccessControl"
@@ -5175,6 +5132,27 @@
       "value": "600"
     },
     {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/HostedVerificationClient.swift",
+      "kind": "BooleanLiteral",
+      "offset": 609,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/HostedVerificationClient.swift",
+      "kind": "IntegerLiteral",
+      "offset": 6020,
+      "length": 1,
+      "value": "3"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/HostedVerificationClient.swift",
+      "kind": "FloatLiteral",
+      "offset": 6050,
+      "length": 3,
+      "value": "1.0"
+    },
+    {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
       "offset": 1651,
@@ -5207,180 +5185,187 @@
       "kind": "IntegerLiteral",
       "offset": 1850,
       "length": 2,
-      "value": "40"
+      "value": "45"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
       "offset": 1892,
+      "length": 3,
+      "value": "230"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1935,
       "length": 2,
       "value": "18"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 1941,
+      "offset": 1984,
       "length": 3,
       "value": "0.2"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2013,
+      "offset": 2056,
       "length": 4,
       "value": "0.20"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2052,
+      "offset": 2095,
       "length": 4,
       "value": "0.35"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2089,
+      "offset": 2132,
       "length": 4,
       "value": "0.35"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2129,
+      "offset": 2172,
       "length": 2,
       "value": "14"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2169,
+      "offset": 2212,
       "length": 2,
       "value": "10"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2211,
+      "offset": 2254,
       "length": 1,
       "value": "3"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2254,
+      "offset": 2297,
       "length": 1,
       "value": "2"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2301,
+      "offset": 2344,
       "length": 4,
       "value": "0.10"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2353,
+      "offset": 2396,
       "length": 4,
       "value": "0.05"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2412,
+      "offset": 2455,
       "length": 3,
       "value": "0.8"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2467,
+      "offset": 2510,
       "length": 3,
       "value": "3.0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2525,
+      "offset": 2568,
       "length": 3,
       "value": "0.4"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "FloatLiteral",
-      "offset": 2579,
+      "offset": 2622,
       "length": 3,
       "value": "3.0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2813,
+      "offset": 2856,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "Array",
-      "offset": 2863,
+      "offset": 2906,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2916,
+      "offset": 2959,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 2963,
+      "offset": 3006,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "IntegerLiteral",
-      "offset": 3051,
+      "offset": 3094,
       "length": 2,
       "value": "-1"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "BooleanLiteral",
-      "offset": 3082,
+      "offset": 3125,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "BooleanLiteral",
-      "offset": 3164,
+      "offset": 3207,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "BooleanLiteral",
-      "offset": 3203,
+      "offset": 3246,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "BooleanLiteral",
-      "offset": 3238,
+      "offset": 3281,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/LivenessStateMachine.swift",
       "kind": "BooleanLiteral",
-      "offset": 3272,
+      "offset": 3315,
       "length": 5,
       "value": "false"
     },
@@ -5779,77 +5764,105 @@
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "StringLiteral",
-      "offset": 2880,
+      "offset": 2845,
       "length": 26,
       "value": "\"https:\/\/api.trueface.dev\""
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
-      "kind": "StringLiteral",
-      "offset": 2938,
-      "length": 31,
-      "value": "\"https:\/\/realtime.trueface.dev\""
-    },
-    {
-      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "IntegerLiteral",
-      "offset": 3090,
+      "offset": 2992,
       "length": 1,
       "value": "3"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 3159,
+      "offset": 3061,
       "length": 4,
       "value": "true"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "StringLiteral",
-      "offset": 3913,
+      "offset": 3776,
       "length": 20,
       "value": "\"com.trueface.video\""
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 4534,
+      "offset": 3997,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "Array",
+      "offset": 4044,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 4086,
+      "length": 3,
+      "value": "200"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 4176,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 4577,
+      "offset": 4664,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 4707,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "IntegerLiteral",
-      "offset": 4618,
+      "offset": 4748,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "IntegerLiteral",
-      "offset": 4809,
+      "offset": 4979,
+      "length": 2,
+      "value": "-1"
+    },
+    {
+      "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 5027,
       "length": 2,
       "value": "-1"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "Array",
-      "offset": 4907,
+      "offset": 5125,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/mac\/workspace\/flutter\/liveness\/ios-sdk\/Sources\/TrueFaceLiveness\/TrueFaceLivenessViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 5062,
+      "offset": 5280,
       "length": 4,
       "value": "true"
     }

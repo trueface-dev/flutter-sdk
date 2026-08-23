@@ -44,7 +44,7 @@ final public class HeuristicAntiSpoofDetector : TrueFaceLiveness.AntiSpoofDetect
   public typealias ProgressCallback = (Swift.String, Swift.Double) -> Swift.Void
   public typealias SuccessCallback = (Swift.String) -> Swift.Void
   public typealias ErrorCallback = (Swift.String, Swift.String?) -> Swift.Void
-  public static func performVerification(backendUrl: Swift.String, verificationId: Swift.String, publicKey: Swift.String, clientSecret: Swift.String, imageData: Foundation.Data?, videoData: Foundation.Data?, completedChallenges: [Swift.String], onDeviceSpoofScore: Swift.Double?, onProgress: @escaping TrueFaceLiveness.HostedVerificationClient.ProgressCallback, onSuccess: @escaping TrueFaceLiveness.HostedVerificationClient.SuccessCallback, onError: @escaping TrueFaceLiveness.HostedVerificationClient.ErrorCallback)
+  public static func performVerification(backendUrl: Swift.String, verificationId: Swift.String, publicKey: Swift.String, clientSecret: Swift.String, imageData: Foundation.Data?, videoData: Foundation.Data?, completedChallenges: [Swift.String], onDeviceSpoofScore: Swift.Double? = nil, flashExecuted: Swift.Bool = true, onProgress: @escaping TrueFaceLiveness.HostedVerificationClient.ProgressCallback, onSuccess: @escaping TrueFaceLiveness.HostedVerificationClient.SuccessCallback, onError: @escaping TrueFaceLiveness.HostedVerificationClient.ErrorCallback)
   @objc deinit
 }
 public struct FaceObservation {
@@ -126,7 +126,6 @@ public struct TrueFaceColors {
 }
 public struct TrueFaceConfig {
   public let backendBaseUrl: Swift.String
-  public let grpcBaseUrl: Swift.String
   public let publicKey: Swift.String
   public let verificationId: Swift.String
   public let clientSecret: Swift.String
@@ -134,7 +133,7 @@ public struct TrueFaceConfig {
   public let showInstructions: Swift.Bool?
   public let showPrompt: Swift.Bool
   public let colors: TrueFaceLiveness.TrueFaceColors
-  public init(backendBaseUrl: Swift.String = "https://api.trueface.dev", grpcBaseUrl: Swift.String = "https://realtime.trueface.dev", publicKey: Swift.String, verificationId: Swift.String, clientSecret: Swift.String, challengeCount: Swift.Int = 3, showInstructions: Swift.Bool? = nil, showPrompt: Swift.Bool = true, colors: TrueFaceLiveness.TrueFaceColors = TrueFaceColors())
+  public init(backendBaseUrl: Swift.String = "https://api.trueface.dev", publicKey: Swift.String, verificationId: Swift.String, clientSecret: Swift.String, challengeCount: Swift.Int = 3, showInstructions: Swift.Bool? = nil, showPrompt: Swift.Bool = true, colors: TrueFaceLiveness.TrueFaceColors = TrueFaceColors())
 }
 @objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class TrueFaceLivenessViewController : UIKit.UIViewController, AVFoundation.AVCaptureVideoDataOutputSampleBufferDelegate {
   @_Concurrency.MainActor @preconcurrency weak final public var delegate: (any TrueFaceLiveness.TrueFaceLivenessDelegate)?

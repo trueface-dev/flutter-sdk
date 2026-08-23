@@ -1,3 +1,10 @@
+## 0.3.0
+
+* **Dynamic Luminance & Gating Checks**: Integrated dynamic camera frame luminance (luma) calculation to detect low-light/dark room environments as well as excessive glare/overexposure, preventing challenges from running until lighting conditions are optimal.
+* **Native SDK Upgrades**: Upgraded underlying native dependencies to `dev.trueface:trueface-liveness:0.3.0` on Android and `v0.3.0` on iOS.
+* **Video Encoding & Buffer Pipeline**: Realigned native Android and iOS media recording pipelines with clean surface encoding and synchronized frame acquisition.
+* **Human-Friendly Gating & Challenge Hints**: Updated challenge and positioning hint prompts for natural user instructions.
+
 ## 0.2.9
 
 * **Attentive-Only Video Recording**: Refactored the native recording sessions on both iOS and Android to only begin capturing/storing video frames once the user has become attentive and the first liveness challenge has officially started.

@@ -11,7 +11,7 @@ enum CameraLensDirection { front, back }
 /// model enabled.
 class LivenessConfig {
   const LivenessConfig({
-    this.challengePool = LivenessChallenge.values,
+    this.challengePool = LivenessChallenge.selectable,
     this.numberOfChallenges = 3,
     this.randomizeOrder = true,
     this.challengeTimeout = const Duration(seconds: 12),
