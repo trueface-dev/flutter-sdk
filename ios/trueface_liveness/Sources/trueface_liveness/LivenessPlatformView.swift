@@ -66,13 +66,10 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   private var machine: TrueFaceLiveness.LivenessStateMachine
   private var resultDelivered = false
   private var cameraConfigured = false
-  private var lastFacePixelBuffer: CVPixelBuffer?
-  private var lastFaceBox: CGRect?
-  private var bestAttentivePixelBuffer: CVPixelBuffer?
-  private var bestAttentiveFaceBox: CGRect?
+  private var lastCapturedJPEG: (data: Data, width: Int, height: Int)?
+  private var bestAttentiveJPEG: (data: Data, width: Int, height: Int)?
   private var bestAttentiveScore: CGFloat = -1
-  private var bestEyesOpenPixelBuffer: CVPixelBuffer?
-  private var bestEyesOpenFaceBox: CGRect?
+  private var bestEyesOpenJPEG: (data: Data, width: Int, height: Int)?
   private var bestEyesOpenScore: CGFloat = -1
   private var lastDiagAt: TimeInterval = 0  // TODO: remove after calibration
   private var lastSmileDebug = ""  // TODO: remove after calibration
@@ -359,29 +356,29 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       let face = faces[0]
       let stats = grayStats(pixelBuffer: pixelBuffer, faceBox: face.box)
       luminance = stats?.luma
-      lastFacePixelBuffer = pixelBuffer
-      lastFaceBox = face.box
 
       let leftOpen = face.leftEyeOpen ?? 0.8
       let rightOpen = face.rightEyeOpen ?? 0.8
       let absY = abs(face.eulerY)
       let absX = abs(face.eulerX)
 
-      // Evaluate face attentiveness (eyes open >= 0.70, head frontal <= 12 deg)
-      if leftOpen >= 0.70 && rightOpen >= 0.70 && absY <= 12 && absX <= 12 {
-        let score = (leftOpen + rightOpen) - (absY + absX) / 100.0
-        if score > bestAttentiveScore {
-          bestAttentiveScore = score
-          bestAttentivePixelBuffer = pixelBuffer
-          bestAttentiveFaceBox = face.box
-        }
-      }
+      if let encoded = encodeFaceCrop(pixelBuffer: pixelBuffer, faceBox: face.box) {
+        lastCapturedJPEG = encoded
 
-      let eyesScore = leftOpen + rightOpen
-      if eyesScore > bestEyesOpenScore {
-        bestEyesOpenScore = eyesScore
-        bestEyesOpenPixelBuffer = pixelBuffer
-        bestEyesOpenFaceBox = face.box
+        let eyesScore = leftOpen + rightOpen
+        if eyesScore > bestEyesOpenScore {
+          bestEyesOpenScore = eyesScore
+          bestEyesOpenJPEG = encoded
+        }
+
+        // Evaluate face attentiveness on Apple Vision (eyes open >= 0.25, head frontal <= 12 deg)
+        if leftOpen >= 0.25 && rightOpen >= 0.25 && absY <= 12 && absX <= 12 {
+          let score = eyesScore - (absY + absX) / 100.0
+          if score > bestAttentiveScore {
+            bestAttentiveScore = score
+            bestAttentiveJPEG = encoded
+          }
+        }
       }
 
       let current = machine.currentChallenge
@@ -646,11 +643,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   }
 
   private func finalizeAndDeliver(spoofScore: Double?) {
-    guard
-      let pixelBuffer = bestAttentivePixelBuffer ?? bestEyesOpenPixelBuffer ?? lastFacePixelBuffer,
-      let faceBox = bestAttentiveFaceBox ?? bestEyesOpenFaceBox ?? lastFaceBox,
-      let encoded = encodeFaceCrop(pixelBuffer: pixelBuffer, faceBox: faceBox)
-    else {
+    guard let encoded = bestAttentiveJPEG ?? bestEyesOpenJPEG ?? lastCapturedJPEG else {
       finish(failureReason: "unknown", spoofScore: spoofScore)
       return
     }
@@ -745,14 +738,11 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       timeoutMs: config.challengeTimeoutMs
     )
     antiSpoof.reset()
-    bestAttentivePixelBuffer = nil
-    bestAttentiveFaceBox = nil
+    lastCapturedJPEG = nil
+    bestAttentiveJPEG = nil
     bestAttentiveScore = -1
-    bestEyesOpenPixelBuffer = nil
-    bestEyesOpenFaceBox = nil
+    bestEyesOpenJPEG = nil
     bestEyesOpenScore = -1
-    lastFacePixelBuffer = nil
-    lastFaceBox = nil
     resultDelivered = false
     discardRecording()
     resetRecordingState()
