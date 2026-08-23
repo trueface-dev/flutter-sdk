@@ -680,38 +680,42 @@ internal class LivenessView(
 
     override fun onSessionEvent(event: Map<String, Any>) {
         if (disposed || resultSent) return
-        if (event["type"] == "challengeStarted" && config.recordVideo && recording == null) {
-            startVideoRecording()
+        mainHandler.post {
+            if (disposed || resultSent) return@post
+            if (event["type"] == "challengeStarted" && config.recordVideo && recording == null) {
+                startVideoRecording()
+            }
+            channel.invokeMethod("onEvent", event)
         }
-        channel.invokeMethod("onEvent", event)
     }
 
     override fun onChallengesPassed(completed: List<String>) {
         if (disposed || resultSent) return
-        val score: Double? =
-            if (config.enablePassiveAntiSpoof) antiSpoof.computeScore() else null
-        if (score != null && score < config.spoofScoreThreshold) {
-            if (config.recordVideo) stopAndDiscardVideo()
-            sendResult(
-                mapOf(
-                    "success" to false,
-                    "failureReason" to "spoofDetected",
-                    "spoofScore" to score,
-                    "completed" to completed,
-                ),
-            )
-            return
-        }
+        mainHandler.post {
+            if (disposed || resultSent) return@post
+            val score: Double? =
+                if (config.enablePassiveAntiSpoof) antiSpoof.computeScore() else null
+            if (score != null && score < config.spoofScoreThreshold) {
+                if (config.recordVideo) stopAndDiscardVideo()
+                sendResult(
+                    mapOf(
+                        "success" to false,
+                        "failureReason" to "spoofDetected",
+                        "spoofScore" to score,
+                        "completed" to completed,
+                    ),
+                )
+                return@post
+            }
 
-        val colorsToFlash = activeFlashColors
-        if (colorsToFlash.isNotEmpty()) {
-            mainHandler.post {
+            val colorsToFlash = activeFlashColors
+            if (colorsToFlash.isNotEmpty()) {
                 runFlashChallenge(colorsToFlash, activeFlashDurationMs) {
                     captureAndFinish(score, completed)
                 }
+            } else {
+                captureAndFinish(score, completed)
             }
-        } else {
-            captureAndFinish(score, completed)
         }
     }
 
@@ -763,8 +767,11 @@ internal class LivenessView(
 
     override fun onSessionFailed(reason: String, completed: List<String>) {
         if (disposed) return
-        if (config.recordVideo) stopAndDiscardVideo()
-        sendResult(failureMap(reason, completed))
+        mainHandler.post {
+            if (disposed) return@post
+            if (config.recordVideo) stopAndDiscardVideo()
+            sendResult(failureMap(reason, completed))
+        }
     }
 
     // ---------------------------------------------------------------- capture
@@ -947,11 +954,11 @@ internal class LivenessView(
     private fun stopAndDiscardVideo() {
         try {
             recording?.stop()
+            recording = null
+            videoFile?.delete()
+            videoFile = null
         } catch (_: Exception) {
         }
-        recording = null
-        videoFile?.let { runCatching { it.delete() } }
-        videoFile = null
     }
 
     /** Encodes a YUV_420_888 [ImageProxy] to an unrotated JPEG. */
@@ -1062,6 +1069,8 @@ internal class LivenessView(
         if (resultSent || disposed) return
         resultSent = true
         session?.stop()
-        channel.invokeMethod("onResult", map)
+        mainHandler.post {
+            channel.invokeMethod("onResult", map)
+        }
     }
 }
