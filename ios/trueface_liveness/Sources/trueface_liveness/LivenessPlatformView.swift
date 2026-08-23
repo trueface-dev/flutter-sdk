@@ -96,6 +96,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   private var dynamicFlashColors: [UIColor] = []
   private var dynamicFlashDurationMs: Int = 200
   private var lastLightingHintAt: TimeInterval = 0
+  private var warmupFrameCount = 0
   private var awaitingAttentiveFrame = false
   private var awaitingAttentiveDeadline: TimeInterval = 0
   private var cachedSpoofScore: Double?
@@ -415,7 +416,9 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       luminance = grayStats(pixelBuffer: pixelBuffer, faceBox: centerBox)?.luma
     }
 
-    if let luma = luminance {
+    warmupFrameCount += 1
+
+    if warmupFrameCount >= 8, let luma = luminance {
       if luma < 55.0 && now - lastLightingHintAt > 0.8 {
         lastLightingHintAt = now
         sendEvent(["type": "hint", "code": "faceTooDark"])
@@ -780,6 +783,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     bestAttentiveScore = -1
     bestEyesOpenJPEG = nil
     bestEyesOpenScore = -1
+    warmupFrameCount = 0
     awaitingAttentiveFrame = false
     awaitingAttentiveDeadline = 0
     cachedSpoofScore = nil

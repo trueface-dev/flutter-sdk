@@ -351,6 +351,7 @@ internal class LivenessView(
         bestEyesOpenJpeg = null
         bestEyesOpenScore = -1f
         lastFrameJpeg = null
+        frameCounter = 0
         awaitingAttentiveFrame = false
         awaitingAttentiveDeadline = 0L
         pendingPassedScore = null
@@ -632,12 +633,14 @@ internal class LivenessView(
         if (config.enablePassiveAntiSpoof) antiSpoof.onObservation(obs, lumaCrop)
 
         val now = SystemClock.elapsedRealtime()
-        if (meanLuma < 55.0 && now - lastLightingHintAt > 800) {
-            lastLightingHintAt = now
-            onSessionEvent(mapOf("type" to "hint", "code" to "faceTooDark"))
-        } else if (meanLuma > 230.0 && now - lastLightingHintAt > 800) {
-            lastLightingHintAt = now
-            onSessionEvent(mapOf("type" to "hint", "code" to "faceTooBright"))
+        if (frameCounter >= 8) {
+            if (meanLuma < 55.0 && now - lastLightingHintAt > 800) {
+                lastLightingHintAt = now
+                onSessionEvent(mapOf("type" to "hint", "code" to "faceTooDark"))
+            } else if (meanLuma > 230.0 && now - lastLightingHintAt > 800) {
+                lastLightingHintAt = now
+                onSessionEvent(mapOf("type" to "hint", "code" to "faceTooBright"))
+            }
         }
 
         if (awaitingAttentiveFrame) {
