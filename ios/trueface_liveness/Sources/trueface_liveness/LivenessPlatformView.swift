@@ -354,6 +354,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     let leftOpen = eyeOpenness(leftEye)
     let rightOpen = eyeOpenness(rightEye)
     let smile = smileScore(lips: lips, leftEye: leftEye, rightEye: rightEye)
+    let mouthOpen = computeMouthOpen(face: obs)
 
     return TrueFaceLiveness.FaceObservation(
       box: box,
@@ -362,10 +363,33 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       leftEyeOpen: leftOpen,
       rightEyeOpen: rightOpen,
       smiling: smile,
+      mouthOpen: mouthOpen,
       nose: centroid(noseP),
       leftCheek: contour.min(by: { $0.x < $1.x }),
       rightCheek: contour.max(by: { $0.x < $1.x })
     )
+  }
+
+  private func computeMouthOpen(face: VNFaceObservation) -> CGFloat {
+    if let inner = face.landmarks?.innerLips?.normalizedPoints, inner.count >= 4 {
+      let pTop = inner[inner.count / 4]
+      let pBot = inner[(3 * inner.count) / 4]
+      let innerH = hypot(pBot.x - pTop.x, pBot.y - pTop.y)
+      let pLeft = inner[0]
+      let pRight = inner[inner.count / 2]
+      let innerW = hypot(pRight.x - pLeft.x, pRight.y - pLeft.y)
+      return innerW > 0 ? (innerH / innerW) : 0.0
+    } else if let outer = face.landmarks?.outerLips?.normalizedPoints, outer.count >= 4 {
+      let pTop = outer[outer.count / 4]
+      let pBot = outer[(3 * outer.count) / 4]
+      let outerH = hypot(pBot.x - pTop.x, pBot.y - pTop.y)
+      let pLeft = outer[0]
+      let pRight = outer[outer.count / 2]
+      let outerW = hypot(pRight.x - pLeft.x, pRight.y - pLeft.y)
+      let ratio = outerW > 0 ? (outerH / outerW) : 0.0
+      return max(0, ratio - 0.38)
+    }
+    return 0.0
   }
 
   private func degrees(_ radians: NSNumber?) -> CGFloat {

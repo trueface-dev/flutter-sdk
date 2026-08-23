@@ -70,7 +70,7 @@ struct LivenessNativeConfig {
     // requested only nod.
     let requested = pool.isEmpty ? Challenge.allCases : pool
     let usable = requested.filter { $0 != .nod }
-    challengePool = usable.isEmpty ? [.blink, .smile, .turnLeft, .turnRight] : usable
+    challengePool = usable.isEmpty ? [.blink, .smile, .turnLeft, .turnRight, .openMouth] : usable
     numberOfChallenges = max(1, map["numberOfChallenges"] as? Int ?? 3)
     randomizeOrder = map["randomizeOrder"] as? Bool ?? true
     challengeTimeoutMs = map["challengeTimeoutMs"] as? Int ?? 12000
