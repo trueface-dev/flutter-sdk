@@ -457,8 +457,9 @@ internal class LivenessView(
         lastFrameJpeg = null
         val file = File(appContext.cacheDir, "liveness_${System.currentTimeMillis()}.mp4")
         videoFile = file
+        val maxDuration = maxOf(config.videoMaxDurationMs, 20000L)
         val options = FileOutputOptions.Builder(file)
-            .setDurationLimitMillis(config.videoMaxDurationMs)
+            .setDurationLimitMillis(maxDuration)
             .build()
         // No .withAudioEnabled() — video only, so no RECORD_AUDIO permission.
         recording = vc.output
@@ -744,7 +745,9 @@ internal class LivenessView(
             try {
                 targetView.removeView(flashOverlay)
             } catch (_: Exception) {}
-            onComplete()
+            mainHandler.postDelayed({
+                onComplete()
+            }, 200L)
         }
 
         fun flashStep(index: Int) {
@@ -754,7 +757,7 @@ internal class LivenessView(
             }
 
             val color = colors[index]
-            val semiTransparent = Color.argb(125, Color.red(color), Color.green(color), Color.blue(color))
+            val semiTransparent = Color.argb(135, Color.red(color), Color.green(color), Color.blue(color))
             flashOverlay.setBackgroundColor(semiTransparent)
 
             mainHandler.postDelayed({

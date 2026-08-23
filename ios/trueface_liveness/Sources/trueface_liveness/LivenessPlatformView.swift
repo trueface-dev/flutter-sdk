@@ -612,7 +612,9 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
         overlay.backgroundColor = .clear
       }) { _ in
         overlay.removeFromSuperview()
-        completion()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
+          completion()
+        }
       }
       return
     }
@@ -771,8 +773,9 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     if let input = writerInput, input.isReadyForMoreMediaData {
       pixelAdaptor?.append(pixelBuffer, withPresentationTime: pts)
     }
+    let maxDur = max(Double(config.videoMaxDurationMs) / 1000.0, 20.0)
     if let first = firstFramePTS,
-      CMTimeGetSeconds(CMTimeSubtract(pts, first)) >= Double(config.videoMaxDurationMs) / 1000
+      CMTimeGetSeconds(CMTimeSubtract(pts, first)) >= maxDur
     {
       finalizeRecording(completion: nil)  // cap reached; keep the file
     }
