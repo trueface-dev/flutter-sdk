@@ -39,6 +39,7 @@ import androidx.camera.video.VideoCapture
 import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.PreviewView
 import java.io.File
+import java.nio.ByteBuffer
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -663,7 +664,6 @@ internal class LivenessView(
         if (config.enablePassiveAntiSpoof) antiSpoof.onObservation(obs, lumaCrop)
 
         val now = SystemClock.elapsedRealtime()
-        val isTooDark = frameCounter >= 8 && meanLuma < 75.0
         if (frameCounter >= 8) {
             if (isTooDark && now - lastLightingHintAt > 800) {
                 lastLightingHintAt = now
