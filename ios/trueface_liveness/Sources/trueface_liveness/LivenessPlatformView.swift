@@ -91,6 +91,9 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
   private var firstFramePTS: CMTime?
   private var videoURL: URL?
 
+  private var dynamicFlashColors: [UIColor] = []
+  private var dynamicFlashDurationMs: Int = 200
+
   init(
     frame: CGRect,
     viewId: Int64,
@@ -131,7 +134,73 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       }
     }
 
+    fetchBackendSessionConfig()
     requestCameraAccess()
+  }
+
+  private func fetchBackendSessionConfig() {
+    guard config.hasBackend,
+          let baseUrl = config.backendBaseUrl,
+          let vId = config.verificationId,
+          let pubKey = config.publicKey,
+          let sec = config.clientSecret,
+          let url = URL(string: "\(baseUrl.trimmingCharacters(in: CharacterSet(charactersIn: "/")))/v1/sessions/\(vId)/start") else {
+      return
+    }
+
+    var req = URLRequest(url: url)
+    req.httpMethod = "POST"
+    req.setValue(pubKey, forHTTPHeaderField: "x-public-key")
+    req.setValue(sec, forHTTPHeaderField: "x-client-secret")
+    req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    req.httpBody = try? JSONSerialization.data(withJSONObject: ["clientSecret": sec])
+
+    URLSession.shared.dataTask(with: req) { [weak self] data, _, _ in
+      guard let self = self, let data = data,
+            let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
+        return
+      }
+
+      var newChallenges: [Challenge]?
+      if let chArr = json["challenges"] as? [String] {
+        let parsed = chArr.compactMap { Challenge(rawValue: $0) }.filter { $0 != .nod }
+        if !parsed.isEmpty {
+          newChallenges = parsed
+        }
+      }
+
+      var flashColors: [UIColor] = []
+      var durationMs = 200
+      if let flashObj = json["flashConfig"] as? [String: Any],
+         let enabled = flashObj["enabled"] as? Bool, enabled,
+         let hexes = flashObj["colors"] as? [String] {
+        durationMs = flashObj["durationMsPerColor"] as? Int ?? 200
+        flashColors = hexes.compactMap { hex -> UIColor? in
+          var cString: String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+          if cString.hasPrefix("#") { cString.remove(at: cString.startIndex) }
+          guard cString.count == 6 else { return nil }
+          var rgbValue: UInt64 = 0
+          Scanner(string: cString).scanHexInt64(&rgbValue)
+          return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: 1.0
+          )
+        }
+      }
+
+      self.videoQueue.async {
+        if let newChallenges {
+          self.machine = TrueFaceLiveness.LivenessStateMachine(
+            challenges: newChallenges,
+            timeoutMs: self.config.challengeTimeoutMs
+          )
+        }
+        self.dynamicFlashColors = flashColors
+        self.dynamicFlashDurationMs = durationMs
+      }
+    }.resume()
   }
 
   func view() -> UIView { previewView }
@@ -509,9 +578,12 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       }
     }
 
-    if !config.flashColors.isEmpty {
+    let activeColors = !config.flashColors.isEmpty ? config.flashColors : dynamicFlashColors
+    let activeDuration = !config.flashColors.isEmpty ? config.flashDurationMs : dynamicFlashDurationMs
+
+    if !activeColors.isEmpty {
       DispatchQueue.main.async {
-        self.runFlashChallenge {
+        self.runFlashChallenge(colors: activeColors, durationMs: activeDuration) {
           self.videoQueue.async {
             self.finalizeAndDeliver(spoofScore: spoofScore)
           }
@@ -522,18 +594,20 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     }
   }
 
-  private func runFlashChallenge(completion: @escaping () -> Void) {
+  private func runFlashChallenge(colors: [UIColor], durationMs: Int, completion: @escaping () -> Void) {
     sendEvent(["type": "instruction", "instruction": "Hold steady — analyzing reflection..."])
-    let overlay = UIView(frame: previewView.bounds)
+    let targetView = previewView.window ?? previewView
+    let overlay = UIView(frame: targetView.bounds)
     overlay.backgroundColor = .clear
     overlay.isUserInteractionEnabled = false
-    previewView.addSubview(overlay)
+    targetView.addSubview(overlay)
+    targetView.bringSubviewToFront(overlay)
 
-    executeFlashStep(index: 0, overlay: overlay, completion: completion)
+    executeFlashStep(index: 0, colors: colors, durationMs: durationMs, overlay: overlay, targetView: targetView, completion: completion)
   }
 
-  private func executeFlashStep(index: Int, overlay: UIView, completion: @escaping () -> Void) {
-    guard index < config.flashColors.count else {
+  private func executeFlashStep(index: Int, colors: [UIColor], durationMs: Int, overlay: UIView, targetView: UIView, completion: @escaping () -> Void) {
+    guard index < colors.count else {
       UIView.animate(withDuration: 0.12, animations: {
         overlay.backgroundColor = .clear
       }) { _ in
@@ -543,14 +617,14 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
       return
     }
 
-    let color = config.flashColors[index]
-    let duration = Double(config.flashDurationMs) / 1000.0
+    let color = colors[index]
+    let duration = Double(durationMs) / 1000.0
 
     UIView.animate(withDuration: 0.08, animations: {
-      overlay.backgroundColor = color.withAlphaComponent(0.40)
+      overlay.backgroundColor = color.withAlphaComponent(0.45)
     }) { _ in
       DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
-        self?.executeFlashStep(index: index + 1, overlay: overlay, completion: completion)
+        self?.executeFlashStep(index: index + 1, colors: colors, durationMs: durationMs, overlay: overlay, targetView: targetView, completion: completion)
       }
     }
   }

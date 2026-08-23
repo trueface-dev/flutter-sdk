@@ -17,6 +17,7 @@ import android.os.SystemClock
 import android.util.Base64
 import android.util.Size
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -202,6 +203,10 @@ internal class LivenessView(
     @Volatile private var bestEyesOpenRotation = 0
     @Volatile private var bestEyesOpenScore = -1f
 
+    private var dynamicChallenges: List<String>? = null
+    private var dynamicFlashColors: List<String> = emptyList()
+    private var dynamicFlashDurationMs: Long = 200L
+
     override val lifecycle: Lifecycle
         get() = lifecycleRegistry
 
@@ -248,18 +253,81 @@ internal class LivenessView(
 
     // -------------------------------------------------------------- lifecycle
 
+    private fun fetchBackendSessionConfig(onReady: () -> Unit) {
+        if (!config.hasBackend) {
+            onReady()
+            return
+        }
+        val backendUrl = config.backendBaseUrl?.removeSuffix("/") ?: run { onReady(); return }
+        val verificationId = config.verificationId ?: run { onReady(); return }
+        val publicKey = config.publicKey ?: run { onReady(); return }
+        val clientSecret = config.clientSecret ?: run { onReady(); return }
+
+        val client = OkHttpClient()
+        val req = Request.Builder()
+            .url("$backendUrl/v1/sessions/$verificationId/start")
+            .post(JSONObject().put("clientSecret", clientSecret).toString().toRequestBody("application/json".toMediaType()))
+            .addHeader("x-public-key", publicKey)
+            .addHeader("x-client-secret", clientSecret)
+            .build()
+
+        client.newCall(req).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                mainHandler.post { onReady() }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    val respStr = response.body?.string() ?: "{}"
+                    val json = JSONObject(respStr)
+                    val challengesJson = json.optJSONArray("challenges")
+                    if (challengesJson != null && challengesJson.length() > 0) {
+                        val list = mutableListOf<String>()
+                        for (i in 0 until challengesJson.length()) {
+                            list.add(challengesJson.getString(i))
+                        }
+                        dynamicChallenges = list
+                    }
+                    val flashObj = json.optJSONObject("flashConfig")
+                    if (flashObj != null && flashObj.optBoolean("enabled", false)) {
+                        dynamicFlashDurationMs = flashObj.optLong("durationMsPerColor", 200L)
+                        val colorsArr = flashObj.optJSONArray("colors")
+                        if (colorsArr != null && colorsArr.length() > 0) {
+                            val list = mutableListOf<String>()
+                            for (i in 0 until colorsArr.length()) {
+                                list.add(colorsArr.getString(i))
+                            }
+                            dynamicFlashColors = list
+                        }
+                    }
+                } catch (_: Exception) {}
+                mainHandler.post { onReady() }
+            }
+        })
+    }
+
+    private val activeFlashColors: List<String>
+        get() = if (config.flashColors.isNotEmpty()) config.flashColors else dynamicFlashColors
+
+    private val activeFlashDurationMs: Long
+        get() = if (config.flashColors.isNotEmpty()) config.flashDurationMs else dynamicFlashDurationMs
+
     private fun start() {
         if (disposed) return
         if (hasCameraPermission()) {
             startCamera()
-            startSession()
+            fetchBackendSessionConfig {
+                if (!disposed) startSession()
+            }
             return
         }
         plugin.requestCameraPermission { granted ->
             if (disposed) return@requestCameraPermission
             if (granted) {
                 startCamera()
-                startSession()
+                fetchBackendSessionConfig {
+                    if (!disposed) startSession()
+                }
             } else {
                 postFailureResult("cameraError", delayMs = EARLY_RESULT_DELAY_MS)
             }
@@ -282,6 +350,10 @@ internal class LivenessView(
     }
 
     private fun buildChallengeList(): List<String> {
+        val dynamic = dynamicChallenges
+        if (!dynamic.isNullOrEmpty()) {
+            return dynamic
+        }
         val pool = config.challengePool
         val n = config.numberOfChallenges
         val out = ArrayList<String>(n)
@@ -366,7 +438,6 @@ internal class LivenessView(
                 val vc = VideoCapture.withOutput(recorder)
                 videoCapture = vc
                 provider.bindToLifecycle(this, selector, preview, analysis, vc)
-                startVideoRecording()
             } else {
                 val capture = ImageCapture.Builder()
                     .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
@@ -381,6 +452,7 @@ internal class LivenessView(
 
     private fun startVideoRecording() {
         val vc = videoCapture ?: return
+        if (recording != null) return
         videoFinalized = false
         lastFrameJpeg = null
         val file = File(appContext.cacheDir, "liveness_${System.currentTimeMillis()}.mp4")
@@ -396,47 +468,52 @@ internal class LivenessView(
             }
     }
 
-    // --------------------------------------------------------------- analysis
+    // ---------------------------------------------------------------- analysis
 
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
     private fun analyzeFrame(proxy: ImageProxy) {
-        val detector = faceDetector
+        if (disposed || resultSent) {
+            proxy.close()
+            return
+        }
         val mediaImage = proxy.image
-        if (disposed || resultSent || detector == null || mediaImage == null) {
+        if (mediaImage == null) {
             proxy.close()
             return
         }
         val rotation = proxy.imageInfo.rotationDegrees
-        val swapped = rotation == 90 || rotation == 270
-        val frameWidth = if (swapped) proxy.height else proxy.width
-        val frameHeight = if (swapped) proxy.width else proxy.height
+        val image = InputImage.fromMediaImage(mediaImage, rotation)
+        val detector = faceDetector
+        if (detector == null) {
+            proxy.close()
+            return
+        }
+        val frameWidth = if (rotation == 90 || rotation == 270) proxy.height else proxy.width
+        val frameHeight = if (rotation == 90 || rotation == 270) proxy.width else proxy.height
         val meanLuma = computeMeanLuma(proxy)
-        frameCounter++
         val lumaCrop =
-            if (config.enablePassiveAntiSpoof && frameCounter % TEXTURE_SAMPLE_EVERY == 0) {
-                grabLumaCrop(proxy)
-            } else {
-                null
-            }
-        // Cache a JPEG of this frame (throttled) so the final still can be taken
-        // from the analysis stream when recording (ImageCapture isn't bound).
-        val frameJpeg =
-            if (config.recordVideo && frameCounter % 4 == 0) encodeProxyToJpeg(proxy) else null
-        val timestamp = SystemClock.elapsedRealtime()
-        detector.process(InputImage.fromMediaImage(mediaImage, rotation))
-            .addOnSuccessListener { faces ->
-                // ML Kit delivers this on the main thread.
-                if (!disposed) {
-                    handleFaces(
-                        faces, frameWidth, frameHeight, meanLuma, lumaCrop, timestamp,
-                        frameJpeg, rotation,
-                    )
-                }
+            if (frameCounter++ % TEXTURE_SAMPLE_EVERY == 0) grabLumaCrop(proxy) else null
+        val now = SystemClock.elapsedRealtime()
+
+        val frameJpeg = encodeProxyToJpeg(proxy)
+
+        detector.process(image)
+            .addOnSuccessListener(analysisExecutor) { faces ->
+                processObservation(
+                    faces = faces,
+                    frameWidth = frameWidth,
+                    frameHeight = frameHeight,
+                    meanLuma = meanLuma,
+                    lumaCrop = lumaCrop,
+                    timestampMs = now,
+                    frameJpeg = frameJpeg,
+                    frameRotation = rotation,
+                )
             }
             .addOnCompleteListener { proxy.close() }
     }
 
-    private fun handleFaces(
+    private fun processObservation(
         faces: List<Face>,
         frameWidth: Int,
         frameHeight: Int,
@@ -544,10 +621,13 @@ internal class LivenessView(
         val buffer = plane.buffer
         val rowStride = plane.rowStride
         val pixelStride = plane.pixelStride
-        val x0 = proxy.width / 4
-        val x1 = proxy.width * 3 / 4
-        val y0 = proxy.height / 4
-        val y1 = proxy.height * 3 / 4
+        val w = proxy.width
+        val h = proxy.height
+        val x0 = w / 4
+        val x1 = (3 * w) / 4
+        val y0 = h / 4
+        val y1 = (3 * h) / 4
+
         var sum = 0L
         var count = 0
         var saturatedCount = 0
@@ -600,6 +680,9 @@ internal class LivenessView(
 
     override fun onSessionEvent(event: Map<String, Any>) {
         if (disposed || resultSent) return
+        if (event["type"] == "challengeStarted" && config.recordVideo && recording == null) {
+            startVideoRecording()
+        }
         channel.invokeMethod("onEvent", event)
     }
 
@@ -620,9 +703,10 @@ internal class LivenessView(
             return
         }
 
-        if (config.flashColors.isNotEmpty()) {
+        val colorsToFlash = activeFlashColors
+        if (colorsToFlash.isNotEmpty()) {
             mainHandler.post {
-                runFlashChallenge {
+                runFlashChallenge(colorsToFlash, activeFlashDurationMs) {
                     captureAndFinish(score, completed)
                 }
             }
@@ -631,8 +715,8 @@ internal class LivenessView(
         }
     }
 
-    private fun runFlashChallenge(onComplete: () -> Unit) {
-        val colors = config.flashColors.mapNotNull { hex ->
+    private fun runFlashChallenge(colorsList: List<String>, durationMs: Long, onComplete: () -> Unit) {
+        val colors = colorsList.mapNotNull { hex ->
             try { Color.parseColor(hex) } catch (_: Exception) { null }
         }
         if (colors.isEmpty()) {
@@ -642,15 +726,19 @@ internal class LivenessView(
 
         channel.invokeMethod("onEvent", mapOf("type" to "instruction", "instruction" to "Hold steady — analyzing reflection..."))
 
-        val flashOverlay = View(previewView.context).apply {
+        val targetView = (previewView.rootView as? ViewGroup) ?: previewView
+        val flashOverlay = View(targetView.context).apply {
             setBackgroundColor(Color.TRANSPARENT)
-            layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            isClickable = false
+            isFocusable = false
         }
-        previewView.addView(flashOverlay)
+        targetView.addView(flashOverlay)
+        flashOverlay.bringToFront()
 
         fun finishFlash() {
             try {
-                previewView.removeView(flashOverlay)
+                targetView.removeView(flashOverlay)
             } catch (_: Exception) {}
             onComplete()
         }
@@ -662,12 +750,12 @@ internal class LivenessView(
             }
 
             val color = colors[index]
-            val semiTransparent = Color.argb(105, Color.red(color), Color.green(color), Color.blue(color))
+            val semiTransparent = Color.argb(125, Color.red(color), Color.green(color), Color.blue(color))
             flashOverlay.setBackgroundColor(semiTransparent)
 
             mainHandler.postDelayed({
                 flashStep(index + 1)
-            }, config.flashDurationMs)
+            }, durationMs)
         }
 
         flashStep(0)
