@@ -109,7 +109,7 @@ enum LivenessHint {
     LivenessHint.moveBack => 'Move a little back',
     LivenessHint.centerFace => 'Center your face in the frame',
     LivenessHint.holdStill => 'Hold still',
-    LivenessHint.faceTooDark => 'Find better lighting',
+    LivenessHint.faceTooDark => 'Too dark — move to a brighter spot',
     LivenessHint.faceTooBright => 'Reduce direct glare or backlight',
     LivenessHint.multipleFaces => 'Only one face should be visible',
     LivenessHint.lookStraight => 'Look straight at the camera',

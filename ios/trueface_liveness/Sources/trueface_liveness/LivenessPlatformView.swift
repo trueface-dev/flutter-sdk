@@ -93,6 +93,7 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
 
   private var dynamicFlashColors: [UIColor] = []
   private var dynamicFlashDurationMs: Int = 200
+  private var lastLightingHintAt: TimeInterval = 0
 
   init(
     frame: CGRect,
@@ -398,6 +399,16 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
     } else {
       let centerBox = CGRect(x: size.width * 0.25, y: size.height * 0.25, width: size.width * 0.50, height: size.height * 0.50)
       luminance = grayStats(pixelBuffer: pixelBuffer, faceBox: centerBox)?.luma
+    }
+
+    if let luma = luminance {
+      if luma < 55.0 && now - lastLightingHintAt > 0.8 {
+        lastLightingHintAt = now
+        sendEvent(["type": "hint", "code": "faceTooDark"])
+      } else if luma > 230.0 && now - lastLightingHintAt > 0.8 {
+        lastLightingHintAt = now
+        sendEvent(["type": "hint", "code": "faceTooBright"])
+      }
     }
 
     let effects = machine.process(

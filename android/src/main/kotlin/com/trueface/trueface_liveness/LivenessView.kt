@@ -206,6 +206,7 @@ internal class LivenessView(
     private var dynamicChallenges: List<String>? = null
     private var dynamicFlashColors: List<String> = emptyList()
     private var dynamicFlashDurationMs: Long = 200L
+    private var lastLightingHintAt: Long = 0L
 
     override val lifecycle: Lifecycle
         get() = lifecycleRegistry
@@ -613,12 +614,22 @@ internal class LivenessView(
             FaceObservation(timestampMs, frameWidth, frameHeight, faces.size, meanLuma)
         }
         if (config.enablePassiveAntiSpoof) antiSpoof.onObservation(obs, lumaCrop)
+
+        val now = SystemClock.elapsedRealtime()
+        if (meanLuma < 55.0 && now - lastLightingHintAt > 800) {
+            lastLightingHintAt = now
+            onSessionEvent(mapOf("type" to "hint", "code" to "faceTooDark"))
+        } else if (meanLuma > 230.0 && now - lastLightingHintAt > 800) {
+            lastLightingHintAt = now
+            onSessionEvent(mapOf("type" to "hint", "code" to "faceTooBright"))
+        }
+
         session?.onFrame(obs)
     }
 
     /** Mean luminance (0-255) of the central half of the frame's Y plane with glare saturation detection. */
     private fun computeMeanLuma(proxy: ImageProxy): Double {
-        val plane = proxy.planes.getOrNull(0) ?: return 120.0
+        val plane = proxy.planes.getOrNull(0) ?: return 0.0
         val buffer = plane.buffer
         val rowStride = plane.rowStride
         val pixelStride = plane.pixelStride
@@ -647,7 +658,7 @@ internal class LivenessView(
             }
             y += 8
         }
-        if (count == 0) return 120.0
+        if (count == 0) return 0.0
         // Glare / Overexposure Gating: If >25% of facial pixels are saturated, report 245 to trigger faceTooBright
         if (saturatedCount.toDouble() / count > 0.25) return 245.0
         return sum.toDouble() / count

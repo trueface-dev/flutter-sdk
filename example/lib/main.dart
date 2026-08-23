@@ -573,9 +573,13 @@ class _LivenessScreenState extends State<LivenessScreen> {
         case LivenessHintEvent(:final hint):
           _instruction = hint.message;
         case FaceLostEvent():
-          _instruction = 'Keep your face in view';
+          if (!_instruction.contains('dark') && !_instruction.contains('glare') && !_instruction.contains('lighting')) {
+            _instruction = 'Keep your face in view';
+          }
         case FaceDetectedEvent():
-          _instruction = 'Hold still';
+          if (!_instruction.contains('dark') && !_instruction.contains('glare') && !_instruction.contains('lighting')) {
+            _instruction = 'Hold still';
+          }
         case LivenessUploadingEvent(:final progress):
           _verifying = true;
           _instruction = progress == null
