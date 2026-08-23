@@ -501,7 +501,23 @@ internal class LivenessView(
         }
         val frameWidth = if (rotation == 90 || rotation == 270) proxy.height else proxy.width
         val frameHeight = if (rotation == 90 || rotation == 270) proxy.width else proxy.height
-        val meanLuma = computeMeanLuma(proxy, lastFaceBox, rotation)
+        val yPlane = proxy.planes.getOrNull(0)
+        val yBuffer = yPlane?.buffer?.let { buf ->
+            try {
+                val copy = ByteBuffer.allocateDirect(buf.remaining())
+                val orig = buf.duplicate()
+                copy.put(orig)
+                copy.rewind()
+                copy
+            } catch (e: Exception) {
+                null
+            }
+        }
+        val rowStride = yPlane?.rowStride ?: proxy.width
+        val pixelStride = yPlane?.pixelStride ?: 1
+        val proxyW = proxy.width
+        val proxyH = proxy.height
+
         val lumaCrop =
             if (frameCounter++ % TEXTURE_SAMPLE_EVERY == 0) grabLumaCrop(proxy) else null
         val now = SystemClock.elapsedRealtime()
@@ -510,6 +526,18 @@ internal class LivenessView(
 
         detector.process(image)
             .addOnSuccessListener(analysisExecutor) { faces ->
+                val faceBox = faces.firstOrNull()?.boundingBox
+                val meanLuma = computeFaceLuma(
+                    buffer = yBuffer,
+                    rowStride = rowStride,
+                    pixelStride = pixelStride,
+                    sensorW = proxyW,
+                    sensorH = proxyH,
+                    rotation = rotation,
+                    frameWidth = frameWidth,
+                    frameHeight = frameHeight,
+                    faceBox = faceBox
+                )
                 processObservation(
                     faces = faces,
                     frameWidth = frameWidth,
@@ -535,6 +563,8 @@ internal class LivenessView(
         frameRotation: Int,
     ) {
         if (resultSent) return
+        val isTooDark = frameCounter >= 8 && meanLuma < 75.0
+
         val obs = if (faces.size == 1) {
             val face = faces[0]
             lastFaceBox = Rect(face.boundingBox)
@@ -546,7 +576,7 @@ internal class LivenessView(
             val absY = kotlin.math.abs(face.headEulerAngleY)
             val absX = kotlin.math.abs(face.headEulerAngleX)
 
-            if (frameJpeg != null) {
+            if (frameJpeg != null && !isTooDark) {
                 lastFrameJpeg = frameJpeg
                 lastFrameJpegRotation = frameRotation
 
@@ -633,7 +663,7 @@ internal class LivenessView(
         if (config.enablePassiveAntiSpoof) antiSpoof.onObservation(obs, lumaCrop)
 
         val now = SystemClock.elapsedRealtime()
-        val isTooDark = frameCounter >= 8 && meanLuma < 65.0
+        val isTooDark = frameCounter >= 8 && meanLuma < 75.0
         if (frameCounter >= 8) {
             if (isTooDark && now - lastLightingHintAt > 800) {
                 lastLightingHintAt = now
@@ -663,50 +693,50 @@ internal class LivenessView(
         session?.onFrame(obs)
     }
 
-    /** Mean luminance (0-255) of the facial region (or central frame) with glare saturation detection. */
-    private fun computeMeanLuma(proxy: ImageProxy, faceBox: Rect? = null, rotation: Int = 0): Double {
-        val plane = proxy.planes.getOrNull(0) ?: return 0.0
-        val buffer = plane.buffer
-        val rowStride = plane.rowStride
-        val pixelStride = plane.pixelStride
-        val w = proxy.width
-        val h = proxy.height
-
-        val (x0, x1, y0, y1) = if (faceBox != null && !faceBox.isEmpty) {
-            if (rotation == 90 || rotation == 270) {
-                val fx0 = ((faceBox.top.toDouble() / maxOf(1, proxy.height)) * w).toInt().coerceIn(0, w - 1)
-                val fx1 = ((faceBox.bottom.toDouble() / maxOf(1, proxy.height)) * w).toInt().coerceIn(fx0 + 1, w)
-                val fy0 = ((faceBox.left.toDouble() / maxOf(1, proxy.width)) * h).toInt().coerceIn(0, h - 1)
-                val fy1 = ((faceBox.right.toDouble() / maxOf(1, proxy.width)) * h).toInt().coerceIn(fy0 + 1, h)
-                arrayOf(fx0, fx1, fy0, fy1)
-            } else {
-                val fx0 = faceBox.left.coerceIn(0, w - 1)
-                val fx1 = faceBox.right.coerceIn(fx0 + 1, w)
-                val fy0 = faceBox.top.coerceIn(0, h - 1)
-                val fy1 = faceBox.bottom.coerceIn(fy0 + 1, h)
-                arrayOf(fx0, fx1, fy0, fy1)
-            }
+    /** Mean luminance (0-255) of the facial region (or central frame) sampled on a 16x16 grid. */
+    private fun computeFaceLuma(
+        buffer: java.nio.ByteBuffer?,
+        rowStride: Int,
+        pixelStride: Int,
+        sensorW: Int,
+        sensorH: Int,
+        rotation: Int,
+        frameWidth: Int,
+        frameHeight: Int,
+        faceBox: Rect?,
+    ): Double {
+        if (buffer == null || sensorW <= 0 || sensorH <= 0 || frameWidth <= 0 || frameHeight <= 0) return 0.0
+        val box = if (faceBox != null && !faceBox.isEmpty) {
+            faceBox
         } else {
-            arrayOf(w / 4, (3 * w) / 4, h / 4, (3 * h) / 4)
+            Rect(frameWidth / 4, frameHeight / 4, (3 * frameWidth) / 4, (3 * frameHeight) / 4)
         }
 
+        val grid = 16
         var sum = 0L
         var count = 0
         var saturatedCount = 0
-        var y = y0
-        while (y < y1) {
-            var x = x0
-            while (x < x1) {
-                val index = y * rowStride + x * pixelStride
+
+        for (gy in 0 until grid) {
+            for (gx in 0 until grid) {
+                val u = (box.left + box.width().toDouble() * (gx + 0.5) / grid.toDouble()) / frameWidth.toDouble()
+                val v = (box.top + box.height().toDouble() * (gy + 0.5) / grid.toDouble()) / frameHeight.toDouble()
+                val (sx, sy) = when (rotation) {
+                    90 -> Pair(v * sensorW, (1.0 - u) * sensorH)
+                    270 -> Pair((1.0 - v) * sensorW, u * sensorH)
+                    180 -> Pair((1.0 - u) * sensorW, (1.0 - v) * sensorH)
+                    else -> Pair(u * sensorW, v * sensorH)
+                }
+                val px = sx.toInt().coerceIn(0, sensorW - 1)
+                val py = sy.toInt().coerceIn(0, sensorH - 1)
+                val index = py * rowStride + px * pixelStride
                 if (index < buffer.limit()) {
                     val luma = buffer.get(index).toInt() and 0xFF
                     sum += luma
                     if (luma >= 250) saturatedCount++
                     count++
                 }
-                x += 8
             }
-            y += 8
         }
         if (count == 0) return 0.0
         // Glare / Overexposure Gating: If >25% of facial pixels are saturated, report 245 to trigger faceTooBright
