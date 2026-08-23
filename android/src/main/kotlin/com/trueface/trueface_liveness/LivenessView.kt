@@ -189,6 +189,12 @@ internal class LivenessView(
     @Volatile private var videoFinalized = false
     @Volatile private var lastFrameJpeg: ByteArray? = null
     @Volatile private var lastFrameJpegRotation = 0
+    @Volatile private var bestAttentiveJpeg: ByteArray? = null
+    @Volatile private var bestAttentiveRotation = 0
+    @Volatile private var bestAttentiveScore = -1f
+    @Volatile private var bestEyesOpenJpeg: ByteArray? = null
+    @Volatile private var bestEyesOpenRotation = 0
+    @Volatile private var bestEyesOpenScore = -1f
 
     override val lifecycle: Lifecycle
         get() = lifecycleRegistry
@@ -261,6 +267,11 @@ internal class LivenessView(
     private fun startSession() {
         session?.stop()
         antiSpoof.reset()
+        bestAttentiveJpeg = null
+        bestAttentiveScore = -1f
+        bestEyesOpenJpeg = null
+        bestEyesOpenScore = -1f
+        lastFrameJpeg = null
         session = ChallengeSession(buildChallengeList(), config.challengeTimeoutMs, this)
     }
 
@@ -433,12 +444,35 @@ internal class LivenessView(
         val obs = if (faces.size == 1) {
             val face = faces[0]
             lastFaceBox = Rect(face.boundingBox)
+            lastFrameWidth = frameWidth
+            lastFrameHeight = frameHeight
+
+            val leftEyeOpen = face.leftEyeOpenProbability ?: 0.8f
+            val rightEyeOpen = face.rightEyeOpenProbability ?: 0.8f
+            val absY = kotlin.math.abs(face.headEulerAngleY)
+            val absX = kotlin.math.abs(face.headEulerAngleX)
+
             if (frameJpeg != null) {
                 lastFrameJpeg = frameJpeg
                 lastFrameJpegRotation = frameRotation
+
+                // Evaluate face attentiveness (eyes open >= 0.70, head frontal <= 12 deg)
+                if (leftEyeOpen >= 0.70f && rightEyeOpen >= 0.70f && absY <= 12f && absX <= 12f) {
+                    val score = (leftEyeOpen + rightEyeOpen) - (absY + absX) / 100f
+                    if (score > bestAttentiveScore) {
+                        bestAttentiveScore = score
+                        bestAttentiveJpeg = frameJpeg
+                        bestAttentiveRotation = frameRotation
+                    }
+                }
+
+                val eyesScore = leftEyeOpen + rightEyeOpen
+                if (eyesScore > bestEyesOpenScore) {
+                    bestEyesOpenScore = eyesScore
+                    bestEyesOpenJpeg = frameJpeg
+                    bestEyesOpenRotation = frameRotation
+                }
             }
-            lastFrameWidth = frameWidth
-            lastFrameHeight = frameHeight
             val landmarks = HashMap<Int, PointF>()
             for (type in intArrayOf(
                 FaceLandmark.NOSE_BASE,
@@ -698,10 +732,11 @@ internal class LivenessView(
             while (!videoFinalized && SystemClock.elapsedRealtime() < deadline) {
                 Thread.sleep(50)
             }
-            val jpeg = lastFrameJpeg
+            val jpeg = bestAttentiveJpeg ?: bestEyesOpenJpeg ?: lastFrameJpeg
+            val rotation = if (bestAttentiveJpeg != null) bestAttentiveRotation else if (bestEyesOpenJpeg != null) bestEyesOpenRotation else lastFrameJpegRotation
             val map: Map<String, Any?> = if (jpeg != null) {
                 val base = try {
-                    buildSuccessResult(jpeg, lastFrameJpegRotation, score, completed)
+                    buildSuccessResult(jpeg, rotation, score, completed)
                 } catch (e: Exception) {
                     failureMap("unknown", completed, score)
                 }
