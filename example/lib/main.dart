@@ -554,6 +554,7 @@ class _LivenessScreenState extends State<LivenessScreen> {
   String _debug =
       'waiting for camera frames…'; // TODO: remove after calibration
   bool _verifying = false;
+  LivenessChallenge? _currentChallenge;
 
   void _onEvent(LivenessEvent event) {
     setState(() {
@@ -563,34 +564,51 @@ class _LivenessScreenState extends State<LivenessScreen> {
           :final index,
           :final total,
         ):
+          _currentChallenge = challenge;
           _instruction = challenge.instruction;
           _completed = index;
           _total = total;
         case ChallengeCompletedEvent(:final total):
+          _currentChallenge = null;
           _completed += 1;
           _total = total;
           _instruction = 'Great!';
         case LivenessHintEvent(:final hint):
-          _instruction = hint.message;
+          if (_currentChallenge == null ||
+              hint == LivenessHint.faceTooDark ||
+              hint == LivenessHint.faceTooBright ||
+              hint == LivenessHint.multipleFaces) {
+            _instruction = hint.message;
+          }
         case LivenessInstructionEvent(:final instruction):
+          _currentChallenge = null;
           _instruction = instruction;
         case FaceLostEvent():
-          if (!_instruction.contains('dark') && !_instruction.contains('glare') && !_instruction.contains('lighting')) {
+          if (_currentChallenge == null &&
+              !_instruction.contains('dark') &&
+              !_instruction.contains('glare') &&
+              !_instruction.contains('lighting')) {
             _instruction = 'Keep your face in view';
           }
         case FaceDetectedEvent():
-          if (!_instruction.contains('dark') && !_instruction.contains('glare') && !_instruction.contains('lighting')) {
+          if (_currentChallenge == null &&
+              !_instruction.contains('dark') &&
+              !_instruction.contains('glare') &&
+              !_instruction.contains('lighting')) {
             _instruction = 'Hold still';
           }
         case LivenessUploadingEvent(:final progress):
+          _currentChallenge = null;
           _verifying = true;
           _instruction = progress == null
               ? 'Uploading…'
               : 'Uploading… ${(progress * 100).toStringAsFixed(0)}%';
         case LivenessVerifyingEvent():
+          _currentChallenge = null;
           _verifying = true;
           _instruction = 'Verifying your identity…';
         case LivenessUploadFailedEvent(:final message):
+          _currentChallenge = null;
           _instruction = 'Upload failed: $message';
         case UnknownLivenessEvent(:final type, :final raw):
           if (type == 'debug') _debug = raw?['message']?.toString() ?? '';
