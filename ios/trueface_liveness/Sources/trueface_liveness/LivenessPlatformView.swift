@@ -371,9 +371,12 @@ final class LivenessPlatformView: NSObject, FlutterPlatformView,
           bestEyesOpenJPEG = encoded
         }
 
-        // Evaluate face attentiveness on Apple Vision (eyes open >= 0.25, head frontal <= 12 deg)
-        if leftOpen >= 0.25 && rightOpen >= 0.25 && absY <= 12 && absX <= 12 {
-          let score = eyesScore - (absY + absX) / 100.0
+        let minEye = min(leftOpen, rightOpen)
+        let sharpness = stats?.sharpness ?? 0
+        // Evaluate face attentiveness: both eyes open, strictly frontal (<= 10 deg), sharp focus
+        if minEye >= 0.22 && absY <= 10 && absX <= 10 {
+          let frontalScore = max(0, 10.0 - absY) + max(0, 10.0 - absX)
+          let score = (eyesScore * 10.0) + frontalScore + (min(sharpness, 30.0) / 3.0)
           if score > bestAttentiveScore {
             bestAttentiveScore = score
             bestAttentiveJPEG = encoded

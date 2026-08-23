@@ -541,9 +541,11 @@ internal class LivenessView(
                 lastFrameJpeg = frameJpeg
                 lastFrameJpegRotation = frameRotation
 
-                // Evaluate face attentiveness (eyes open >= 0.70, head frontal <= 12 deg)
-                if (leftEyeOpen >= 0.70f && rightEyeOpen >= 0.70f && absY <= 12f && absX <= 12f) {
-                    val score = (leftEyeOpen + rightEyeOpen) - (absY + absX) / 100f
+                val minEye = minOf(leftEyeOpen, rightEyeOpen)
+                // Evaluate face attentiveness (both eyes open >= 0.70, head frontal <= 10 deg)
+                if (minEye >= 0.70f && absY <= 10f && absX <= 10f) {
+                    val frontalScore = (10f - absY).coerceAtLeast(0f) + (10f - absX).coerceAtLeast(0f)
+                    val score = (leftEyeOpen + rightEyeOpen) * 10f + frontalScore
                     if (score > bestAttentiveScore) {
                         bestAttentiveScore = score
                         bestAttentiveJpeg = frameJpeg
