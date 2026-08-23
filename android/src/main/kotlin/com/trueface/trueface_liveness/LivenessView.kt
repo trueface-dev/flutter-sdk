@@ -564,7 +564,7 @@ internal class LivenessView(
         frameRotation: Int,
     ) {
         if (resultSent) return
-        val isTooDark = frameCounter >= 8 && meanLuma < 75.0
+        val isTooDark = frameCounter >= 8 && meanLuma < 85.0
 
         val obs = if (faces.size == 1) {
             val face = faces[0]
